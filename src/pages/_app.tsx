@@ -1,4 +1,4 @@
-import AppLayout from '@/components/layout/AppLayout'
+import AppLayout from '@/components/AppLayout/AppLayout'
 import GlobalStyle from '@/styles/GlobalStyle'
 import theme from '@/styles/theme'
 import type { AppProps } from 'next/app'

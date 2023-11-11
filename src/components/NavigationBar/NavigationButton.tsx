@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
-import Icons, { IconNameType } from '../Icons'
+import Icons, { IconNameType } from '../Icons/Icons'
 
 interface NavigationButtonProps {
   IconName: IconNameType
