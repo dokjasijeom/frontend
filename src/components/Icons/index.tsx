@@ -26,6 +26,7 @@ import User from './icons/ic-user.svg'
 import Content from './icons/ic-content.svg'
 import Setting from './icons/ic-setting.svg'
 import Subscription from './icons/ic-subscription.svg'
+import Library from './icons/ic-library.svg'
 import Doksi from './icons/symbol_gray.svg'
 
 const IconObject = {
@@ -56,6 +57,7 @@ const IconObject = {
   Content,
   Setting,
   Subscription,
+  Library,
   Doksi,
 } as { [key: string]: any }
 
@@ -87,6 +89,7 @@ export type IconNameType =
   | 'Content'
   | 'Setting'
   | 'Subscription'
+  | 'Library'
   | 'Doksi'
 
 interface IconProps {
