@@ -1,5 +1,7 @@
 import { ReactNode } from 'react'
 import styled from 'styled-components'
+import Header from '../Header'
+import BottomBar from '../NavigationBar/BottomBar'
 
 const Centering = styled.div`
   display: flex;
@@ -19,7 +21,11 @@ function AppLayout(props: AppLayoutProps) {
   const { children } = props
   return (
     <Centering>
-      <FixedWidth>{children}</FixedWidth>
+      <FixedWidth>
+        <Header />
+        {children}
+        <BottomBar />
+      </FixedWidth>
     </Centering>
   )
 }

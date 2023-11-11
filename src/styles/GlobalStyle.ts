@@ -14,7 +14,8 @@ const GlobalStyle = createGlobalStyle`
   }
   button {
     cursor: pointer;
-    background-color: inherit;
+    background-color: inherit; 
+    border: none;
   }
   a {
     text-decoration:none;
