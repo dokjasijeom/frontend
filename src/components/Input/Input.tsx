@@ -32,13 +32,19 @@ const InputWrapper = styled.input`
 `
 
 interface InputProps {
+  value: string
   placeholder: string
   disabled?: boolean
   error?: boolean
 }
 
 function Input(props: InputProps) {
-  const { placeholder = '', disabled = false, error = false } = props
+  const {
+    value = '',
+    placeholder = '',
+    disabled = false,
+    error = false,
+  } = props
   return (
     <InputContainer>
       <InputWrapper
@@ -46,6 +52,7 @@ function Input(props: InputProps) {
         placeholder={placeholder}
         disabled={disabled}
         className={error ? 'error' : ''}
+        value={value}
       />
     </InputContainer>
   )
