@@ -97,6 +97,7 @@ interface IconProps {
   width?: string
   height?: string
   fill?: string
+  onClick?: () => void
 }
 
 function Icons(props: IconProps) {
@@ -106,10 +107,23 @@ function Icons(props: IconProps) {
     width = '26px',
     height = '26px',
     fill = theme.color.gray[600],
+    onClick,
   } = props
   const SVG = IconObject[name]
 
-  return <SVG width={width} height={height} fill={fill} />
+  const handleClick = () => {
+    if (onClick) onClick()
+  }
+
+  return (
+    <SVG
+      width={width}
+      height={height}
+      fill={fill}
+      onClick={handleClick}
+      style={{ cursor: onClick ? 'pointer' : 'unset' }}
+    />
+  )
 }
 
 export default Icons
