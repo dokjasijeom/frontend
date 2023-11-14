@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const ButtonContainer = styled.button`
+  width: 100%;
   padding: 12px 20px;
   ${({ theme }) => theme.typography.head2};
   border-radius: 12px;
@@ -52,7 +53,7 @@ interface ButtonProps {
   children?: ReactNode | undefined
   type?: 'primary' | 'secondary' | 'text'
   disabled?: boolean
-  onClick?: any
+  onClick?: () => void
 }
 
 function Button(props: ButtonProps) {
