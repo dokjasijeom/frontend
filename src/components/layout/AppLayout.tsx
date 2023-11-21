@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import styled from 'styled-components'
-import Header from '../Header/Header'
-import BottomBar from '../NavigationBar/BottomBar'
+import Header from '../common/Header/Header'
+import BottomBar from '../common/NavigationBar/BottomBar'
 
 const Centering = styled.div`
   display: flex;
