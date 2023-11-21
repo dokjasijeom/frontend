@@ -1,5 +1,5 @@
-import Button from '@/components/Button/Button'
-import Input from '@/components/Input/Input'
+import Button from '@/components/common/Button/Button'
+import Input from '@/components/common/Input/Input'
 import { useRouter } from 'next/router'
 import React from 'react'
 import styled from 'styled-components'
@@ -61,7 +61,12 @@ function Login() {
           <Button type="primary" onClick={() => {}}>
             로그인
           </Button>
-          <Button type="secondary" onClick={() => {}}>
+          <Button
+            type="secondary"
+            onClick={() => {
+              router.push('/auth/join')
+            }}
+          >
             이메일로 회원가입
           </Button>
           <Button type="text" onClick={() => {}}>
