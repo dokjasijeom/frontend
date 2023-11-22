@@ -31,8 +31,8 @@ function TitleHeader(props: TitleHeaderProps) {
   const router = useRouter()
 
   const handleClickBack = () => {
-    if (onClickBack) onClickBack()
-    router.back()
+    if (onClickBack) return onClickBack()
+    return router.back()
   }
   return (
     <TitleHeaderContainer>
