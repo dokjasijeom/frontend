@@ -12,6 +12,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Pretendard';
     height: 100%;
+    color: ${({ theme }) => theme.color.gray[950]}
   }
   button {
     cursor: pointer;

@@ -59,7 +59,12 @@ function Button(props: ButtonProps) {
   const { children, type = 'primary', disabled = false, onClick } = props
 
   return (
-    <ButtonContainer className={type} onClick={onClick} disabled={disabled}>
+    <ButtonContainer
+      type="button"
+      className={type}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </ButtonContainer>
   )
