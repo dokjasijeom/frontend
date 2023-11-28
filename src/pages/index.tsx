@@ -1,6 +1,42 @@
+import Icons from '@/components/common/Icons/Icons'
+import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import Head from 'next/head'
+import styled, { useTheme } from 'styled-components'
+import { range } from 'lodash'
+import { Book } from '@/@types/book'
+
+const HomeContainer = styled.div``
+
+const TabTitle = styled.div`
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  ${({ theme }) => theme.typography.head1};
+  color: ${({ theme }) => theme.color.gray[950]};
+`
+
+const BookListWrapper = styled.div`
+  display: grid;
+  justify-content: center;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 137px);
+  row-gap: 16px;
+  column-gap: 4px;
+  padding: 16px 0 32px;
+`
 
 export default function Home() {
+  const theme = useTheme()
+
+  const book = {
+    image: '',
+    title: '게임 속 바바리안으로 살아남기',
+    author: 'carbo(도효원)',
+    genre: '로맨스',
+    score: 935,
+    platforms: ['naver', 'kakao', 'ridi'],
+  } as Book
   return (
     <>
       <Head>
@@ -9,7 +45,18 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>메인</main>
+      <HomeContainer>
+        <TabTitle>
+          <Icons name="Calendar" color={theme.color.main[300]} />
+          요일별 연재 작품
+        </TabTitle>
+        <BookListWrapper>
+          {range(12).map((_, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Thumbnail key={index} book={book} />
+          ))}
+        </BookListWrapper>
+      </HomeContainer>
     </>
   )
 }
