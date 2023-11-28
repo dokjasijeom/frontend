@@ -4,6 +4,7 @@ import NavigationButton from './NavigationButton'
 
 const BottomBarContainer = styled.div`
   width: 600px;
+  z-index: 100;
   @media (max-width: 600px) {
     width: 100%;
   }
