@@ -36,6 +36,7 @@ interface InputProps {
   placeholder: string
   disabled?: boolean
   error?: boolean
+  onChange?: () => void
 }
 
 function Input(props: InputProps) {
@@ -44,6 +45,7 @@ function Input(props: InputProps) {
     placeholder = '',
     disabled = false,
     error = false,
+    onChange,
   } = props
   return (
     <InputContainer>
@@ -53,6 +55,7 @@ function Input(props: InputProps) {
         disabled={disabled}
         className={error ? 'error' : ''}
         value={value}
+        onChange={onChange}
       />
     </InputContainer>
   )

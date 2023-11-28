@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 import styled from 'styled-components'
-import Header from '../Header/Header'
-import BottomBar from '../NavigationBar/BottomBar'
+import BottomBar from '../common/NavigationBar/BottomBar'
 
 const Centering = styled.div`
   display: flex;
@@ -13,16 +12,15 @@ const FixedWidth = styled.div`
     width: 100%;
   }
 `
-interface AppLayoutProps {
+interface OnlyFooterLayoutProps {
   children: ReactNode | undefined
 }
 
-function AppLayout(props: AppLayoutProps) {
+function OnlyFooterLayout(props: OnlyFooterLayoutProps) {
   const { children } = props
   return (
     <Centering>
       <FixedWidth>
-        <Header />
         {children}
         <BottomBar />
       </FixedWidth>
@@ -30,4 +28,4 @@ function AppLayout(props: AppLayoutProps) {
   )
 }
 
-export default AppLayout
+export default OnlyFooterLayout

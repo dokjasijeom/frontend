@@ -1,7 +1,8 @@
-import Button from '@/components/Button/Button'
-import Input from '@/components/Input/Input'
 import Modal from '@/components/Modal/Modal'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import Button from '@/components/common/Button/Button'
+import Input from '@/components/common/Input/Input'
 import styled from 'styled-components'
 
 const LoginContainer = styled.div`
@@ -49,6 +50,7 @@ const FindPasswordFormWrapper = styled.div`
 `
 
 function Login() {
+  const router = useRouter()
   const [showFindPasswordModal, setShowFindPasswordModal] = useState(false)
 
   const handleSnedFindPasswordMail = () => {
@@ -77,17 +79,30 @@ function Login() {
       <div className="login_form_wrapper">
         <div className="form_item">
           <div className="label">이메일</div>
-          <Input value="" placeholder="이메일을 입력해주세요." />
+          <Input
+            value=""
+            placeholder="이메일을 입력해주세요."
+            onChange={() => {}}
+          />
         </div>
         <div className="form_item">
           <div className="label">비밀번호</div>
-          <Input value="" placeholder="비밀번호를 입력해주세요." />
+          <Input
+            value=""
+            placeholder="비밀번호를 입력해주세요."
+            onChange={() => {}}
+          />
         </div>
         <div className="button_wrapper">
           <Button type="primary" onClick={() => {}}>
             로그인
           </Button>
-          <Button type="secondary" onClick={() => {}}>
+          <Button
+            type="secondary"
+            onClick={() => {
+              router.push('/auth/join')
+            }}
+          >
             이메일로 회원가입
           </Button>
           <Button
