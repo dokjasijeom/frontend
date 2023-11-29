@@ -2,7 +2,8 @@ import { useTheme } from 'styled-components'
 import Alert from './icons/ic-alert.svg'
 import ArrowLeft from './icons/ic-arrow-left.svg'
 import ArrowRight from './icons/ic-arrow-right.svg'
-import Book from './icons/ic-book.svg'
+import OpenedBook from './icons/ic-book.svg'
+import Book from './icons/ic-book-2.svg'
 import Calendar from './icons/ic-calendar.svg'
 import CheckActive from './icons/ic-check-active.svg'
 import CheckDefault from './icons/ic-check-default.svg'
@@ -27,12 +28,15 @@ import Content from './icons/ic-content.svg'
 import Setting from './icons/ic-setting.svg'
 import Subscription from './icons/ic-subscription.svg'
 import Library from './icons/ic-library.svg'
+import Plus from './icons/ic-plus.svg'
+import Minus from './icons/ic-minus.svg'
 import Doksi from './icons/symbol_gray.svg'
 
 const IconObject = {
   Alert,
   ArrowLeft,
   ArrowRight,
+  OpenedBook,
   Book,
   Calendar,
   CheckActive,
@@ -58,6 +62,8 @@ const IconObject = {
   Setting,
   Subscription,
   Library,
+  Plus,
+  Minus,
   Doksi,
 } as { [key: string]: any }
 
@@ -65,6 +71,7 @@ export type IconNameType =
   | 'Alert'
   | 'ArrowLeft'
   | 'ArrowRight'
+  | 'OpenedBook'
   | 'Book'
   | 'Calendar'
   | 'CheckActive'
@@ -90,13 +97,15 @@ export type IconNameType =
   | 'Setting'
   | 'Subscription'
   | 'Library'
+  | 'Plus'
+  | 'Minus'
   | 'Doksi'
 
 interface IconProps {
   name: IconNameType
   width?: string
   height?: string
-  fill?: string
+  color?: string
 }
 
 function Icons(props: IconProps) {
@@ -105,11 +114,11 @@ function Icons(props: IconProps) {
     name,
     width = '26px',
     height = '26px',
-    fill = theme.color.gray[600],
+    color = theme.color.gray[600],
   } = props
   const SVG = IconObject[name]
 
-  return <SVG width={width} height={height} fill={fill} />
+  return <SVG width={width} height={height} fill={color} />
 }
 
 export default Icons
