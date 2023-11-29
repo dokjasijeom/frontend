@@ -1,20 +1,22 @@
-import Icons from '@/components/common/Icons/Icons'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import Head from 'next/head'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import { range } from 'lodash'
 import { Book } from '@/@types/book'
 import SwiperPosterThumbnail from '@/components/common/SwiperPosterThumbnail/SwiperPosterThumbnail'
+import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
+import {
+  CONTENTS_TAB_LIST,
+  PLATFORM_TAB_LIST,
+  WEEK_TAB_LIST,
+} from '@/constants/Tab'
+import Tab from '@/components/common/Tab/Tab'
+import { useState } from 'react'
 
 const HomeContainer = styled.div``
 
-const TabTitle = styled.div`
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  ${({ theme }) => theme.typography.head1};
-  color: ${({ theme }) => theme.color.gray[950]};
+const WeekTabWrapper = styled.div`
+  padding: 4px 20px 0;
 `
 
 const BookListWrapper = styled.div`
@@ -48,8 +50,7 @@ const book = {
 } as Book
 
 export default function Home() {
-  const theme = useTheme()
-
+  const [selectedWeek, setSelectedWeek] = useState(WEEK_TAB_LIST[0])
   return (
     <>
       <Head>
@@ -59,27 +60,38 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HomeContainer>
-        <TabTitle>
-          <Icons name="Calendar" color={theme.color.main[300]} />
-          요일별 연재 작품
-        </TabTitle>
+        <TabTitleHeader
+          title="요일별 연재 작품"
+          tabList={CONTENTS_TAB_LIST}
+          onClickMore={() => {}}
+        />
+        <WeekTabWrapper>
+          <Tab
+            type="button"
+            tabList={WEEK_TAB_LIST}
+            selectedTab={selectedWeek}
+            onChange={(tab) => setSelectedWeek(tab)}
+          />
+        </WeekTabWrapper>
         <BookListWrapper>
           {range(12).map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <Thumbnail key={index} book={book} />
           ))}
         </BookListWrapper>
-        <TabTitle>
-          <Icons name="New" color={theme.color.main[300]} />
-          웹소설 신작
-        </TabTitle>
+        <TabTitleHeader
+          title="웹소설 신작"
+          tabList={PLATFORM_TAB_LIST}
+          onClickMore={() => {}}
+        />
         <SwiperBookListWrapper>
           <SwiperPosterThumbnail />
         </SwiperBookListWrapper>
-        <TabTitle>
-          <Icons name="New" color={theme.color.main[300]} />
-          웹툰 신작
-        </TabTitle>
+        <TabTitleHeader
+          title="웹툰 신작"
+          tabList={PLATFORM_TAB_LIST}
+          onClickMore={() => {}}
+        />
         <SwiperBookListWrapper>
           <SwiperPosterThumbnail />
         </SwiperBookListWrapper>
