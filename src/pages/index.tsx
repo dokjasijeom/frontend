@@ -4,6 +4,7 @@ import Head from 'next/head'
 import styled, { useTheme } from 'styled-components'
 import { range } from 'lodash'
 import { Book } from '@/@types/book'
+import SwiperPosterThumbnail from '@/components/common/SwiperPosterThumbnail/SwiperPosterThumbnail'
 
 const HomeContainer = styled.div``
 
@@ -26,17 +27,29 @@ const BookListWrapper = styled.div`
   padding: 16px 0 32px;
 `
 
+const SwiperBookListWrapper = styled.div`
+  position: relative;
+  padding: 4px 20px 32px;
+  width: 100%;
+  .swiper {
+    .swiper-slide {
+      width: 184px;
+    }
+  }
+`
+
+const book = {
+  image: '',
+  title: '게임 속 바바리안으로 살아남기',
+  author: 'carbo(도효원)',
+  genre: '로맨스',
+  score: 935,
+  platforms: ['naver', 'kakao', 'ridi'],
+} as Book
+
 export default function Home() {
   const theme = useTheme()
 
-  const book = {
-    image: '',
-    title: '게임 속 바바리안으로 살아남기',
-    author: 'carbo(도효원)',
-    genre: '로맨스',
-    score: 935,
-    platforms: ['naver', 'kakao', 'ridi'],
-  } as Book
   return (
     <>
       <Head>
@@ -56,6 +69,20 @@ export default function Home() {
             <Thumbnail key={index} book={book} />
           ))}
         </BookListWrapper>
+        <TabTitle>
+          <Icons name="New" color={theme.color.main[300]} />
+          웹소설 신작
+        </TabTitle>
+        <SwiperBookListWrapper>
+          <SwiperPosterThumbnail />
+        </SwiperBookListWrapper>
+        <TabTitle>
+          <Icons name="New" color={theme.color.main[300]} />
+          웹툰 신작
+        </TabTitle>
+        <SwiperBookListWrapper>
+          <SwiperPosterThumbnail />
+        </SwiperBookListWrapper>
       </HomeContainer>
     </>
   )
