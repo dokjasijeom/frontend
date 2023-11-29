@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import Tab, { TabItem } from '../Tab/Tab'
-import Icons from '../Icons/Icons'
+import Icons, { IconNameType } from '../Icons/Icons'
 
 const TabTitleHeaderContainer = styled.div`
   padding: 16px 20px;
@@ -28,13 +28,14 @@ const TabTitleHeaderContainer = styled.div`
 const MoreButton = styled.button``
 
 interface TabTitleHeaderProps {
+  iconName: IconNameType
   title: string
   tabList: TabItem[]
   onClickMore: () => void
 }
 
 function TabTitleHeader(props: TabTitleHeaderProps) {
-  const { title, tabList, onClickMore } = props
+  const { title, tabList, onClickMore, iconName } = props
   const theme = useTheme()
 
   const [selectedTab, setSelectedTab] = useState(tabList[0])
@@ -43,7 +44,7 @@ function TabTitleHeader(props: TabTitleHeaderProps) {
     <TabTitleHeaderContainer>
       <div className="tab_title_wrapper">
         <div className="tab_title">
-          <Icons name="Calendar" color={theme.color.main[300]} />
+          <Icons name={iconName} color={theme.color.main[300]} />
           {title}
         </div>
         <Tab

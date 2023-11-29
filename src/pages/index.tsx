@@ -61,6 +61,7 @@ export default function Home() {
       </Head>
       <HomeContainer>
         <TabTitleHeader
+          iconName="Calendar"
           title="요일별 연재 작품"
           tabList={CONTENTS_TAB_LIST}
           onClickMore={() => {}}
@@ -80,6 +81,7 @@ export default function Home() {
           ))}
         </BookListWrapper>
         <TabTitleHeader
+          iconName="New"
           title="웹소설 신작"
           tabList={PLATFORM_TAB_LIST}
           onClickMore={() => {}}
@@ -88,6 +90,7 @@ export default function Home() {
           <SwiperPosterThumbnail />
         </SwiperBookListWrapper>
         <TabTitleHeader
+          iconName="New"
           title="웹툰 신작"
           tabList={PLATFORM_TAB_LIST}
           onClickMore={() => {}}
