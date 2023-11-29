@@ -29,8 +29,13 @@ const ThumbnailImageWrapper = styled.div`
       padding: 0 20px;
       ${({ theme }) => theme.typography.head1};
       color: ${({ theme }) => theme.color.system.w};
-      word-break: break-all;
+      word-break: keep-all;
       text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
     .book_author {
       text-align: center;
