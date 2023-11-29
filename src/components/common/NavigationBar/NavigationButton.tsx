@@ -1,6 +1,6 @@
-import React from 'react'
-import { useRouter } from 'next/navigation'
-import styled from 'styled-components'
+import React, { useMemo } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import styled, { useTheme } from 'styled-components'
 import Icons, { IconNameType } from '../Icons/Icons'
 
 interface NavigationButtonProps {
@@ -23,6 +23,16 @@ const ButtonTitle = styled.div`
 function NavigationButton(props: NavigationButtonProps) {
   const { IconName, title, href } = props
   const router = useRouter()
+  const pathname = usePathname()
+  const theme = useTheme()
+
+  const isActive = useMemo(() => {
+    if (pathname === href) {
+      return true
+    }
+    return false
+  }, [href, pathname])
+
   return (
     <NavigationButtonContainer
       onClick={() => {
@@ -31,8 +41,7 @@ function NavigationButton(props: NavigationButtonProps) {
     >
       <Icons
         name={IconName}
-        width={IconName === 'Doksi' ? '17' : '28'}
-        height={IconName === 'Doksi' ? '20' : '28'}
+        color={isActive ? theme.color.main[600] : theme.color.gray[600]}
       />
       <ButtonTitle>{title}</ButtonTitle>
     </NavigationButtonContainer>
