@@ -1,5 +1,5 @@
 import TermOfUseContainer from '@/components/Join/TermOfUseContainer'
-import EmailJoinFormContainer from '@/components/Join/emailJoinFormContainer'
+import EmailJoinFormContainer from '@/components/Join/EmailJoinFormContainer'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { useRouter } from 'next/router'
