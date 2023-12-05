@@ -1,9 +1,11 @@
+import GlobalModal from '@/components/Modal/GlobalModal'
 import AppLayout from '@/components/layout/AppLayout'
 import GlobalStyle from '@/styles/GlobalStyle'
 import theme from '@/styles/theme'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { ReactElement, ReactNode } from 'react'
+import { RecoilRoot } from 'recoil'
 import { ThemeProvider } from 'styled-components'
 
 type NextPageWithLayout = NextPage & {
@@ -19,9 +21,12 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     Component.getLayout || ((page) => <AppLayout>{page}</AppLayout>)
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      {getLayout(<Component {...pageProps} />)}
-    </ThemeProvider>
+    <RecoilRoot>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <GlobalModal />
+        {getLayout(<Component {...pageProps} />)}
+      </ThemeProvider>
+    </RecoilRoot>
   )
 }
