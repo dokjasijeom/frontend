@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import useModal from '@/hooks/useModal'
 import Button from '../common/Button/Button'
 import Input from '../common/Input/Input'
 
@@ -38,8 +39,14 @@ const ContentsWrapper = styled.div`
 `
 
 function EmailJoinFormContainer() {
-  console.log(111)
+  const { showModal } = useModal()
 
+  const handleJoin = () => {
+    showModal({
+      title: '회원가입 완료',
+      description: '독자시점에 오신 것을 환영합니다!',
+    })
+  }
   return (
     <EmailJoinFormWrapper>
       <Title>
@@ -73,7 +80,7 @@ function EmailJoinFormContainer() {
             />
           </div>
           <div className="button_wrapper">
-            <Button type="primary" onClick={() => {}}>
+            <Button type="primary" onClick={handleJoin}>
               완료
             </Button>
           </div>

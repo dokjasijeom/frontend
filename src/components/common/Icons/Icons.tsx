@@ -105,6 +105,7 @@ interface IconProps {
   name: IconNameType
   width?: string
   height?: string
+  onClick?: () => void
   color?: string
 }
 
@@ -115,10 +116,23 @@ function Icons(props: IconProps) {
     width = '26px',
     height = '26px',
     color = theme.color.gray[600],
+    onClick,
   } = props
   const SVG = IconObject[name]
 
-  return <SVG width={width} height={height} fill={color} />
+  const handleClick = () => {
+    if (onClick) onClick()
+  }
+
+  return (
+    <SVG
+      width={width}
+      height={height}
+      fill={color}
+      onClick={handleClick}
+      style={{ cursor: onClick ? 'pointer' : 'unset' }}
+    />
+  )
 }
 
 export default Icons
