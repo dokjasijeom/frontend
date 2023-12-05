@@ -1,9 +1,9 @@
-import Modal from '@/components/Modal/Modal'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React from 'react'
 import Button from '@/components/common/Button/Button'
 import Input from '@/components/common/Input/Input'
 import styled from 'styled-components'
+import useModal from '@/hooks/useModal'
 
 const LoginContainer = styled.div`
   padding: 16px 20px;
@@ -51,19 +51,27 @@ const FindPasswordFormWrapper = styled.div`
 
 function Login() {
   const router = useRouter()
-  const [showFindPasswordModal, setShowFindPasswordModal] = useState(false)
+  const { showModal } = useModal()
 
   const handleSnedFindPasswordMail = () => {
-    // TODO: 비밀번호 찾기 이메일 발송
+    showModal({
+      title: '완료',
+      description: (
+        <div>
+          가입한 이메일로 로그인 링크를 보냈어요!
+          <br />
+          메일함을 확인해주세요.
+        </div>
+      ),
+    })
   }
 
-  return (
-    <LoginContainer>
-      {showFindPasswordModal && (
-        <Modal
-          title="비밀번호 찾기"
-          onClose={() => setShowFindPasswordModal(false)}
-        >
+  const handleClickFindPassword = () => {
+    showModal({
+      type: 'self',
+      title: '비밀번호 찾기',
+      description: (
+        <div>
           비밀번호를 잊으셨나요? <br />
           가입한 이메일로 로그인 링크를 보내드려요.
           <FindPasswordFormWrapper>
@@ -73,8 +81,13 @@ function Login() {
               <Button onClick={handleSnedFindPasswordMail}>메일 보내기</Button>
             </div>
           </FindPasswordFormWrapper>
-        </Modal>
-      )}
+        </div>
+      ),
+    })
+  }
+
+  return (
+    <LoginContainer>
       <div className="title">로그인</div>
       <div className="login_form_wrapper">
         <div className="form_item">
@@ -105,12 +118,7 @@ function Login() {
           >
             이메일로 회원가입
           </Button>
-          <Button
-            type="text"
-            onClick={() => {
-              setShowFindPasswordModal(true)
-            }}
-          >
+          <Button type="text" onClick={handleClickFindPassword}>
             비밀번호를 잊어버렸어요.
           </Button>
         </div>
