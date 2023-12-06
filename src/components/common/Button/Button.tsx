@@ -47,11 +47,23 @@ const ButtonContainer = styled.button`
       color: ${({ theme }) => theme.color.gray[200]};
     }
   }
+  &.icon {
+    width: auto;
+    padding: 10px;
+    background: ${({ theme }) => theme.color.main[50]};
+    font-size: 0;
+    &:hover {
+      background: ${({ theme }) => theme.color.main[100]};
+    }
+    &:disabled {
+      background: transparent;
+    }
+  }
 `
 
 interface ButtonProps {
   children?: ReactNode | undefined
-  type?: 'primary' | 'secondary' | 'text'
+  type?: 'primary' | 'secondary' | 'text' | 'icon'
   disabled?: boolean
   onClick?: () => void
 }
