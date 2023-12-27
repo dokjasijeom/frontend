@@ -25,6 +25,7 @@ const InputWrapper = styled.input`
   &:disabled {
     border: none;
     background: ${({ theme }) => theme.color.gray[100]};
+    color: ${({ theme }) => theme.color.gray[600]};
   }
   &.error {
     border: solid 2px ${({ theme }) => theme.color.system.error} !important;
