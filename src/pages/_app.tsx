@@ -1,4 +1,4 @@
-import GlobalModal from '@/components/Modal/GlobalModal'
+import GlobalModal from '@/components/common/Modal/GlobalModal'
 import AppLayout from '@/components/layout/AppLayout'
 import GlobalStyle from '@/styles/GlobalStyle'
 import theme from '@/styles/theme'
