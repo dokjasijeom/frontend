@@ -2,6 +2,7 @@ import React from 'react'
 import Icons from '@/components/common/Icons/Icons'
 import Image from 'next/image'
 import styled, { useTheme } from 'styled-components'
+import { useRouter } from 'next/router'
 
 const MyInfoWrapper = styled.div`
   padding: 16px 20px 20px;
@@ -86,9 +87,10 @@ const PlusButton = styled.button`
 `
 
 function MyInfoContainer() {
+  const router = useRouter()
   const theme = useTheme()
   const handleEditMyInfo = () => {
-    // TODO: 내 정보 설정
+    router.push('/user/profile')
   }
   const handleEditSubscribe = () => {
     // TODO: 구독 중인 서비스 설정
