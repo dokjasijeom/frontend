@@ -4,6 +4,7 @@ import GlobalStyle from '@/styles/GlobalStyle'
 import theme from '@/styles/theme'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import Head from 'next/head'
 import { ReactElement, ReactNode } from 'react'
 import { RecoilRoot } from 'recoil'
 import { ThemeProvider } from 'styled-components'
@@ -23,6 +24,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <RecoilRoot>
       <ThemeProvider theme={theme}>
+        <Head>
+          <title>독자시점</title>
+        </Head>
         <GlobalStyle />
         <GlobalModal />
         {getLayout(<Component {...pageProps} />)}

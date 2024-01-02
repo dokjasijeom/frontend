@@ -1,4 +1,5 @@
 import MyInfoContainer from '@/components/Library/MyInfoContainer'
+import MyReadingListContainer from '@/components/Library/MyReadingListContainer'
 import Divider from '@/components/common/Divider/Divider'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
@@ -21,6 +22,7 @@ function Library() {
         color={theme.color.gray[50]}
         style={{ margin: 0 }}
       />
+      <MyReadingListContainer />
     </LibraryContainer>
   )
 }
