@@ -33,6 +33,9 @@ const ReadingItem = styled.div`
     align-items: center;
     justify-content: space-between;
     .book_info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
       .book_title {
         display: flex;
         align-items: center;
@@ -44,6 +47,10 @@ const ReadingItem = styled.div`
           ${({ theme }) => theme.typography.body5};
           color: ${({ theme }) => theme.color.gray[800]};
         }
+      }
+      .platform_wrapper {
+        display: flex;
+        gap: 4px;
       }
     }
     .book_count_wrapper {
@@ -105,7 +112,7 @@ function ReadingListItem(props: ReadingListItemProps) {
                 {book.author} · {book.genre}
               </span>
             </div>
-            <div>
+            <div className="platform_wrapper">
               {book.platforms.map((platform: any) => (
                 <Image
                   key={platform}
