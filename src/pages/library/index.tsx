@@ -7,7 +7,9 @@ import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import styled, { useTheme } from 'styled-components'
 
-const LibraryContainer = styled.div``
+const LibraryContainer = styled.div`
+  padding-top: 56px;
+`
 
 function Library() {
   const router = useRouter()

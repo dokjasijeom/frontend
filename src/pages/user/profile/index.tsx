@@ -9,13 +9,15 @@ import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 
-const ProfileContainer = styled.div``
+const ProfileContainer = styled.div`
+  padding-top: 56px;
+`
 
 const ProfileImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px 0 32px;
+  padding: 16px 20px 32px;
 `
 
 const ImageWrapper = styled.div`
@@ -50,6 +52,7 @@ const ImageWrapper = styled.div`
 `
 
 const UserInfoFormWrapper = styled.div`
+  padding: 0 20px;
   .user_info_form_wrapper {
     display: flex;
     flex-direction: column;
@@ -75,6 +78,7 @@ const UserInfoFormWrapper = styled.div`
 const UserAccountSettingWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 0 20px;
 `
 
 const ListButton = styled.button`

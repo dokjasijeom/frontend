@@ -6,7 +6,9 @@ import { useRouter } from 'next/router'
 import React, { ReactElement, useState } from 'react'
 import styled from 'styled-components'
 
-const JoinContainer = styled.div``
+const JoinContainer = styled.div`
+  padding-top: 56px;
+`
 
 function Join() {
   const router = useRouter()
