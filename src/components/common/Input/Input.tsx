@@ -57,7 +57,7 @@ interface InputProps {
   error?: boolean
   prefix?: ReactNode | undefined
   suffix?: ReactNode | undefined
-  onChange?: () => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 function Input(props: InputProps) {
