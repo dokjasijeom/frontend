@@ -13,6 +13,7 @@ import ChevronLeft from './icons/ic-chevron-left.svg'
 import ChevronRight from './icons/ic-chevron-right.svg'
 import ChevronUp from './icons/ic-chevron-up.svg'
 import Close from './icons/ic-close.svg'
+import CloseCircle from './icons/ic-close-circle.svg'
 import DropDown from './icons/ic-dropdown.svg'
 import EyeClosed from './icons/ic-eye-closed.svg'
 import EyeOpen from './icons/ic-eye-open.svg'
@@ -47,6 +48,7 @@ const IconObject = {
   ChevronRight,
   ChevronUp,
   Close,
+  CloseCircle,
   DropDown,
   EyeClosed,
   EyeOpen,
@@ -82,6 +84,7 @@ export type IconNameType =
   | 'ChevronRight'
   | 'ChevronUp'
   | 'Close'
+  | 'CloseCircle'
   | 'DropDown'
   | 'EyeClosed'
   | 'EyeOpen'
