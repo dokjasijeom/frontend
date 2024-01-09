@@ -13,5 +13,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: '/library',
+  matcher: '/my/library',
 }

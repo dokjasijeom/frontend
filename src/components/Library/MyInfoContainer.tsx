@@ -3,6 +3,7 @@ import Icons from '@/components/common/Icons/Icons'
 import Image from 'next/image'
 import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
+import { isEmpty } from 'lodash'
 
 const MyInfoWrapper = styled.div`
   padding: 16px 20px 20px;
@@ -86,15 +87,40 @@ const PlusButton = styled.button`
   cursor: pointer;
 `
 
+const PlatformIcon = styled.div<{ index: number }>`
+  border-radius: 50%;
+  font-size: 0;
+  border: solid 4px ${({ theme }) => theme.color.system.w};
+  position: absolute;
+  z-index: calc(${({ index }) => index} * -1);
+  right: calc(${({ index }) => index} * 23px);
+  bottom: -4px;
+  cursor: pointer;
+`
+
+const SubscribtionPlatformWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: 34px;
+  flex-direction: row;
+  justify-content: flex-end;
+  position: relative;
+`
+
 function MyInfoContainer() {
   const router = useRouter()
   const theme = useTheme()
   const handleEditMyInfo = () => {
-    router.push('/user/profile')
+    router.push('/my/profile')
   }
   const handleEditSubscribe = () => {
-    // TODO: 구독 중인 서비스 설정
+    router.push('/my/subscribtion')
   }
+
+  const mySubscribtion = [
+    { label: '네이버시리즈', value: 'naver' },
+  ] as Platform[]
+
   return (
     <MyInfoWrapper>
       <ProfileWrppaer>
@@ -152,9 +178,27 @@ function MyInfoContainer() {
             구독 중인 서비스
           </div>
           <div className="box_content_wrapper">
-            <PlusButton onClick={handleEditSubscribe}>
-              <Icons name="Plus" width="20px" height="20px" />
-            </PlusButton>
+            {isEmpty(mySubscribtion) && (
+              <PlusButton onClick={handleEditSubscribe}>
+                <Icons name="Plus" width="20px" height="20px" />
+              </PlusButton>
+            )}
+            <SubscribtionPlatformWrapper>
+              {mySubscribtion.map((subscribtion, index) => (
+                <PlatformIcon
+                  key={subscribtion.value}
+                  index={index}
+                  onClick={handleEditSubscribe}
+                >
+                  <Image
+                    src={`/images/${subscribtion.value}.png`}
+                    alt={subscribtion.label}
+                    width={26}
+                    height={26}
+                  />
+                </PlatformIcon>
+              ))}
+            </SubscribtionPlatformWrapper>
           </div>
         </Box>
       </MyContentsWrapper>
