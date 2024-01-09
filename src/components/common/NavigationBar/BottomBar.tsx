@@ -28,7 +28,7 @@ function BottomBar() {
       <NavigationButton IconName="Doksi" title="홈" href="/" />
       <NavigationButton IconName="Menu" title="카테고리" href="/category" />
       <NavigationButton IconName="Search" title="검색" href="/search" />
-      <NavigationButton IconName="Library" title="내 서재" href="/library" />
+      <NavigationButton IconName="Library" title="내 서재" href="/my/library" />
     </BottomBarContainer>
   )
 }

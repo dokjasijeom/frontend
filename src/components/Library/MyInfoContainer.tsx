@@ -90,7 +90,7 @@ function MyInfoContainer() {
   const router = useRouter()
   const theme = useTheme()
   const handleEditMyInfo = () => {
-    router.push('/user/profile')
+    router.push('/my/profile')
   }
   const handleEditSubscribe = () => {
     // TODO: 구독 중인 서비스 설정
