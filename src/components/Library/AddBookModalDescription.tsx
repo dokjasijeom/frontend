@@ -68,9 +68,56 @@ const SearchResultWrapper = styled.div`
   }
 `
 
+const AddBookFormWrapper = styled.div`
+  .add_book_form_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 32px;
+
+    .form_item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      .label {
+        ${({ theme }) => theme.typography.head2};
+        color: ${({ theme }) => theme.color.gray[800]};
+      }
+    }
+  }
+`
+
 function AddBookModalDescription() {
   const [search, setSearch] = useState('')
+  const [showSearchBox, setShowSearchBox] = useState(false)
+  const [showSearchResult, setShowSearchResult] = useState(false)
+  const [isDirect, setIsDirect] = useState(false)
+  const [title, setTitle] = useState('')
   const theme = useTheme()
+
+  const handleChangeSearch = (value: string) => {
+    setSearch(value)
+    setTitle(value)
+
+    if (!isEmpty(search)) {
+      setShowSearchBox(true)
+    }
+  }
+  const handleAddBookDirect = () => {
+    setIsDirect(true)
+    setShowSearchBox(false)
+  }
+
+  const handleShowSearchResult = () => {
+    setIsDirect(false)
+    setShowSearchBox(false)
+    setShowSearchResult(true)
+  }
+
+  const handleClearSearch = () => {
+    setSearch('')
+    setShowSearchResult(false)
+  }
   return (
     <AddBookModalDescriptionWrapper>
       <SearchWrapper>
@@ -83,20 +130,20 @@ function AddBookModalDescription() {
                 name="CloseCircle"
                 width="22px"
                 height="22px"
-                onClick={() => setSearch('')}
+                onClick={handleClearSearch}
               />
             ) : (
               <Icons name="Search" width="22px" height="22px" />
             )
           }
-          onChange={(e) => {
-            setSearch(e.target.value)
-          }}
+          onChange={(e) => handleChangeSearch(e.target.value)}
         />
-        {!isEmpty(search) && (
+        {showSearchBox && (
           <SearchBox>
-            <SearchBoxItem>나 혼자만 레벨업</SearchBoxItem>
-            <SearchBoxItem>
+            <SearchBoxItem onClick={handleShowSearchResult}>
+              나 혼자만 레벨업
+            </SearchBoxItem>
+            <SearchBoxItem onClick={handleAddBookDirect}>
               <div className="last_item">
                 <div className="keyword">{search}</div> 직접 등록하기
               </div>
@@ -104,23 +151,55 @@ function AddBookModalDescription() {
           </SearchBox>
         )}
       </SearchWrapper>
-      <SearchResultWrapper>
-        <Image src="/images/empty_book.png" width={142} height={200} alt="" />
-        <div className="book_info_wrapper">
-          <Badge value="완결" />
-          <div className="title">나 혼자만 레벨업</div>
-          <div className="sub">추공 · 판타지</div>
-          <div className="count">
-            <Icons
-              name="HeartActive"
-              width="16px"
-              height="16px"
-              color={theme.color.main[600]}
-            />
-            4,504
+      {isDirect && (
+        <AddBookFormWrapper>
+          <form className="add_book_form_wrapper">
+            <div className="form_item">
+              <div className="label">제목</div>
+              <Input
+                value={title}
+                placeholder="제목을 입력해주세요."
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div className="form_item">
+              <div className="label">저자</div>
+              <Input
+                value=""
+                placeholder="저자를 입력해주세요."
+                onChange={() => {}}
+              />
+            </div>
+            <div className="form_item">
+              <div className="label">전체 회차</div>
+              <Input
+                value=""
+                placeholder="총 몇 화인지 숫자만 입력해주세요."
+                onChange={() => {}}
+              />
+            </div>
+          </form>
+        </AddBookFormWrapper>
+      )}
+      {!isEmpty(search) && !isDirect && showSearchResult && (
+        <SearchResultWrapper>
+          <Image src="/images/empty_book.png" width={142} height={200} alt="" />
+          <div className="book_info_wrapper">
+            <Badge value="완결" />
+            <div className="title">나 혼자만 레벨업</div>
+            <div className="sub">추공 · 판타지</div>
+            <div className="count">
+              <Icons
+                name="HeartActive"
+                width="16px"
+                height="16px"
+                color={theme.color.main[600]}
+              />
+              4,504
+            </div>
           </div>
-        </div>
-      </SearchResultWrapper>
+        </SearchResultWrapper>
+      )}
     </AddBookModalDescriptionWrapper>
   )
 }
