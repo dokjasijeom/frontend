@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { CONTENTS_TAB_LIST } from '@/constants/Tab'
 import styled from 'styled-components'
+import useModal from '@/hooks/useModal'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import ReadingListItem from './ReadingListItem'
 
@@ -33,6 +34,9 @@ const ListWrapper = styled.div`
 `
 
 function MyReadingListContainer() {
+  const { showModal } = useModal()
+  const [isEdit, setIsEdit] = useState(false)
+
   const mock = {
     webToon: [],
     webNovel: [
@@ -65,14 +69,29 @@ function MyReadingListContainer() {
       },
     ],
   }
+
+  const handleEditReadingList = () => {
+    showModal({
+      title: '기록한 작품 삭제',
+      description: (
+        <>
+          삭제된 기록은 되돌릴 수 없어요.
+          <br />
+          정말 삭제할까요?
+        </>
+      ),
+      positiveText: '삭제',
+    })
+  }
+
   return (
     <MyReadingListContainerWrapper>
       <TabTitleHeader
         iconName="OpenedBook"
         title="읽고 있는 작품"
         tabList={CONTENTS_TAB_LIST}
-        moreButton={<EditButton>편집</EditButton>}
-        onClickMore={() => {}}
+        moreButton={<EditButton>{isEdit ? '완료' : '편집'}</EditButton>}
+        onClickMore={() => setIsEdit(!isEdit)}
       />
       {/* <EmptyWrapper>
         <Image
@@ -86,9 +105,13 @@ function MyReadingListContainer() {
         기록해보세요!
       </EmptyWrapper> */}
       <ListWrapper>
-        {mock.webNovel.map((book, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <ReadingListItem book={book} key={index} />
+        {mock.webNovel.map((book) => (
+          <ReadingListItem
+            book={book}
+            key={book.title}
+            isEdit={isEdit}
+            onEdit={handleEditReadingList}
+          />
         ))}
       </ListWrapper>
     </MyReadingListContainerWrapper>

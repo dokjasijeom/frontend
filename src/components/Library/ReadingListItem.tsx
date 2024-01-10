@@ -3,10 +3,6 @@ import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import Icons from '../common/Icons/Icons'
 
-interface ReadingListItemProps {
-  book: any
-}
-
 const ReadingListItemWrapper = styled.div`
   display: flex;
 `
@@ -78,6 +74,16 @@ const ProgressValue = styled.div<{ value: number }>`
   background: ${({ theme }) => theme.color.sub[200]};
   border-radius: 12px;
 `
+const ReadingListItemEditButton = styled.button`
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 50px;
+  padding: 0 4px;
+  ${({ theme }) => theme.typography.head3};
+  color: ${({ theme }) => theme.color.gray[600]};
+`
+
 const ReadingListItemAddButton = styled.button`
   display: flex;
   justify-content: center;
@@ -87,8 +93,14 @@ const ReadingListItemAddButton = styled.button`
   border-radius: 12px;
 `
 
+interface ReadingListItemProps {
+  book: any
+  isEdit?: boolean
+  onEdit?: () => void
+}
+
 function ReadingListItem(props: ReadingListItemProps) {
-  const { book } = props
+  const { book, isEdit = false, onEdit } = props
   const theme = useTheme()
   const progressValue = (total: number, current: number) => {
     return (current / total) * 100
@@ -131,9 +143,15 @@ function ReadingListItem(props: ReadingListItemProps) {
         </div>
         <ProgressValue value={progressValue(book.total, book.current)} />
       </ReadingItem>
-      <ReadingListItemAddButton>
-        <Icons name="Plus" color={theme.color.gray[800]} />
-      </ReadingListItemAddButton>
+      {isEdit ? (
+        <ReadingListItemEditButton onClick={onEdit}>
+          삭제
+        </ReadingListItemEditButton>
+      ) : (
+        <ReadingListItemAddButton>
+          <Icons name="Plus" color={theme.color.gray[800]} />
+        </ReadingListItemAddButton>
+      )}
     </ReadingListItemWrapper>
   )
 }
