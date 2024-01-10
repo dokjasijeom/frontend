@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import Tab, { TabItem } from '../Tab/Tab'
 import Icons, { IconNameType } from '../Icons/Icons'
@@ -31,11 +31,12 @@ interface TabTitleHeaderProps {
   iconName: IconNameType
   title: string
   tabList: TabItem[]
+  moreButton?: ReactNode | undefined
   onClickMore: () => void
 }
 
 function TabTitleHeader(props: TabTitleHeaderProps) {
-  const { title, tabList, onClickMore, iconName } = props
+  const { title, tabList, onClickMore, iconName, moreButton } = props
   const theme = useTheme()
 
   const [selectedTab, setSelectedTab] = useState(tabList[0])
@@ -54,7 +55,7 @@ function TabTitleHeader(props: TabTitleHeaderProps) {
         />
       </div>
       <MoreButton onClick={onClickMore}>
-        <Icons name="ChevronRight" />
+        {moreButton || <Icons name="ChevronRight" />}
       </MoreButton>
     </TabTitleHeaderContainer>
   )

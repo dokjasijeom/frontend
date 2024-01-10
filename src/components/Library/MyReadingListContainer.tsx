@@ -19,6 +19,12 @@ const MyReadingListContainerWrapper = styled.div``
 //   padding: 32px;
 // `
 
+const EditButton = styled.div`
+  padding: 0px 4px;
+  ${({ theme }) => theme.typography.head3};
+  color: ${({ theme }) => theme.color.gray[600]};
+`
+
 const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -65,6 +71,7 @@ function MyReadingListContainer() {
         iconName="OpenedBook"
         title="읽고 있는 작품"
         tabList={CONTENTS_TAB_LIST}
+        moreButton={<EditButton>편집</EditButton>}
         onClickMore={() => {}}
       />
       {/* <EmptyWrapper>
