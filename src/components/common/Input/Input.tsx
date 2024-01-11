@@ -1,7 +1,9 @@
 import React, { ReactNode, useState } from 'react'
 import { styled } from 'styled-components'
 
-const InputContainer = styled.div`
+const InputContainer = styled.div``
+
+const InputWrapper = styled.div`
   padding: 12px 20px;
   width: 100%;
   border-radius: 12px;
@@ -32,7 +34,7 @@ const InputPrefixWrapper = styled.div`
   gap: 4px;
 `
 
-const InputWrapper = styled.input`
+const InputStyled = styled.input`
   border: 0;
   width: 100%;
   flex: 1;
@@ -50,11 +52,18 @@ const InputWrapper = styled.input`
   }
 `
 
+const ErrorMessageWrapper = styled.div`
+  padding: 4px 20px 0;
+  color: ${({ theme }) => theme.color.system.error};
+  ${({ theme }) => theme.typography.body2};
+`
+
 interface InputProps {
   value: string
   placeholder: string
   disabled?: boolean
   error?: boolean
+  errorMessage?: string
   prefix?: ReactNode | undefined
   suffix?: ReactNode | undefined
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -66,6 +75,7 @@ function Input(props: InputProps) {
     placeholder = '',
     disabled = false,
     error = false,
+    errorMessage,
     prefix,
     suffix,
     onChange,
@@ -74,28 +84,33 @@ function Input(props: InputProps) {
   const [isFocus, setIsFocus] = useState(false)
 
   return (
-    <InputContainer
-      className={`${error ? 'error' : ''} ${isFocus ? 'focus' : ''} ${
-        disabled ? 'disabled' : ''
-      }`}
-    >
-      <InputPrefixWrapper>
-        {prefix}
-        <InputWrapper
-          type="text"
-          placeholder={placeholder}
-          value={value}
-          disabled={disabled}
-          onChange={onChange}
-          onFocus={() => {
-            setIsFocus(true)
-          }}
-          onBlur={() => {
-            setIsFocus(false)
-          }}
-        />
-      </InputPrefixWrapper>
-      {suffix}
+    <InputContainer>
+      <InputWrapper
+        className={`${error ? 'error' : ''} ${isFocus ? 'focus' : ''} ${
+          disabled ? 'disabled' : ''
+        }`}
+      >
+        <InputPrefixWrapper>
+          {prefix}
+          <InputStyled
+            type="text"
+            placeholder={placeholder}
+            value={value}
+            disabled={disabled}
+            onChange={onChange}
+            onFocus={() => {
+              setIsFocus(true)
+            }}
+            onBlur={() => {
+              setIsFocus(false)
+            }}
+          />
+        </InputPrefixWrapper>
+        {suffix}
+      </InputWrapper>
+      {error && (
+        <ErrorMessageWrapper>{error ? errorMessage : ''}</ErrorMessageWrapper>
+      )}
     </InputContainer>
   )
 }
