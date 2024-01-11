@@ -1,7 +1,15 @@
-import React, { ReactNode, useState } from 'react'
+import React, {
+  HTMLInputTypeAttribute,
+  ReactNode,
+  useCallback,
+  useState,
+} from 'react'
 import { styled } from 'styled-components'
+import Icons from '../Icons/Icons'
 
-const InputContainer = styled.div`
+const InputContainer = styled.div``
+
+const InputWrapper = styled.div`
   padding: 12px 20px;
   width: 100%;
   border-radius: 12px;
@@ -32,7 +40,7 @@ const InputPrefixWrapper = styled.div`
   gap: 4px;
 `
 
-const InputWrapper = styled.input`
+const InputStyled = styled.input`
   border: 0;
   width: 100%;
   flex: 1;
@@ -50,11 +58,19 @@ const InputWrapper = styled.input`
   }
 `
 
+const ErrorMessageWrapper = styled.div`
+  padding: 4px 20px 0;
+  color: ${({ theme }) => theme.color.system.error};
+  ${({ theme }) => theme.typography.body2};
+`
+
 interface InputProps {
+  type?: HTMLInputTypeAttribute
   value: string
   placeholder: string
   disabled?: boolean
   error?: boolean
+  errorMessage?: string
   prefix?: ReactNode | undefined
   suffix?: ReactNode | undefined
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -62,40 +78,73 @@ interface InputProps {
 
 function Input(props: InputProps) {
   const {
+    type = 'text',
     value = '',
     placeholder = '',
     disabled = false,
     error = false,
+    errorMessage,
     prefix,
     suffix,
     onChange,
   } = props
 
   const [isFocus, setIsFocus] = useState(false)
+  const [inputType, setInputType] = useState(type)
+
+  const handleClickEye = useCallback(() => {
+    if (inputType === 'text') {
+      setInputType('password')
+    } else if (inputType === 'password') {
+      setInputType('text')
+    }
+  }, [inputType])
+
+  const setSuffix = useCallback(() => {
+    if (suffix) {
+      return suffix
+    }
+    if (type === 'password') {
+      return (
+        <Icons
+          name={inputType === 'text' ? 'EyeOpen' : 'EyeClosed'}
+          onClick={handleClickEye}
+          width="20px"
+          height="20px"
+        />
+      )
+    }
+    return <></>
+  }, [handleClickEye, inputType, suffix, type])
 
   return (
-    <InputContainer
-      className={`${error ? 'error' : ''} ${isFocus ? 'focus' : ''} ${
-        disabled ? 'disabled' : ''
-      }`}
-    >
-      <InputPrefixWrapper>
-        {prefix}
-        <InputWrapper
-          type="text"
-          placeholder={placeholder}
-          value={value}
-          disabled={disabled}
-          onChange={onChange}
-          onFocus={() => {
-            setIsFocus(true)
-          }}
-          onBlur={() => {
-            setIsFocus(false)
-          }}
-        />
-      </InputPrefixWrapper>
-      {suffix}
+    <InputContainer>
+      <InputWrapper
+        className={`${error ? 'error' : ''} ${isFocus ? 'focus' : ''} ${
+          disabled ? 'disabled' : ''
+        }`}
+      >
+        <InputPrefixWrapper>
+          {prefix}
+          <InputStyled
+            type={inputType}
+            placeholder={placeholder}
+            value={value}
+            disabled={disabled}
+            onChange={onChange}
+            onFocus={() => {
+              setIsFocus(true)
+            }}
+            onBlur={() => {
+              setIsFocus(false)
+            }}
+          />
+        </InputPrefixWrapper>
+        {setSuffix()}
+      </InputWrapper>
+      {error && (
+        <ErrorMessageWrapper>{error ? errorMessage : ''}</ErrorMessageWrapper>
+      )}
     </InputContainer>
   )
 }
