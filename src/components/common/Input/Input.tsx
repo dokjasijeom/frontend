@@ -1,5 +1,11 @@
-import React, { ReactNode, useState } from 'react'
+import React, {
+  HTMLInputTypeAttribute,
+  ReactNode,
+  useCallback,
+  useState,
+} from 'react'
 import { styled } from 'styled-components'
+import Icons from '../Icons/Icons'
 
 const InputContainer = styled.div``
 
@@ -59,6 +65,7 @@ const ErrorMessageWrapper = styled.div`
 `
 
 interface InputProps {
+  type?: HTMLInputTypeAttribute
   value: string
   placeholder: string
   disabled?: boolean
@@ -71,6 +78,7 @@ interface InputProps {
 
 function Input(props: InputProps) {
   const {
+    type = 'text',
     value = '',
     placeholder = '',
     disabled = false,
@@ -82,6 +90,32 @@ function Input(props: InputProps) {
   } = props
 
   const [isFocus, setIsFocus] = useState(false)
+  const [inputType, setInputType] = useState(type)
+
+  const handleClickEye = useCallback(() => {
+    if (inputType === 'text') {
+      setInputType('password')
+    } else if (inputType === 'password') {
+      setInputType('text')
+    }
+  }, [inputType])
+
+  const setSuffix = useCallback(() => {
+    if (suffix) {
+      return suffix
+    }
+    if (type === 'password') {
+      return (
+        <Icons
+          name={inputType === 'text' ? 'EyeOpen' : 'EyeClosed'}
+          onClick={handleClickEye}
+          width="20px"
+          height="20px"
+        />
+      )
+    }
+    return <></>
+  }, [handleClickEye, inputType, suffix, type])
 
   return (
     <InputContainer>
@@ -93,7 +127,7 @@ function Input(props: InputProps) {
         <InputPrefixWrapper>
           {prefix}
           <InputStyled
-            type="text"
+            type={inputType}
             placeholder={placeholder}
             value={value}
             disabled={disabled}
@@ -106,7 +140,7 @@ function Input(props: InputProps) {
             }}
           />
         </InputPrefixWrapper>
-        {suffix}
+        {setSuffix()}
       </InputWrapper>
       {error && (
         <ErrorMessageWrapper>{error ? errorMessage : ''}</ErrorMessageWrapper>
