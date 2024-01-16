@@ -33,7 +33,7 @@ function GlobalModal() {
         title={modal.title}
         onClose={handleModalClose}
       >
-        {modal.description}
+        {modal.body}
       </Modal>
     )
   }

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import ReadingListItem from './ReadingListItem'
-import RecordModalDescription from './RecordModalDescription'
+import RecordModalBody from './RecordModalBody'
 
 const MyReadingListContainerWrapper = styled.div``
 
@@ -74,7 +74,7 @@ function MyReadingListContainer() {
   const handleEditReadingList = () => {
     showModal({
       title: '기록한 작품 삭제',
-      description: (
+      body: (
         <>
           삭제된 기록은 되돌릴 수 없어요.
           <br />
@@ -89,7 +89,7 @@ function MyReadingListContainer() {
     showModal({
       type: 'self',
       title: '기록하기',
-      description: <RecordModalDescription />,
+      body: <RecordModalBody />,
     })
   }
   return (

@@ -1,4 +1,4 @@
-import AddBookModalDescription from '@/components/Library/AddBookModalDescription'
+import AddBookModalBody from '@/components/Library/AddBookModalBody'
 import MyInfoContainer from '@/components/Library/MyInfoContainer'
 import MyReadingListContainer from '@/components/Library/MyReadingListContainer'
 import Divider from '@/components/common/Divider/Divider'
@@ -33,7 +33,7 @@ function Library() {
   const handlePlusButton = () => {
     showModal({
       title: '웹소설 작품 추가하기',
-      description: <AddBookModalDescription />,
+      body: <AddBookModalBody />,
       positiveText: '추가',
       onPositiveClick: handleAddBook,
     })

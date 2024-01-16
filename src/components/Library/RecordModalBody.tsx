@@ -8,7 +8,7 @@ import Selector, { OptionItem } from '../common/Selector/Selector'
 import RecordEpisodes, { Episodes } from './RecordEpisodes'
 import Button from '../common/Button/Button'
 
-const RecordModalDescriptionContainer = styled.div`
+const RecordModalBodyContainer = styled.div`
   padding-top: 20px;
   width: 460px;
   display: flex;
@@ -64,7 +64,7 @@ const RecordWrapper = styled.div`
   }
 `
 
-function RecordModalDescription() {
+function RecordModalBody() {
   const theme = useTheme()
   const [isMulti, setIsMulti] = useState(false)
   const [platform, setPlarform] = useState<OptionItem | null>(null)
@@ -79,7 +79,7 @@ function RecordModalDescription() {
   }
 
   return (
-    <RecordModalDescriptionContainer>
+    <RecordModalBodyContainer>
       <BookWrapper>
         <Image
           className="book_thumbnail"
@@ -118,8 +118,8 @@ function RecordModalDescription() {
         <RecordEpisodes isMulti={isMulti} setEpisodes={setEpisodes} />
       </RecordWrapper>
       <Button onClick={handleRecord}>저장</Button>
-    </RecordModalDescriptionContainer>
+    </RecordModalBodyContainer>
   )
 }
 
-export default RecordModalDescription
+export default RecordModalBody
