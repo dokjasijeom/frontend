@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import ReadingListItem from './ReadingListItem'
+import RecordModalDescription from './RecordModalDescription'
 
 const MyReadingListContainerWrapper = styled.div``
 
@@ -84,6 +85,13 @@ function MyReadingListContainer() {
     })
   }
 
+  const handleRecordReadingList = () => {
+    showModal({
+      type: 'self',
+      title: '기록하기',
+      description: <RecordModalDescription />,
+    })
+  }
   return (
     <MyReadingListContainerWrapper>
       <TabTitleHeader
@@ -111,6 +119,7 @@ function MyReadingListContainer() {
             key={book.title}
             isEdit={isEdit}
             onEdit={handleEditReadingList}
+            onRecord={handleRecordReadingList}
           />
         ))}
       </ListWrapper>

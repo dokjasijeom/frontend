@@ -97,10 +97,11 @@ interface ReadingListItemProps {
   book: any
   isEdit?: boolean
   onEdit?: () => void
+  onRecord?: () => void
 }
 
 function ReadingListItem(props: ReadingListItemProps) {
-  const { book, isEdit = false, onEdit } = props
+  const { book, isEdit = false, onEdit, onRecord } = props
   const theme = useTheme()
   const progressValue = (total: number, current: number) => {
     return (current / total) * 100
@@ -148,7 +149,7 @@ function ReadingListItem(props: ReadingListItemProps) {
           삭제
         </ReadingListItemEditButton>
       ) : (
-        <ReadingListItemAddButton>
+        <ReadingListItemAddButton onClick={onRecord}>
           <Icons name="Plus" color={theme.color.gray[800]} />
         </ReadingListItemAddButton>
       )}
