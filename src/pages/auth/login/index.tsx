@@ -56,7 +56,7 @@ function Login() {
   const handleSnedFindPasswordMail = () => {
     showModal({
       title: '완료',
-      description: (
+      body: (
         <div>
           가입한 이메일로 로그인 링크를 보냈어요!
           <br />
@@ -70,7 +70,7 @@ function Login() {
     showModal({
       type: 'self',
       title: '비밀번호 찾기',
-      description: (
+      body: (
         <div>
           비밀번호를 잊으셨나요? <br />
           가입한 이메일로 로그인 링크를 보내드려요.

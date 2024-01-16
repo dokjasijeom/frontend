@@ -110,7 +110,7 @@ function Profile() {
     showModal({
       type: 'confirm',
       title: '회원 탈퇴',
-      description: (
+      body: (
         <div>
           회원 탈퇴 시 기록한 모든 데이터가 사라지고
           <br />

@@ -6,7 +6,7 @@ import Input from '../common/Input/Input'
 import Icons from '../common/Icons/Icons'
 import Badge from '../common/Badge/Badge'
 
-const AddBookModalDescriptionWrapper = styled.div`
+const AddBookModalBodyWrapper = styled.div`
   width: 396px;
   min-height: 266px;
 `
@@ -87,7 +87,7 @@ const AddBookFormWrapper = styled.div`
   }
 `
 
-function AddBookModalDescription() {
+function AddBookModalBody() {
   const [search, setSearch] = useState('')
   const [showSearchBox, setShowSearchBox] = useState(false)
   const [showSearchResult, setShowSearchResult] = useState(false)
@@ -119,7 +119,7 @@ function AddBookModalDescription() {
     setShowSearchResult(false)
   }
   return (
-    <AddBookModalDescriptionWrapper>
+    <AddBookModalBodyWrapper>
       <SearchWrapper>
         <Input
           value={search}
@@ -200,8 +200,8 @@ function AddBookModalDescription() {
           </div>
         </SearchResultWrapper>
       )}
-    </AddBookModalDescriptionWrapper>
+    </AddBookModalBodyWrapper>
   )
 }
 
-export default AddBookModalDescription
+export default AddBookModalBody

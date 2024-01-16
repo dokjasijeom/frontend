@@ -44,7 +44,7 @@ function EmailJoinFormContainer() {
   const handleJoin = () => {
     showModal({
       title: '회원가입 완료',
-      description: '독자시점에 오신 것을 환영합니다!',
+      body: '독자시점에 오신 것을 환영합니다!',
     })
   }
   return (

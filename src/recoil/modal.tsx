@@ -4,7 +4,7 @@ import { atom } from 'recoil'
 export interface ModalProps {
   type?: 'alert' | 'confirm' | 'self'
   title?: string
-  description?: string | ReactNode | undefined
+  body?: string | ReactNode | undefined
   negativeText?: string
   positiveText?: string
   onNegativeClick?: () => void
