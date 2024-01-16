@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import styled, { CSSProperties } from 'styled-components'
+import styled, { CSSProperties, useTheme } from 'styled-components'
 import Icons from '../Icons/Icons'
 
 const CheckboxContainer = styled.div`
@@ -34,10 +34,20 @@ interface CheckboxProps {
   checked: boolean
   onChange?: () => void
   style?: CSSProperties
+  checkColor?: string
 }
 
 function Checkbox(props: CheckboxProps) {
-  const { children, disabled = false, checked, onChange, style } = props
+  const theme = useTheme()
+  const {
+    children,
+    disabled = false,
+    checked,
+    onChange,
+    style,
+    checkColor = theme.color.gray[600],
+  } = props
+
   return (
     <CheckboxContainer>
       <CheckboxLabel style={style}>
@@ -49,7 +59,7 @@ function Checkbox(props: CheckboxProps) {
         />
         <CheckboxIcon>
           {checked ? (
-            <Icons name="CheckActive" />
+            <Icons name="CheckActive" color={checkColor} />
           ) : (
             <Icons name="CheckDefault" />
           )}
