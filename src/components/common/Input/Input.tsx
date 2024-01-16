@@ -3,8 +3,9 @@ import React, {
   ReactNode,
   useCallback,
   useState,
+  KeyboardEvent,
 } from 'react'
-import { styled } from 'styled-components'
+import { CSSProperties, styled } from 'styled-components'
 import Icons from '../Icons/Icons'
 
 const InputContainer = styled.div``
@@ -66,7 +67,7 @@ const ErrorMessageWrapper = styled.div`
 
 interface InputProps {
   type?: HTMLInputTypeAttribute
-  value: string
+  value: string | number
   placeholder: string
   disabled?: boolean
   error?: boolean
@@ -74,6 +75,8 @@ interface InputProps {
   prefix?: ReactNode | undefined
   suffix?: ReactNode | undefined
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  style?: CSSProperties
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void
 }
 
 function Input(props: InputProps) {
@@ -87,6 +90,8 @@ function Input(props: InputProps) {
     prefix,
     suffix,
     onChange,
+    style,
+    onKeyDown,
   } = props
 
   const [isFocus, setIsFocus] = useState(false)
@@ -120,6 +125,7 @@ function Input(props: InputProps) {
   return (
     <InputContainer>
       <InputWrapper
+        style={style}
         className={`${error ? 'error' : ''} ${isFocus ? 'focus' : ''} ${
           disabled ? 'disabled' : ''
         }`}
@@ -138,6 +144,7 @@ function Input(props: InputProps) {
             onBlur={() => {
               setIsFocus(false)
             }}
+            onKeyDown={onKeyDown}
           />
         </InputPrefixWrapper>
         {setSuffix()}
