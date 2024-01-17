@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
+import { useRouter } from 'next/router'
 import Icons from '../common/Icons/Icons'
 
 const ReadingListItemWrapper = styled.div`
@@ -8,7 +9,8 @@ const ReadingListItemWrapper = styled.div`
 `
 
 const ReadingItem = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 50px auto;
   flex: 1;
   align-items: center;
   gap: 12px;
@@ -17,9 +19,12 @@ const ReadingItem = styled.div`
   border-radius: 12px;
   overflow: hidden;
   position: relative;
+  cursor: pointer;
 
   .book_thumbnail_image {
     z-index: 1;
+    object-fit: cover;
+    border-radius: 4px;
   }
 
   .book_info_wrapper {
@@ -103,13 +108,18 @@ interface ReadingListItemProps {
 function ReadingListItem(props: ReadingListItemProps) {
   const { book, isEdit = false, onEdit, onRecord } = props
   const theme = useTheme()
+  const router = useRouter()
   const progressValue = (total: number, current: number) => {
     return (current / total) * 100
   }
 
   return (
     <ReadingListItemWrapper>
-      <ReadingItem>
+      <ReadingItem
+        onClick={() => {
+          router.push(`/my/library/${book.id}`)
+        }}
+      >
         <Image
           className="book_thumbnail_image"
           src={book.image}

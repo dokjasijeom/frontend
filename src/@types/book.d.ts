@@ -16,4 +16,5 @@ export interface MyBook {
   platforms: string[]
   total: number
   current: number
+  score: number
 }

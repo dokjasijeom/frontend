@@ -12,6 +12,7 @@ export const MockBook = {
       platforms: ['naver', 'kakao', 'ridi'],
       total: 790,
       current: 519,
+      score: 9872,
     },
     {
       id: '1',
@@ -22,6 +23,7 @@ export const MockBook = {
       platforms: ['naver', 'kakao', 'ridi'],
       total: 271,
       current: 200,
+      score: 4504,
     },
     {
       id: '2',
@@ -32,6 +34,7 @@ export const MockBook = {
       platforms: ['kakao'],
       total: 223,
       current: 98,
+      score: 3092,
     },
   ] as MyBook[],
 }
