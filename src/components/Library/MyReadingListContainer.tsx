@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { CONTENTS_TAB_LIST } from '@/constants/Tab'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
+import { MockBook } from '@/constants/MockData'
+import { MyBook } from '@/@types/book'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import ReadingListItem from './ReadingListItem'
 import RecordModalBody from './RecordModalBody'
@@ -38,39 +40,6 @@ function MyReadingListContainer() {
   const { showModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
 
-  const mock = {
-    webToon: [],
-    webNovel: [
-      {
-        title: '전지적 독자 시점',
-        image: '/images/profile.png',
-        author: '싱숑',
-        genre: '판타지',
-        platforms: ['naver', 'kakao', 'ridi'],
-        total: 790,
-        current: 519,
-      },
-      {
-        title: '나 혼자만 레벨업',
-        image: '/images/profile.png',
-        author: '추공',
-        genre: '판타지',
-        platforms: ['naver', 'kakao', 'ridi'],
-        total: 271,
-        current: 200,
-      },
-      {
-        title: '피오니-살인귀 대공과의 미래를 보았다',
-        image: '/images/profile.png',
-        author: '은려원',
-        genre: '로판',
-        platforms: ['kakao'],
-        total: 223,
-        current: 98,
-      },
-    ],
-  }
-
   const handleEditReadingList = () => {
     showModal({
       title: '기록한 작품 삭제',
@@ -85,11 +54,11 @@ function MyReadingListContainer() {
     })
   }
 
-  const handleRecordReadingList = () => {
+  const handleRecordReadingList = (book: MyBook) => {
     showModal({
       type: 'self',
       title: '기록하기',
-      body: <RecordModalBody />,
+      body: <RecordModalBody book={book} />,
     })
   }
   return (
@@ -113,13 +82,13 @@ function MyReadingListContainer() {
         기록해보세요!
       </EmptyWrapper> */}
       <ListWrapper>
-        {mock.webNovel.map((book) => (
+        {MockBook.webNovel.map((book) => (
           <ReadingListItem
             book={book}
-            key={book.title}
+            key={book.id}
             isEdit={isEdit}
             onEdit={handleEditReadingList}
-            onRecord={handleRecordReadingList}
+            onRecord={() => handleRecordReadingList(book)}
           />
         ))}
       </ListWrapper>

@@ -6,3 +6,15 @@ export interface Book {
   score: number
   platforms: string[]
 }
+
+export interface MyBook {
+  id: string
+  title: string
+  image: string
+  author: string
+  genre: string
+  platforms: string[]
+  total: number
+  current: number
+  score: number
+}

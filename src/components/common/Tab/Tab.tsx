@@ -6,6 +6,11 @@ const TextTabContainer = styled.div`
   gap: 8px;
   align-items: center;
 `
+const TextTabWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
 
 const TextTabItemWrapper = styled.div`
   ${({ theme }) => theme.typography.body1};
@@ -75,16 +80,15 @@ function Tab(props: TabProps) {
       return (
         <TextTabContainer>
           {tabList.map((tab, index) => (
-            <>
+            <TextTabWrapper key={tab.value}>
               <TextTabItemWrapper
                 className={selectedTab.value === tab.value ? 'active' : ''}
-                key={tab.value}
                 onClick={() => onChange(tab)}
               >
                 {tab.label}
               </TextTabItemWrapper>
               {tabList.length !== index + 1 && <TextTabDivider />}
-            </>
+            </TextTabWrapper>
           ))}
         </TextTabContainer>
       )

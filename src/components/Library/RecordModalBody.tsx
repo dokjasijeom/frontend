@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { PLATFORM_TAB_LIST } from '@/constants/Tab'
 import { isEmpty } from 'lodash'
+import { MyBook } from '@/@types/book'
 import Checkbox from '../common/Checkbox/Checkbox'
 import Selector, { OptionItem } from '../common/Selector/Selector'
 import RecordEpisodes, { Episodes } from './RecordEpisodes'
@@ -64,7 +65,12 @@ const RecordWrapper = styled.div`
   }
 `
 
-function RecordModalBody() {
+interface RecordModalBodyProps {
+  book: MyBook
+}
+
+function RecordModalBody(props: RecordModalBodyProps) {
+  const { book } = props
   const theme = useTheme()
   const [isMulti, setIsMulti] = useState(false)
   const [platform, setPlarform] = useState<OptionItem | null>(null)
@@ -83,18 +89,21 @@ function RecordModalBody() {
       <BookWrapper>
         <Image
           className="book_thumbnail"
-          src="/images/test.png"
+          src={book.image}
           width={50}
           height={50}
           alt=""
         />
         <div className="book_info">
           <div className="title">
-            나 혼자만 레벨업<span className="sub">추공 · 판타지</span>
+            {book.title}
+            <span className="sub">
+              {book.author} · {book.genre}
+            </span>
           </div>
           <div className="description">
             <Image src="/images/naver.png" width={16} height={16} alt="" />
-            네이버시리즈에서 200화까지 읽었어요!
+            네이버시리즈에서 {book.current}화까지 읽었어요!
           </div>
         </div>
       </BookWrapper>
