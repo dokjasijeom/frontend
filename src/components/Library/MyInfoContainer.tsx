@@ -90,7 +90,7 @@ const PlusButton = styled.button`
 const PlatformIcon = styled.div<{ index: number }>`
   border-radius: 50%;
   font-size: 0;
-  border: solid 4px ${({ theme }) => theme.color.system.w};
+  border: solid 3px ${({ theme }) => theme.color.system.w};
   position: absolute;
   z-index: calc(${({ index }) => index} * -1);
   right: calc(${({ index }) => index} * 23px);
