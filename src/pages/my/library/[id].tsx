@@ -60,7 +60,7 @@ const DeleteButton = styled.button`
 `
 const RecordBanner = styled.div`
   margin: 0 20px;
-  width: 100%;
+  width: calc(100% - 40px);
   padding: 8px 0px;
   text-align: center;
   gap: 10px;
@@ -140,7 +140,7 @@ function LibraryDetail() {
             </div>
           </BookInfoWrapper>
           <RecordBanner>
-            최근에 <span className="bold">네이버시리즈</span>에서{' '}
+            <span className="bold">네이버시리즈</span>에서{' '}
             <span className="bold">{book.current}화</span>까지 읽었어요!
           </RecordBanner>
         </>
