@@ -26,8 +26,10 @@ const CheckboxLabelWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  position: relative;
   .show_detail {
-    flex: none;
+    position: absolute;
+    right: 0;
     width: 21px;
     ${({ theme }) => theme.typography.body4};
     color: ${({ theme }) => theme.color.gray[600]};
