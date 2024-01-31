@@ -280,6 +280,10 @@ function LibraryDetail() {
     }
   }
 
+  const handleEditEpisodes = () => {
+    setIsEdit(true)
+  }
+
   return (
     <LibraryDetailContainer>
       <TitleHeader title="읽고 있는 작품" onClickBack={() => router.back()} />
@@ -328,8 +332,8 @@ function LibraryDetail() {
             <TabTitleHeader
               iconName="Content"
               title="기록장"
-              moreButton={<EditButton>{isEdit ? '완료' : '편집'}</EditButton>}
-              onClickMore={() => {}}
+              moreButton={<EditButton>{isEdit ? '' : '편집'}</EditButton>}
+              onClickMore={handleEditEpisodes}
             />
             <RecordDetail>
               <div className="record_filter_wrapper">
@@ -374,7 +378,7 @@ function LibraryDetail() {
                 />
               </div>
               <div className="episodes_wrapper">
-                {!isEmpty(selectedEpisodes) && (
+                {(!isEmpty(selectedEpisodes) || isEdit) && (
                   <DeleteBox>
                     <div className="selected_info">
                       선택한{' '}
@@ -388,9 +392,15 @@ function LibraryDetail() {
                     <button
                       type="button"
                       className="delete_button"
-                      onClick={handleDeleteModal}
+                      onClick={() => {
+                        if (!isEmpty(selectedEpisodes)) {
+                          handleDeleteModal()
+                        } else {
+                          setIsEdit(false)
+                        }
+                      }}
                     >
-                      삭제
+                      {!isEmpty(selectedEpisodes) ? '삭제' : '취소'}
                     </button>
                   </DeleteBox>
                 )}
