@@ -240,5 +240,17 @@ export const MockBook = {
         { ep: 46, platform: 'ridi' },
       ],
     },
+    {
+      id: '3',
+      title: '없는 작품',
+      image: '',
+      author: '저자',
+      genre: '',
+      platforms: [],
+      total: 0,
+      current: 0,
+      score: 101,
+      episodes: [],
+    },
   ] as MyBook[],
 }

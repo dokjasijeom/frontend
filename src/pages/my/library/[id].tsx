@@ -27,13 +27,14 @@ const BookInfoWrapper = styled.div`
   display: flex;
   .book_image {
     border-radius: 12px;
+    margin-right: 18px;
   }
   .book_info_wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-left: 18px;
     width: 100%;
+    height: 200px;
 
     .book_info {
       position: relative;
@@ -123,6 +124,16 @@ const RecordDetail = styled.div`
     display: flex;
     gap: 4px;
     flex-wrap: wrap;
+
+    .empty_episodes {
+      height: 234px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      ${({ theme }) => theme.typography.body2};
+      color: ${({ theme }) => theme.color.gray[800]};
+    }
   }
 `
 const EpisodeBox = styled.div<{ platform: string }>`
@@ -275,18 +286,21 @@ function LibraryDetail() {
       {book && (
         <>
           <BookInfoWrapper>
-            <Image
-              className="book_image"
-              src={book.image}
-              width={140}
-              height={200}
-              alt=""
-            />
+            {!isEmpty(book.image) && (
+              <Image
+                className="book_image"
+                src={book.image}
+                width={140}
+                height={200}
+                alt=""
+              />
+            )}
             <div className="book_info_wrapper">
               <div className="book_info">
                 <div className="title">{book.title}</div>
                 <div className="sub">
-                  {book.author} · {book.genre}
+                  {book.author}
+                  {book.genre ? ` · ${book.genre}` : ''}
                 </div>
                 <div className="score">
                   <Icons
@@ -304,10 +318,12 @@ function LibraryDetail() {
               </Button>
             </div>
           </BookInfoWrapper>
-          <RecordBanner>
-            <span className="bold">네이버시리즈</span>에서{' '}
-            <span className="bold">{book.current}화</span>까지 읽었어요!
-          </RecordBanner>
+          {book.total > 0 && (
+            <RecordBanner>
+              <span className="bold">네이버시리즈</span>에서{' '}
+              <span className="bold">{book.current}화</span>까지 읽었어요!
+            </RecordBanner>
+          )}
           <RecordDetailWrapper>
             <TabTitleHeader
               iconName="Content"
@@ -377,6 +393,9 @@ function LibraryDetail() {
                       삭제
                     </button>
                   </DeleteBox>
+                )}
+                {isEmpty(filteredEpisodes) && book.total === 0 && (
+                  <div className="empty_episodes">기록된 회차가 없어요.</div>
                 )}
                 {filteredEpisodes.map((episode) => (
                   <EpisodeBox
