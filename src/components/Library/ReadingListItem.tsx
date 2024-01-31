@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
+import { isEmpty } from 'lodash'
 import Icons from '../common/Icons/Icons'
 
 const ReadingListItemWrapper = styled.div`
@@ -9,8 +10,7 @@ const ReadingListItemWrapper = styled.div`
 `
 
 const ReadingItem = styled.div`
-  display: grid;
-  grid-template-columns: 50px auto;
+  display: flex;
   flex: 1;
   align-items: center;
   gap: 12px;
@@ -20,6 +20,7 @@ const ReadingItem = styled.div`
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  height: 74px;
 
   .book_thumbnail_image {
     z-index: 1;
@@ -38,7 +39,6 @@ const ReadingItem = styled.div`
       flex-direction: column;
       gap: 5px;
       .book_title {
-        display: flex;
         align-items: center;
         ${({ theme }) => theme.typography.body1};
         color: ${({ theme }) => theme.color.gray[950]};
@@ -120,19 +120,22 @@ function ReadingListItem(props: ReadingListItemProps) {
           router.push(`/my/library/${book.id}`)
         }}
       >
-        <Image
-          className="book_thumbnail_image"
-          src={book.image}
-          width={50}
-          height={50}
-          alt=""
-        />
+        {!isEmpty(book.image) && (
+          <Image
+            className="book_thumbnail_image"
+            src={book.image}
+            width={50}
+            height={50}
+            alt=""
+          />
+        )}
         <div className="book_info_wrapper">
           <div className="book_info">
             <div className="book_title">
               {book.title}
               <span>
-                {book.author} · {book.genre}
+                {book.author}
+                {book.genre ? ` · ${book.genre}` : ''}
               </span>
             </div>
             <div className="platform_wrapper">

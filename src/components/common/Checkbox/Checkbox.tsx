@@ -3,7 +3,6 @@ import styled, { CSSProperties, useTheme } from 'styled-components'
 import Icons from '../Icons/Icons'
 
 const CheckboxContainer = styled.div`
-  width: 100%;
   position: relative;
 `
 

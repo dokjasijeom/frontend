@@ -17,4 +17,10 @@ export interface MyBook {
   total: number
   current: number
   score: number
+  episodes: Episode[]
+}
+
+export interface Episode {
+  ep: number
+  platform: string
 }
