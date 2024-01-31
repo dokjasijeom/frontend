@@ -1,4 +1,6 @@
+import { Episode } from '@/@types/book'
 import RecordModalBody from '@/components/Library/RecordModalBody'
+import Badge from '@/components/common/Badge/Badge'
 import Button from '@/components/common/Button/Button'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import Icons from '@/components/common/Icons/Icons'
@@ -134,7 +136,42 @@ const EpisodeBox = styled.div<{ platform: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &.active {
+    background: ${({ theme }) => theme.color.gray[950]};
+  }
 `
+
+const DeleteBox = styled.div`
+  padding: 12px;
+  background: ${({ theme }) => theme.color.gray[950]};
+  border-radius: 4px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .selected_info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    ${({ theme }) => theme.typography.head2};
+    color: ${({ theme }) => theme.color.system.w};
+
+    .badge {
+      ${({ theme }) => theme.typography.head2};
+      color: ${({ theme }) => theme.color.system.w};
+    }
+  }
+
+  .delete_button {
+    padding: 12px 20px;
+    background: ${({ theme }) => theme.color.system.error};
+    ${({ theme }) => theme.typography.head2};
+    color: ${({ theme }) => theme.color.system.w};
+    border-radius: 12px;
+  }
+`
+
 function LibraryDetail() {
   const router = useRouter()
   const theme = useTheme()
@@ -142,6 +179,7 @@ function LibraryDetail() {
   const { id } = router.query
   const [isEdit, setIsEdit] = useState(false)
   const [search, setSearch] = useState('')
+  const [selectedEpisodes, setSelectedEpisodes] = useState<Episode[]>([])
 
   const debounceSearch = useDebounce(search, 200)
 
@@ -192,6 +230,18 @@ function LibraryDetail() {
     }
     return episodes
   }, [book, debounceSearch])
+
+  const handleClickEpisode = (episode: Episode) => {
+    const findEpisodes = selectedEpisodes.find((item) => item.ep === episode.ep)
+    if (findEpisodes) {
+      const filterEpisodes = selectedEpisodes.filter(
+        (item) => item.ep !== episode.ep,
+      )
+      setSelectedEpisodes(filterEpisodes)
+    } else {
+      setSelectedEpisodes([...selectedEpisodes, episode])
+    }
+  }
 
   return (
     <LibraryDetailContainer>
@@ -276,8 +326,37 @@ function LibraryDetail() {
                 />
               </div>
               <div className="episodes_wrapper">
+                {!isEmpty(selectedEpisodes) && (
+                  <DeleteBox>
+                    <div className="selected_info">
+                      선택한{' '}
+                      <Badge
+                        color={theme.color.system.error}
+                        value={`${selectedEpisodes.length}개`}
+                        className="badge"
+                      />{' '}
+                      기록을 삭제합니다.
+                    </div>
+                    <button
+                      type="button"
+                      className="delete_button"
+                      onClick={handleDeleteModal}
+                    >
+                      삭제
+                    </button>
+                  </DeleteBox>
+                )}
                 {filteredEpisodes.map((episode) => (
-                  <EpisodeBox platform={episode.platform} key={episode.ep}>
+                  <EpisodeBox
+                    className={
+                      selectedEpisodes.find((item) => item.ep === episode.ep)
+                        ? 'active'
+                        : ''
+                    }
+                    platform={episode.platform}
+                    key={episode.ep}
+                    onClick={() => handleClickEpisode(episode)}
+                  >
                     {episode.ep}
                   </EpisodeBox>
                 ))}
