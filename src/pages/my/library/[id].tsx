@@ -180,6 +180,7 @@ function LibraryDetail() {
   const [isEdit, setIsEdit] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedEpisodes, setSelectedEpisodes] = useState<Episode[]>([])
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform[]>([])
 
   const debounceSearch = useDebounce(search, 200)
 
@@ -228,8 +229,19 @@ function LibraryDetail() {
 
       return filter
     }
+
+    if (!isEmpty(selectedPlatform)) {
+      const filter = episodes.filter((episode) =>
+        selectedPlatform.find(
+          (platform) => platform.value === episode.platform,
+        ),
+      )
+
+      return filter
+    }
+
     return episodes
-  }, [book, debounceSearch])
+  }, [book, debounceSearch, selectedPlatform])
 
   const handleClickEpisode = (episode: Episode) => {
     const findEpisodes = selectedEpisodes.find((item) => item.ep === episode.ep)
@@ -240,6 +252,20 @@ function LibraryDetail() {
       setSelectedEpisodes(filterEpisodes)
     } else {
       setSelectedEpisodes([...selectedEpisodes, episode])
+    }
+  }
+
+  const handleSelectedPlatform = (platform: Platform) => {
+    const findPlatform = selectedPlatform.find(
+      (item) => item.value === platform.value,
+    )
+    if (findPlatform) {
+      const filterPlarform = selectedPlatform.filter(
+        (item) => item.value !== platform.value,
+      )
+      setSelectedPlatform(filterPlarform)
+    } else {
+      setSelectedPlatform([...selectedPlatform, platform])
     }
   }
 
@@ -297,8 +323,14 @@ function LibraryDetail() {
                     <Checkbox
                       key={platform.value}
                       style={{ gap: '4px' }}
-                      checked={false}
-                      onChange={() => {}}
+                      checked={Boolean(
+                        selectedPlatform.find(
+                          (item) => item.value === platform.value,
+                        ),
+                      )}
+                      onChange={() => {
+                        handleSelectedPlatform(platform)
+                      }}
                       checkColor={theme.color.main[600]}
                     >
                       <div className="checkbox_label">{platform.label}</div>
