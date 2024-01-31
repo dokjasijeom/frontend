@@ -1,28 +1,31 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { CSSProperties, useTheme } from 'styled-components'
 
-const BadgeContainer = styled.div`
+const BadgeContainer = styled.div<{ color: string }>`
   padding: 2px 8px;
   ${({ theme }) => theme.typography.body4};
   color: ${({ theme }) => theme.color.gray[950]};
   display: inline-flex;
   width: fit-content;
   border-radius: 4px;
-  &.primary {
-    background: ${({ theme }) => theme.color.gray[300]};
-  }
-  &.secondary {
-    background: ${({ theme }) => theme.color.main[100]};
-  }
+  background: ${({ color }) => color};
 `
 
 interface BadgeProps {
-  type?: 'primary' | 'secondary'
   value: string
+  color?: string
+  style?: CSSProperties
+  className?: string
 }
 function Badge(props: BadgeProps) {
-  const { type = 'primary', value } = props
-  return <BadgeContainer className={type}>{value}</BadgeContainer>
+  const theme = useTheme()
+  const { value, color = theme.color.gray[300], style, className } = props
+
+  return (
+    <BadgeContainer className={className} style={style} color={color}>
+      {value}
+    </BadgeContainer>
+  )
 }
 
 export default Badge
