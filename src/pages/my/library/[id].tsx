@@ -8,6 +8,7 @@ import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { MockBook } from '@/constants/MockData'
 import { PLATFORM_TAB_LIST } from '@/constants/Tab'
+import useDebounce from '@/hooks/useDebounce'
 import useModal from '@/hooks/useModal'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
@@ -142,6 +143,8 @@ function LibraryDetail() {
   const [isEdit, setIsEdit] = useState(false)
   const [search, setSearch] = useState('')
 
+  const debounceSearch = useDebounce(search, 200)
+
   const book = MockBook.webNovel.find((item) => item.id === id)
 
   const handleRecordModal = () => {
@@ -180,17 +183,15 @@ function LibraryDetail() {
 
     const { episodes } = book
 
-    if (!isEmpty(search)) {
+    if (!isEmpty(debounceSearch)) {
       const filter = episodes.filter((episode) =>
-        episode.ep.toString().includes(search),
+        episode.ep.toString().includes(debounceSearch),
       )
 
       return filter
     }
     return episodes
-  }, [book, search])
-
-  console.log(11, filteredEpisodes)
+  }, [book, debounceSearch])
 
   return (
     <LibraryDetailContainer>
