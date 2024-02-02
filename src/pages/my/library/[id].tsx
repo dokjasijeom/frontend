@@ -1,4 +1,5 @@
 import { Episode } from '@/@types/book'
+import AddBookForm from '@/components/Library/AddBookForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
 import Button from '@/components/common/Button/Button'
@@ -87,7 +88,7 @@ const RecordDetailWrapper = styled.div`
   margin-top: 32px;
 `
 
-const EditButton = styled.div`
+const EditButton = styled.button`
   padding: 0px 4px;
   ${({ theme }) => theme.typography.head3};
   color: ${({ theme }) => theme.color.gray[600]};
@@ -220,6 +221,17 @@ function LibraryDetail() {
     })
   }
 
+  const handleAddBook = () => {}
+
+  const handleEditModal = () => {
+    showModal({
+      title: '편집',
+      body: <AddBookForm title="" />,
+      positiveText: '추가',
+      onPositiveClick: handleAddBook,
+    })
+  }
+
   const handleChangeSearch = (value: string) => {
     setSearch(value)
   }
@@ -315,6 +327,14 @@ function LibraryDetail() {
                   />
                   {book.score.toLocaleString()}
                 </div>
+                {book.isDirect && (
+                  <EditButton
+                    style={{ position: 'absolute', right: '40px' }}
+                    onClick={handleEditModal}
+                  >
+                    편집
+                  </EditButton>
+                )}
                 <DeleteButton onClick={handleDeleteModal}>삭제</DeleteButton>
               </div>
               <Button width="95px" onClick={handleRecordModal}>
