@@ -13,13 +13,23 @@ import styled, { useTheme } from 'styled-components'
 const LibraryContainer = styled.div`
   padding-top: 56px;
   position: relative;
-  transform: rotate(0); // fixed 부모에 영향
-  height: 100vh;
+  height: calc(100vh - 55px);
 `
-const AddPlusButton = styled.button`
+
+const AddPlusButtonWrapper = styled.div`
+  width: 600px;
+  height: 56px;
   position: fixed;
   bottom: 88px;
-  right: 22px;
+  display: flex;
+  justify-content: end;
+  padding-right: 22px;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`
+
+const AddPlusButton = styled.button`
   font-size: 0;
 `
 
@@ -49,9 +59,16 @@ function Library() {
         style={{ margin: 0 }}
       />
       <MyReadingListContainer />
-      <AddPlusButton onClick={handlePlusButton}>
-        <Image src="/images/floating_plus.svg" width={56} height={56} alt="" />
-      </AddPlusButton>
+      <AddPlusButtonWrapper>
+        <AddPlusButton onClick={handlePlusButton}>
+          <Image
+            src="/images/floating_plus.svg"
+            width={56}
+            height={56}
+            alt=""
+          />
+        </AddPlusButton>
+      </AddPlusButtonWrapper>
     </LibraryContainer>
   )
 }

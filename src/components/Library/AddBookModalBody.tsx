@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Input from '../common/Input/Input'
 import Icons from '../common/Icons/Icons'
 import Badge from '../common/Badge/Badge'
+import AddBookForm from './AddBookForm'
 
 const AddBookModalBodyWrapper = styled.div`
   width: 396px;
@@ -64,25 +65,6 @@ const SearchResultWrapper = styled.div`
       gap: 4px;
       ${({ theme }) => theme.typography.body2};
       color: ${({ theme }) => theme.color.main[600]};
-    }
-  }
-`
-
-const AddBookFormWrapper = styled.div`
-  .add_book_form_wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-top: 32px;
-
-    .form_item {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      .label {
-        ${({ theme }) => theme.typography.head2};
-        color: ${({ theme }) => theme.color.gray[800]};
-      }
     }
   }
 `
@@ -151,36 +133,7 @@ function AddBookModalBody() {
           </SearchBox>
         )}
       </SearchWrapper>
-      {isDirect && (
-        <AddBookFormWrapper>
-          <form className="add_book_form_wrapper">
-            <div className="form_item">
-              <div className="label">제목</div>
-              <Input
-                value={title}
-                placeholder="제목을 입력해주세요."
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className="form_item">
-              <div className="label">저자</div>
-              <Input
-                value=""
-                placeholder="저자를 입력해주세요."
-                onChange={() => {}}
-              />
-            </div>
-            <div className="form_item">
-              <div className="label">전체 회차</div>
-              <Input
-                value=""
-                placeholder="총 몇 화인지 숫자만 입력해주세요."
-                onChange={() => {}}
-              />
-            </div>
-          </form>
-        </AddBookFormWrapper>
-      )}
+      {isDirect && <AddBookForm title={title} />}
       {!isEmpty(search) && !isDirect && showSearchResult && (
         <SearchResultWrapper>
           <Image src="/images/empty_book.png" width={142} height={200} alt="" />

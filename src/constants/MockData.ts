@@ -61,6 +61,7 @@ export const MockBook = {
         { ep: 45, platform: 'ridi' },
         { ep: 46, platform: 'ridi' },
       ],
+      isDirect: false,
     },
     {
       id: '1',
@@ -180,6 +181,7 @@ export const MockBook = {
         { ep: 105, platform: 'ridi' },
         { ep: 106, platform: 'ridi' },
       ],
+      isDirect: false,
     },
     {
       id: '2',
@@ -239,6 +241,7 @@ export const MockBook = {
         { ep: 45, platform: 'ridi' },
         { ep: 46, platform: 'ridi' },
       ],
+      isDirect: false,
     },
     {
       id: '3',
@@ -251,6 +254,7 @@ export const MockBook = {
       current: 0,
       score: 101,
       episodes: [],
+      isDirect: true,
     },
   ] as MyBook[],
 }
