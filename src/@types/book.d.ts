@@ -18,6 +18,7 @@ export interface MyBook {
   current: number
   score: number
   episodes: Episode[]
+  isDirect: boolean
 }
 
 export interface Episode {
