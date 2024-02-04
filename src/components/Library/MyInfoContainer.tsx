@@ -150,7 +150,15 @@ function MyInfoContainer() {
             찜한 작품
           </div>
           <div className="box_content_wrapper">
-            <div className="count">24</div>
+            <button
+              type="button"
+              className="count"
+              onClick={() => {
+                router.push('/my/library/like')
+              }}
+            >
+              24
+            </button>
           </div>
         </Box>
         <Box>
