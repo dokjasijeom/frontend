@@ -18,6 +18,7 @@ const TextTabItemWrapper = styled.div`
   cursor: pointer;
 
   &.active {
+    ${({ theme }) => theme.typography.body1};
     color: ${({ theme }) => theme.color.main[600]};
   }
 `
@@ -60,13 +61,37 @@ const ButtonTabDivider = styled.div`
   background: ${({ theme }) => theme.color.gray[100]};
 `
 
+const UnderBarTabContainer = styled.div`
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: solid 1px ${({ theme }) => theme.color.gray[200]};
+`
+
+const UnderBarTabItemWrapper = styled.div`
+  ${({ theme }) => theme.typography.body3};
+  color: ${({ theme }) => theme.color.gray[600]};
+  cursor: pointer;
+  padding: 16px 4px 12px;
+  display: flex;
+  flex-direction: column;
+
+  &.active {
+    padding: 16px 4px 9px;
+    ${({ theme }) => theme.typography.body1};
+    color: ${({ theme }) => theme.color.main[600]};
+    border-bottom: 3px solid ${({ theme }) => theme.color.main[600]};
+  }
+`
+
 export interface TabItem {
   label: string
   value: string
 }
 
 interface TabProps {
-  type?: 'text' | 'button'
+  type?: 'text' | 'button' | 'underbar'
   tabList: TabItem[]
   selectedTab: TabItem
   onChange: (tab: TabItem) => void
@@ -109,6 +134,23 @@ function Tab(props: TabProps) {
             </>
           ))}
         </ButtonTabContainer>
+      )
+    }
+    if (type === 'underbar') {
+      return (
+        <UnderBarTabContainer>
+          {tabList.map((tab) => (
+            <>
+              <UnderBarTabItemWrapper
+                className={selectedTab.value === tab.value ? 'active' : ''}
+                key={tab.value}
+                onClick={() => onChange(tab)}
+              >
+                {tab.label}
+              </UnderBarTabItemWrapper>
+            </>
+          ))}
+        </UnderBarTabContainer>
       )
     }
     return null
