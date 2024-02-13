@@ -172,7 +172,15 @@ function MyInfoContainer() {
             완독한 작품
           </div>
           <div className="box_content_wrapper">
-            <div className="count">67</div>
+            <button
+              type="button"
+              className="count"
+              onClick={() => {
+                router.push('/my/library/complete')
+              }}
+            >
+              67
+            </button>
           </div>
         </Box>
         <Box>
