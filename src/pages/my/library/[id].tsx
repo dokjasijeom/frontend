@@ -9,7 +9,7 @@ import Input from '@/components/common/Input/Input'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { MockBook } from '@/constants/MockData'
+import { MockMyBook } from '@/constants/MockData'
 import { PLATFORM_TAB_LIST } from '@/constants/Tab'
 import useDebounce from '@/hooks/useDebounce'
 import useModal from '@/hooks/useModal'
@@ -196,7 +196,7 @@ function LibraryDetail() {
 
   const debounceSearch = useDebounce(search, 200)
 
-  const book = MockBook.webNovel.find((item) => item.id === id)
+  const book = MockMyBook.webNovel.find((item) => item.id === id)
 
   const handleRecordModal = () => {
     if (book) {

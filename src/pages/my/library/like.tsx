@@ -5,7 +5,7 @@ import Icons from '@/components/common/Icons/Icons'
 import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { MockBook } from '@/constants/MockData'
+import { MockMyBook } from '@/constants/MockData'
 import { CONTENTS_TAB_LIST } from '@/constants/Tab'
 import useToast from '@/hooks/useToast'
 import { isEmpty } from 'lodash'
@@ -66,7 +66,7 @@ function Like() {
           onChange={(tab) => setSelectedTab(tab)}
         />
         <LikeBookListWrapper>
-          {isEmpty(MockBook.webNovel) && (
+          {isEmpty(MockMyBook.webNovel) && (
             <EmptyBook>
               <Image
                 src="/images/empty_book.png"
@@ -77,7 +77,7 @@ function Like() {
               찜한 작품이 없어요.
             </EmptyBook>
           )}
-          {MockBook.webNovel.map((book) => (
+          {MockMyBook.webNovel.map((book) => (
             <>
               <LikeBookWrapper key={book.id}>
                 <BookItem book={book} />

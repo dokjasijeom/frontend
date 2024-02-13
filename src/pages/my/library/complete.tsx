@@ -3,7 +3,7 @@ import Divider from '@/components/common/Divider/Divider'
 import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { MockBook } from '@/constants/MockData'
+import { MockMyBook } from '@/constants/MockData'
 import { CONTENTS_TAB_LIST } from '@/constants/Tab'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
@@ -55,7 +55,7 @@ function Complete() {
           onChange={(tab) => setSelectedTab(tab)}
         />
         <CompleteBookListWrapper>
-          {isEmpty(MockBook.webNovel) && (
+          {isEmpty(MockMyBook.webNovel) && (
             <EmptyBook>
               <Image
                 src="/images/empty_book.png"
@@ -66,7 +66,7 @@ function Complete() {
               찜한 작품이 없어요.
             </EmptyBook>
           )}
-          {MockBook.webNovel.map((book) => (
+          {MockMyBook.webNovel.map((book) => (
             <>
               <CompleteBookWrapper
                 key={book.id}

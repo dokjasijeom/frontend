@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { CONTENTS_TAB_LIST } from '@/constants/Tab'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
-import { MockBook } from '@/constants/MockData'
+import { MockMyBook } from '@/constants/MockData'
 import { MyBook } from '@/@types/book'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import ReadingListItem from './ReadingListItem'
@@ -82,7 +82,7 @@ function MyReadingListContainer() {
         기록해보세요!
       </EmptyWrapper> */}
       <ListWrapper>
-        {MockBook.webNovel.map((book) => (
+        {MockMyBook.webNovel.map((book) => (
           <ReadingListItem
             book={book}
             key={book.id}
