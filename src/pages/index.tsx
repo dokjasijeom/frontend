@@ -91,7 +91,7 @@ export default function Home() {
           onClickMore={() => {}}
         />
         <SwiperBookListWrapper>
-          <SwiperPosterThumbnail />
+          <SwiperPosterThumbnail bookList={MockBook.webNovel} />
         </SwiperBookListWrapper>
         <TabTitleHeader
           iconName="New"
@@ -102,7 +102,7 @@ export default function Home() {
           onClickMore={() => {}}
         />
         <SwiperBookListWrapper>
-          <SwiperPosterThumbnail />
+          <SwiperPosterThumbnail bookList={MockBook.webToon} />
         </SwiperBookListWrapper>
       </HomeContainer>
     </>
