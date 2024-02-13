@@ -1,9 +1,12 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
-const ButtonContainer = styled.button<{ width: string }>`
+const ButtonContainer = styled.button<{ width: string; height: string }>`
   width: ${({ width }) => width};
+  height: ${({ height }) => height};
   padding: 12px 20px;
+  display: flex;
+  align-items: center;
   ${({ theme }) => theme.typography.head2};
   border-radius: 12px;
   &.primary {
@@ -67,6 +70,7 @@ interface ButtonProps {
   disabled?: boolean
   onClick?: () => void
   width?: string
+  height?: string
 }
 
 function Button(props: ButtonProps) {
@@ -76,6 +80,7 @@ function Button(props: ButtonProps) {
     disabled = false,
     onClick,
     width = '100%',
+    height = 'auto',
   } = props
 
   return (
@@ -85,6 +90,7 @@ function Button(props: ButtonProps) {
       onClick={onClick}
       disabled={disabled}
       width={width}
+      height={height}
     >
       {children}
     </ButtonContainer>

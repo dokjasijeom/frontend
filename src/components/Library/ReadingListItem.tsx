@@ -1,9 +1,8 @@
-import Image from 'next/image'
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
-import { isEmpty } from 'lodash'
 import Icons from '../common/Icons/Icons'
+import BookItem from '../common/BookItem/BookItem'
 
 const ReadingListItemWrapper = styled.div`
   display: flex;
@@ -12,6 +11,7 @@ const ReadingListItemWrapper = styled.div`
 const ReadingItem = styled.div`
   display: flex;
   flex: 1;
+  justify-content: space-between;
   align-items: center;
   gap: 12px;
   padding: 12px 20px;
@@ -22,50 +22,18 @@ const ReadingItem = styled.div`
   cursor: pointer;
   height: 74px;
 
-  .book_thumbnail_image {
-    z-index: 1;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-
-  .book_info_wrapper {
-    z-index: 1;
-    width: 100%;
+  .book_count_wrapper {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    .book_info {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      .book_title {
-        align-items: center;
-        ${({ theme }) => theme.typography.body1};
-        color: ${({ theme }) => theme.color.gray[950]};
-
-        span {
-          margin-left: 12px;
-          ${({ theme }) => theme.typography.body5};
-          color: ${({ theme }) => theme.color.gray[800]};
-        }
-      }
-      .platform_wrapper {
-        display: flex;
-        gap: 4px;
-      }
+    gap: 8px;
+    z-index: 1;
+    .current {
+      ${({ theme }) => theme.typography.head2};
+      color: ${({ theme }) => theme.color.main[600]};
     }
-    .book_count_wrapper {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      .current {
-        ${({ theme }) => theme.typography.head2};
-        color: ${({ theme }) => theme.color.main[600]};
-      }
-      .total {
-        ${({ theme }) => theme.typography.body4};
-        color: ${({ theme }) => theme.color.gray[800]};
-      }
+    .total {
+      ${({ theme }) => theme.typography.body4};
+      color: ${({ theme }) => theme.color.gray[800]};
     }
   }
 `
@@ -120,40 +88,10 @@ function ReadingListItem(props: ReadingListItemProps) {
           router.push(`/my/library/${book.id}`)
         }}
       >
-        {!isEmpty(book.image) && (
-          <Image
-            className="book_thumbnail_image"
-            src={book.image}
-            width={50}
-            height={50}
-            alt=""
-          />
-        )}
-        <div className="book_info_wrapper">
-          <div className="book_info">
-            <div className="book_title">
-              {book.title}
-              <span>
-                {book.author}
-                {book.genre ? ` · ${book.genre}` : ''}
-              </span>
-            </div>
-            <div className="platform_wrapper">
-              {book.platforms.map((platform: any) => (
-                <Image
-                  key={platform}
-                  src={`/images/${platform}.png`}
-                  alt={platform}
-                  width={20}
-                  height={20}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="book_count_wrapper">
-            <span className="current">{book.current}화</span>
-            <span className="total">/{book.total}화</span>
-          </div>
+        <BookItem book={book} />
+        <div className="book_count_wrapper">
+          <span className="current">{book.current}화</span>
+          <span className="total">/{book.total}화</span>
         </div>
         <ProgressValue value={progressValue(book.total, book.current)} />
       </ReadingItem>

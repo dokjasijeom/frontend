@@ -1,4 +1,5 @@
 import GlobalModal from '@/components/common/Modal/GlobalModal'
+import GlobalToast from '@/components/common/Toast/GlobalToast'
 import AppLayout from '@/components/layout/AppLayout'
 import GlobalStyle from '@/styles/GlobalStyle'
 import theme from '@/styles/theme'
@@ -29,6 +30,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         </Head>
         <GlobalStyle />
         <GlobalModal />
+        <GlobalToast />
         {getLayout(<Component {...pageProps} />)}
       </ThemeProvider>
     </RecoilRoot>
