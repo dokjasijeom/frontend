@@ -1,4 +1,5 @@
 import { Episode } from '@/@types/book'
+import { Platform } from '@/@types/platform'
 import AddBookForm from '@/components/Library/AddBookForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
@@ -256,7 +257,7 @@ function LibraryDetail() {
     if (!isEmpty(selectedPlatform)) {
       const filter = episodes.filter((episode) =>
         selectedPlatform.find(
-          (platform) => platform.value === episode.platform,
+          (platform) => platform.value === episode.platform.value,
         ),
       )
 
@@ -278,7 +279,7 @@ function LibraryDetail() {
     }
   }
 
-  const handleSelectedPlatform = (platform: Platform) => {
+  const handleSelectedPlatform = (platform: any) => {
     const findPlatform = selectedPlatform.find(
       (item) => item.value === platform.value,
     )
@@ -434,7 +435,7 @@ function LibraryDetail() {
                         ? 'active'
                         : ''
                     }
-                    platform={episode.platform}
+                    platform={episode.platform.value}
                     key={episode.ep}
                     onClick={() => handleClickEpisode(episode)}
                   >

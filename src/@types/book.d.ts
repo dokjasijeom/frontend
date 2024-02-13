@@ -1,6 +1,6 @@
-export type BookType = 'webNovel' | 'webToon'
+import { Platform } from './platform'
 
-export type PlatformType = 'naver' | 'kakao' | 'ridi'
+export type BookType = 'webNovel' | 'webToon'
 
 export interface Book {
   id: string
@@ -10,7 +10,12 @@ export interface Book {
   title: string
   author: string
   score: number
-  platforms: PlatformType[]
+  platforms: Platform[]
+  total: number
+  isComplete: boolean
+  publisher: string
+  tags: string[]
+  synopsis: string
 }
 
 export interface MyBook {
@@ -19,7 +24,7 @@ export interface MyBook {
   image: string
   author: string
   genre: string
-  platforms: PlatformType[]
+  platforms: Platform[]
   total: number
   current: number
   score: number
@@ -29,5 +34,5 @@ export interface MyBook {
 
 export interface Episode {
   ep: number
-  platform: string
+  platform: Platform
 }

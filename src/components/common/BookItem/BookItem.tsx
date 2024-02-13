@@ -76,11 +76,11 @@ function BookItem(props: BookItemProps) {
             </span>
           </div>
           <div className="platform_wrapper">
-            {book.platforms.map((platform: any) => (
+            {book.platforms.map((platform) => (
               <Image
-                key={platform}
-                src={`/images/${platform}.png`}
-                alt={platform}
+                key={platform.value}
+                src={`/images/${platform.value}.png`}
+                alt={platform.value}
                 width={20}
                 height={20}
               />
