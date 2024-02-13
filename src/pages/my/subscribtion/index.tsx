@@ -1,3 +1,4 @@
+import { Platform } from '@/@types/platform'
 import Button from '@/components/common/Button/Button'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
@@ -49,7 +50,7 @@ function Subscribtion() {
     { label: '네이버 시리즈', value: 'naver' },
   ])
 
-  const handleChangeSubscribtion = (platform: Platform) => {
+  const handleChangeSubscribtion = (platform: any) => {
     const findItem = subscribtion?.find((v) => v.value === platform.value)
     if (findItem) {
       const temp = subscribtion.filter((v) => v.value !== platform.value)
