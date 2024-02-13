@@ -28,25 +28,40 @@ const Title = styled.div`
   left: 50%;
   transform: translateX(-50%);
 `
+const SearchButton = styled.button`
+  position: absolute;
+  right: 20px;
+`
 
 interface TitleHeaderProps {
   title: string
   onClickBack?: () => void
+  isSearch?: boolean
 }
 function TitleHeader(props: TitleHeaderProps) {
-  const { title, onClickBack } = props
+  const { title, onClickBack, isSearch = false } = props
   const router = useRouter()
 
   const handleClickBack = () => {
     if (onClickBack) return onClickBack()
     return router.back()
   }
+
+  const handleClickSearch = () => {
+    router.push('/search')
+  }
+
   return (
     <TitleHeaderContainer>
       <BackButton onClick={handleClickBack}>
         <Icons name="ChevronLeft" />
       </BackButton>
       <Title>{title}</Title>
+      {isSearch && (
+        <SearchButton onClick={handleClickSearch}>
+          <Icons name="Search" />
+        </SearchButton>
+      )}
     </TitleHeaderContainer>
   )
 }
