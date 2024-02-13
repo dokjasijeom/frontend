@@ -2,6 +2,7 @@ import { Book } from '@/@types/book'
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import Icons from '../Icons/Icons'
 
 const ThumbnailContainer = styled.div`
@@ -10,6 +11,7 @@ const ThumbnailContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  cursor: pointer;
 
   .book_info_wrapper {
     display: flex;
@@ -61,8 +63,9 @@ interface ThumbnailProps {
 function Thumbnail(props: ThumbnailProps) {
   const { book } = props
   const theme = useTheme()
+  const router = useRouter()
   return (
-    <ThumbnailContainer>
+    <ThumbnailContainer onClick={() => router.push(`/book/${book.id}`)}>
       <ThumbnailImageWrapper>
         <div className="platform_wrapper">
           {book.platforms.map((platform) => (
