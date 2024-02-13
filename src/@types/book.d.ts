@@ -1,10 +1,16 @@
+export type BookType = 'webNovel' | 'webToon'
+
+export type PlatformType = 'naver' | 'kakao' | 'ridi'
+
 export interface Book {
+  id: string
+  type: BookType
   genre: string
   image: string
   title: string
   author: string
   score: number
-  platforms: string[]
+  platforms: PlatformType[]
 }
 
 export interface MyBook {
@@ -13,7 +19,7 @@ export interface MyBook {
   image: string
   author: string
   genre: string
-  platforms: string[]
+  platforms: PlatformType[]
   total: number
   current: number
   score: number
