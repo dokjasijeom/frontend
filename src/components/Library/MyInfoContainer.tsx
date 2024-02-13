@@ -4,6 +4,7 @@ import Image from 'next/image'
 import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
+import { Platform } from '@/@types/platform'
 
 const MyInfoWrapper = styled.div`
   padding: 16px 20px 20px;

@@ -1,6 +1,6 @@
 import { TabItem } from '@/components/common/Tab/Tab'
 
-export const CONTENTS_TAB_LIST = [
+export const BOOK_TYPE_TAB_LIST = [
   { label: '웹소설', value: 'webNovel' },
   { label: '웹툰', value: 'webToon' },
 ] as TabItem[]
