@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { isEmpty } from 'lodash'
 import Tab, { TabItem } from '../Tab/Tab'
@@ -31,16 +31,24 @@ const MoreButton = styled.button``
 interface TabTitleHeaderProps {
   iconName: IconNameType
   title: string
-  tabList?: TabItem[]
+  tabList: TabItem[]
+  selectedTab: TabItem
+  onChangeTab: (tab: TabItem) => void
   moreButton?: ReactNode | undefined
   onClickMore: () => void
 }
 
 function TabTitleHeader(props: TabTitleHeaderProps) {
-  const { title, tabList = [], onClickMore, iconName, moreButton } = props
+  const {
+    title,
+    tabList = [],
+    selectedTab,
+    onChangeTab,
+    onClickMore,
+    iconName,
+    moreButton,
+  } = props
   const theme = useTheme()
-
-  const [selectedTab, setSelectedTab] = useState(tabList[0])
 
   return (
     <TabTitleHeaderContainer>
@@ -49,11 +57,11 @@ function TabTitleHeader(props: TabTitleHeaderProps) {
           <Icons name={iconName} color={theme.color.main[300]} />
           {title}
         </div>
-        {!isEmpty(tabList) && (
+        {!isEmpty(tabList) && !isEmpty(selectedTab) && (
           <Tab
             tabList={tabList}
             selectedTab={selectedTab}
-            onChange={(tab) => setSelectedTab(tab)}
+            onChange={(tab) => onChangeTab(tab)}
           />
         )}
       </div>
