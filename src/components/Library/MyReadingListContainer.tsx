@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { CONTENTS_TAB_LIST } from '@/constants/Tab'
+import { BOOK_TYPE_TAB_LIST } from '@/constants/Tab'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
 import { MockMyBook } from '@/constants/MockData'
@@ -7,6 +7,7 @@ import { MyBook } from '@/@types/book'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import ReadingListItem from './ReadingListItem'
 import RecordModalBody from './RecordModalBody'
+import { TabItem } from '../common/Tab/Tab'
 
 const MyReadingListContainerWrapper = styled.div``
 
@@ -39,6 +40,9 @@ const ListWrapper = styled.div`
 function MyReadingListContainer() {
   const { showModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
+  const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
+    BOOK_TYPE_TAB_LIST[0],
+  )
 
   const handleEditReadingList = () => {
     showModal({
@@ -66,9 +70,11 @@ function MyReadingListContainer() {
       <TabTitleHeader
         iconName="OpenedBook"
         title="읽고 있는 작품"
-        tabList={CONTENTS_TAB_LIST}
+        tabList={BOOK_TYPE_TAB_LIST}
         moreButton={<EditButton>{isEdit ? '완료' : '편집'}</EditButton>}
         onClickMore={() => setIsEdit(!isEdit)}
+        selectedTab={selectedBookTypeTab}
+        onChangeTab={(tab: TabItem) => setSelectedBookTypeTab(tab)}
       />
       {/* <EmptyWrapper>
         <Image

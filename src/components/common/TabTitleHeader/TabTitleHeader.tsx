@@ -31,9 +31,9 @@ const MoreButton = styled.button``
 interface TabTitleHeaderProps {
   iconName: IconNameType
   title: string
-  tabList: TabItem[]
-  selectedTab: TabItem
-  onChangeTab: (tab: TabItem) => void
+  tabList?: TabItem[]
+  selectedTab?: TabItem
+  onChangeTab?: (tab: TabItem) => void
   moreButton?: ReactNode | undefined
   onClickMore: () => void
 }
@@ -57,7 +57,7 @@ function TabTitleHeader(props: TabTitleHeaderProps) {
           <Icons name={iconName} color={theme.color.main[300]} />
           {title}
         </div>
-        {!isEmpty(tabList) && !isEmpty(selectedTab) && (
+        {!isEmpty(tabList) && !isEmpty(selectedTab) && onChangeTab && (
           <Tab
             tabList={tabList}
             selectedTab={selectedTab}
