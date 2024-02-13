@@ -1,4 +1,5 @@
 import { Book } from '@/@types/book'
+import { useRouter } from 'next/router'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -8,6 +9,7 @@ const PosterThumbnailContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  cursor: pointer;
 `
 
 const ThumbnailImageWrapper = styled.div`
@@ -56,8 +58,10 @@ interface PosterThumbnailProps {
 }
 function PosterThumbnail(props: PosterThumbnailProps) {
   const { book } = props
+
+  const router = useRouter()
   return (
-    <PosterThumbnailContainer>
+    <PosterThumbnailContainer onClick={() => router.push(`/book/${book.id}`)}>
       <ThumbnailImageWrapper>
         <ThumbnailImage src={book.image} />
         <div className="book_info_wrapper">
