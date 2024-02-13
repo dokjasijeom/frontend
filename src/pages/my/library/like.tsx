@@ -6,7 +6,7 @@ import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { MockMyBook } from '@/constants/MockData'
-import { CONTENTS_TAB_LIST } from '@/constants/Tab'
+import { BOOK_TYPE_TAB_LIST } from '@/constants/Tab'
 import useToast from '@/hooks/useToast'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
@@ -48,7 +48,7 @@ const LikeBookWrapper = styled.div`
 `
 function Like() {
   const router = useRouter()
-  const [selectedTab, setSelectedTab] = useState(CONTENTS_TAB_LIST[0])
+  const [selectedTab, setSelectedTab] = useState(BOOK_TYPE_TAB_LIST[0])
   const theme = useTheme()
   const { showToast } = useToast()
 
@@ -61,7 +61,7 @@ function Like() {
       <LikeWrapper>
         <Tab
           type="underbar"
-          tabList={CONTENTS_TAB_LIST}
+          tabList={BOOK_TYPE_TAB_LIST}
           selectedTab={selectedTab}
           onChange={(tab) => setSelectedTab(tab)}
         />
