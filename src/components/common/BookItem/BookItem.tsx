@@ -11,6 +11,7 @@ const BookItemWrapper = styled.div`
   overflow: hidden;
   position: relative;
   cursor: pointer;
+  flex-shrink: 0;
 
   .book_thumbnail_image {
     z-index: 1;
