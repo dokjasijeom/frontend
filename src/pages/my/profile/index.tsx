@@ -15,6 +15,7 @@ const ProfileContainer = styled.div`
 
 const ProfileImageWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 16px 20px 32px;
@@ -75,9 +76,16 @@ const UserInfoFormWrapper = styled.div`
   }
 `
 
+const ProfileImageDeleteButton = styled.button`
+  ${({ theme }) => theme.typography.head3};
+  color: ${({ theme }) => theme.color.gray[600]};
+  margin-top: 8px;
+`
+
 const UserAccountSettingWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 32px;
   padding: 0 20px;
 `
 
@@ -138,6 +146,7 @@ function Profile() {
           />
           <div className="overlay" />
         </ImageWrapper>
+        <ProfileImageDeleteButton>사진 삭제</ProfileImageDeleteButton>
       </ProfileImageWrapper>
       <UserInfoFormWrapper>
         <form className="user_info_form_wrapper">
@@ -181,8 +190,8 @@ function Profile() {
           </div>
         </form>
       </UserInfoFormWrapper>
-      <Divider style={{ margin: '32px 0 12px' }} />
       <UserAccountSettingWrapper>
+        <Divider style={{ margin: '0 0 12px 0' }} />
         <ListButton type="button" onClick={handleLogout}>
           로그아웃
         </ListButton>

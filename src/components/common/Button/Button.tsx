@@ -7,6 +7,7 @@ const ButtonContainer = styled.button<{ width: string; height: string }>`
   padding: 12px 20px;
   display: flex;
   align-items: center;
+  justify-content: center;
   ${({ theme }) => theme.typography.head2};
   border-radius: 12px;
   &.primary {
