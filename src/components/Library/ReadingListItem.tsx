@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
 import Icons from '../common/Icons/Icons'
 import BookItem from '../common/BookItem/BookItem'
+import Button from '../common/Button/Button'
 
 const ReadingListItemWrapper = styled.div`
   display: flex;
@@ -47,15 +48,6 @@ const ProgressValue = styled.div<{ value: number }>`
   background: ${({ theme }) => theme.color.sub[200]};
   border-radius: 12px;
 `
-const ReadingListItemEditButton = styled.button`
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  width: 50px;
-  padding: 0 4px;
-  ${({ theme }) => theme.typography.head3};
-  color: ${({ theme }) => theme.color.gray[600]};
-`
 
 const ReadingListItemAddButton = styled.button`
   display: flex;
@@ -96,9 +88,14 @@ function ReadingListItem(props: ReadingListItemProps) {
         <ProgressValue value={progressValue(book.total, book.current)} />
       </ReadingItem>
       {isEdit ? (
-        <ReadingListItemEditButton onClick={onEdit}>
+        <Button
+          style={{ marginLeft: '12px' }}
+          type="text"
+          width="auto"
+          onClick={onEdit}
+        >
           삭제
-        </ReadingListItemEditButton>
+        </Button>
       ) : (
         <ReadingListItemAddButton onClick={onRecord}>
           <Icons name="Plus" color={theme.color.gray[800]} />
