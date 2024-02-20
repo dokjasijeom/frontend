@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { CSSProperties } from 'styled-components'
 
 const ButtonContainer = styled.button<{ width: string; height: string }>`
   width: ${({ width }) => width};
@@ -41,7 +41,7 @@ const ButtonContainer = styled.button<{ width: string; height: string }>`
     }
   }
   &.text {
-    padding: 8px 12px;
+    padding: 0 4px;
     ${({ theme }) => theme.typography.head3};
     color: ${({ theme }) => theme.color.gray[600]};
     &:hover {
@@ -72,6 +72,7 @@ interface ButtonProps {
   onClick?: () => void
   width?: string
   height?: string
+  style?: CSSProperties
 }
 
 function Button(props: ButtonProps) {
@@ -82,6 +83,7 @@ function Button(props: ButtonProps) {
     onClick,
     width = '100%',
     height = 'auto',
+    style,
   } = props
 
   return (
@@ -92,6 +94,7 @@ function Button(props: ButtonProps) {
       disabled={disabled}
       width={width}
       height={height}
+      style={style}
     >
       {children}
     </ButtonContainer>

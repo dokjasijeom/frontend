@@ -76,12 +76,6 @@ const UserInfoFormWrapper = styled.div`
   }
 `
 
-const ProfileImageDeleteButton = styled.button`
-  ${({ theme }) => theme.typography.head3};
-  color: ${({ theme }) => theme.color.gray[600]};
-  margin-top: 8px;
-`
-
 const UserAccountSettingWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -146,7 +140,9 @@ function Profile() {
           />
           <div className="overlay" />
         </ImageWrapper>
-        <ProfileImageDeleteButton>사진 삭제</ProfileImageDeleteButton>
+        <Button type="text" width="auto" style={{ marginTop: '8px' }}>
+          사진 삭제
+        </Button>
       </ProfileImageWrapper>
       <UserInfoFormWrapper>
         <form className="user_info_form_wrapper">

@@ -8,6 +8,7 @@ import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import ReadingListItem from './ReadingListItem'
 import RecordModalBody from './RecordModalBody'
 import { TabItem } from '../common/Tab/Tab'
+import Button from '../common/Button/Button'
 
 const MyReadingListContainerWrapper = styled.div``
 
@@ -23,12 +24,6 @@ const MyReadingListContainerWrapper = styled.div``
 //   gap: 20px;
 //   padding: 32px;
 // `
-
-const EditButton = styled.div`
-  padding: 0px 4px;
-  ${({ theme }) => theme.typography.head3};
-  color: ${({ theme }) => theme.color.gray[600]};
-`
 
 const ListWrapper = styled.div`
   display: flex;
@@ -71,7 +66,11 @@ function MyReadingListContainer() {
         iconName="OpenedBook"
         title="읽고 있는 작품"
         tabList={BOOK_TYPE_TAB_LIST}
-        moreButton={<EditButton>{isEdit ? '완료' : '편집'}</EditButton>}
+        moreButton={
+          <Button type="text" width="auto">
+            {isEdit ? '완료' : '편집'}
+          </Button>
+        }
         onClickMore={() => setIsEdit(!isEdit)}
         selectedTab={selectedBookTypeTab}
         onChangeTab={(tab: TabItem) => setSelectedBookTypeTab(tab)}

@@ -62,13 +62,6 @@ const BookInfoWrapper = styled.div`
   }
 `
 
-const DeleteButton = styled.button`
-  position: absolute;
-  right: 0;
-  padding: 0 4px;
-  ${({ theme }) => theme.typography.head3};
-  color: ${({ theme }) => theme.color.gray[600]};
-`
 const RecordBanner = styled.div`
   margin: 0 20px;
   width: calc(100% - 40px);
@@ -87,12 +80,6 @@ const RecordBanner = styled.div`
 
 const RecordDetailWrapper = styled.div`
   margin-top: 32px;
-`
-
-const EditButton = styled.button`
-  padding: 0px 4px;
-  ${({ theme }) => theme.typography.head3};
-  color: ${({ theme }) => theme.color.gray[600]};
 `
 
 const RecordDetail = styled.div`
@@ -329,14 +316,23 @@ function LibraryDetail() {
                   {book.score.toLocaleString()}
                 </div>
                 {book.isDirect && (
-                  <EditButton
+                  <Button
+                    type="text"
+                    width="auto"
                     style={{ position: 'absolute', right: '40px' }}
                     onClick={handleEditModal}
                   >
                     편집
-                  </EditButton>
+                  </Button>
                 )}
-                <DeleteButton onClick={handleDeleteModal}>삭제</DeleteButton>
+                <Button
+                  type="text"
+                  width="auto"
+                  style={{ position: 'absolute', right: '0' }}
+                  onClick={handleDeleteModal}
+                >
+                  삭제
+                </Button>
               </div>
               <Button width="95px" onClick={handleRecordModal}>
                 기록하기
@@ -353,7 +349,11 @@ function LibraryDetail() {
             <TabTitleHeader
               iconName="Content"
               title="기록장"
-              moreButton={<EditButton>{isEdit ? '' : '편집'}</EditButton>}
+              moreButton={
+                <Button type="text" width="auto">
+                  {isEdit ? '' : '편집'}
+                </Button>
+              }
               onClickMore={handleEditEpisodes}
             />
             <RecordDetail>
