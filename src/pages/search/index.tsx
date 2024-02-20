@@ -1,7 +1,7 @@
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
 import { isEmpty } from 'lodash'
-import React, { KeyboardEvent, useState } from 'react'
+import React, { KeyboardEvent, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const SearchContainer = styled.div`
@@ -43,14 +43,75 @@ const SearchResultWrapper = styled.div`
   padding-top: 20px;
 `
 
+const SearchKeywordsWrapper = styled.div`
+  padding-top: 20px;
+`
+
+const SectionTitle = styled.div`
+  ${({ theme }) => theme.typography.head2};
+  color: ${({ theme }) => theme.color.gray[950]};
+`
+
+const KeywordsWrapper = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+`
+
+const KeywordBox = styled.div`
+  padding: 14px 20px;
+  border-radius: 12px;
+  ${({ theme }) => theme.typography.body2};
+  color: ${({ theme }) => theme.color.gray[950]};
+  background: ${({ theme }) => theme.color.gray[50]};
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`
+
+interface Keyword {
+  id: number
+  text: string
+}
+
 function Search() {
   const [search, setSearch] = useState('')
   const [showSearchBox, setShowSearchBox] = useState(false)
   const [showSearchResult, setShowSearchResult] = useState(false)
+  const [keywords, setKeywords] = useState<Keyword[]>([])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const result = localStorage.getItem('keywords') || '[]'
+      setKeywords(JSON.parse(result))
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('keywords', JSON.stringify(keywords))
+  }, [keywords])
+
+  const handleAddKeyword = (value: string) => {
+    const newKeyword = {
+      id: Date.now(),
+      text: value,
+    }
+    setKeywords([newKeyword, ...keywords])
+  }
+
+  const handleShowSearchResult = () => {
+    setShowSearchBox(false)
+    setShowSearchResult(true)
+  }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return
     if (e.key === 'Enter') {
+      const { value } = e.currentTarget
+      handleAddKeyword(value)
       setShowSearchBox(false)
+      handleShowSearchResult()
     }
   }
   const handleChangeSearch = (value: string) => {
@@ -64,11 +125,6 @@ function Search() {
   const handleClearSearch = () => {
     setSearch('')
     setShowSearchResult(false)
-  }
-
-  const handleShowSearchResult = () => {
-    setShowSearchBox(false)
-    setShowSearchResult(true)
   }
 
   return (
@@ -94,13 +150,27 @@ function Search() {
         />
         {showSearchBox && (
           <SearchBox>
-            <SearchBoxItem onClick={handleShowSearchResult}>
-              나 혼자만 레벨업
-            </SearchBoxItem>
+            <SearchBoxItem onClick={() => {}}>나 혼자만 레벨업</SearchBoxItem>
           </SearchBox>
         )}
       </SearchWrapper>
-      <SearchResultWrapper />
+      {!showSearchResult && !isEmpty(keywords) && (
+        <SearchKeywordsWrapper>
+          <SectionTitle>최근 검색어</SectionTitle>
+          <KeywordsWrapper>
+            {keywords.map((keyword) => (
+              <KeywordBox key={keyword.id}>
+                {keyword.text} <Icons width="20px" height="20px" name="Close" />
+              </KeywordBox>
+            ))}
+          </KeywordsWrapper>
+        </SearchKeywordsWrapper>
+      )}
+      {showSearchResult && (
+        <SearchResultWrapper>
+          <SectionTitle>{`‘${search}’ 검색 결과`}</SectionTitle>
+        </SearchResultWrapper>
+      )}
     </SearchContainer>
   )
 }
