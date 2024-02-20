@@ -1,3 +1,4 @@
+import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
 import { isEmpty } from 'lodash'
@@ -47,9 +48,16 @@ const SearchKeywordsWrapper = styled.div`
   padding-top: 20px;
 `
 
+const SectionTitleWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
 const SectionTitle = styled.div`
   ${({ theme }) => theme.typography.head2};
   color: ${({ theme }) => theme.color.gray[950]};
+  cursor: default;
 `
 
 const KeywordsWrapper = styled.div`
@@ -98,6 +106,15 @@ function Search() {
       text: value,
     }
     setKeywords([newKeyword, ...keywords])
+  }
+
+  const handleDeleteKeyword = (id: number) => {
+    const filteredKeyword = keywords.filter((keyword) => keyword.id !== id)
+    setKeywords(filteredKeyword)
+  }
+
+  const handleClearKeywords = () => {
+    setKeywords([])
   }
 
   const handleShowSearchResult = () => {
@@ -156,11 +173,22 @@ function Search() {
       </SearchWrapper>
       {!showSearchResult && !isEmpty(keywords) && (
         <SearchKeywordsWrapper>
-          <SectionTitle>최근 검색어</SectionTitle>
+          <SectionTitleWrapper>
+            <SectionTitle>최근 검색어</SectionTitle>
+            <Button width="auto" type="text" onClick={handleClearKeywords}>
+              전체 삭제
+            </Button>
+          </SectionTitleWrapper>
           <KeywordsWrapper>
             {keywords.map((keyword) => (
               <KeywordBox key={keyword.id}>
-                {keyword.text} <Icons width="20px" height="20px" name="Close" />
+                {keyword.text}{' '}
+                <Icons
+                  width="20px"
+                  height="20px"
+                  name="Close"
+                  onClick={() => handleDeleteKeyword(keyword.id)}
+                />
               </KeywordBox>
             ))}
           </KeywordsWrapper>
