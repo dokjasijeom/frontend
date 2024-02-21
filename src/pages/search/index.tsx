@@ -76,6 +76,7 @@ const KeywordBox = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+  cursor: default;
 `
 
 interface Keyword {
