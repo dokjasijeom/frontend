@@ -165,10 +165,10 @@ function BookDetail() {
                 </div>
                 <div className="sub">
                   총 {book.total}화
-                  {book.isComplete && (
+                  {book.status.value === 'complete' && (
                     <>
                       <div className="divider" />
-                      <span className="caption">완결</span>
+                      <span className="caption">{book.status.label}</span>
                     </>
                   )}
                 </div>

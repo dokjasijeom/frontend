@@ -12,7 +12,7 @@ export interface Book {
   score: number
   platforms: Platform[]
   total: number
-  isComplete: boolean
+  status: BookStatus
   publisher: string
   tags: string[]
   synopsis: string
@@ -28,8 +28,16 @@ export interface MyBook {
   total: number
   current: number
   score: number
+  status: BookStatus
   episodes: Episode[]
   isDirect: boolean
+}
+
+export type BookStatusType = 'in series' | 'complete'
+
+export interface BookStatus {
+  label: string
+  value: BookStatusType
 }
 
 export interface Episode {

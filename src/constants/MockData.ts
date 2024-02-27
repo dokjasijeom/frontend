@@ -16,7 +16,7 @@ export const MockBook = {
       ],
       score: 9872,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -36,7 +36,7 @@ export const MockBook = {
       ],
       score: 4504,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -52,7 +52,7 @@ export const MockBook = {
       platforms: [{ label: '카카오페이지', value: 'kakao' }],
       score: 3092,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -68,7 +68,7 @@ export const MockBook = {
       platforms: [{ label: '리디북스', value: 'ridi' }],
       score: 935,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -88,7 +88,7 @@ export const MockBook = {
       ],
       score: 9872,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -108,7 +108,7 @@ export const MockBook = {
       ],
       score: 4504,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -124,7 +124,7 @@ export const MockBook = {
       platforms: [{ label: '카카오페이지', value: 'kakao' }],
       score: 3092,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -140,7 +140,7 @@ export const MockBook = {
       platforms: [{ label: '리디북스', value: 'ridi' }],
       score: 935,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -160,7 +160,7 @@ export const MockBook = {
       ],
       score: 9872,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -180,7 +180,7 @@ export const MockBook = {
       ],
       score: 4504,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -196,7 +196,7 @@ export const MockBook = {
       platforms: [{ label: '카카오페이지', value: 'kakao' }],
       score: 3092,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -212,7 +212,7 @@ export const MockBook = {
       platforms: [{ label: '리디북스', value: 'ridi' }],
       score: 935,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹툰', '판타지', '현대판타지'],
       synopsis:
@@ -234,7 +234,7 @@ export const MockBook = {
       ],
       score: 9872,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -254,7 +254,7 @@ export const MockBook = {
       ],
       score: 4504,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -270,7 +270,7 @@ export const MockBook = {
       platforms: [{ label: '카카오페이지', value: 'kakao' }],
       score: 3092,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -286,7 +286,7 @@ export const MockBook = {
       platforms: [{ label: '리디북스', value: 'ridi' }],
       score: 935,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -306,7 +306,7 @@ export const MockBook = {
       ],
       score: 9872,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -326,7 +326,7 @@ export const MockBook = {
       ],
       score: 4504,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -342,7 +342,7 @@ export const MockBook = {
       platforms: [{ label: '카카오페이지', value: 'kakao' }],
       score: 3092,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -358,7 +358,7 @@ export const MockBook = {
       platforms: [{ label: '리디북스', value: 'ridi' }],
       score: 935,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -378,7 +378,7 @@ export const MockBook = {
       ],
       score: 9872,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -398,7 +398,7 @@ export const MockBook = {
       ],
       score: 4504,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -414,7 +414,7 @@ export const MockBook = {
       platforms: [{ label: '카카오페이지', value: 'kakao' }],
       score: 3092,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -430,7 +430,7 @@ export const MockBook = {
       platforms: [{ label: '리디북스', value: 'ridi' }],
       score: 935,
       total: 270,
-      isComplete: true,
+      status: { label: '완결', value: 'complete' },
       publisher: '파피루스',
       tags: ['웹소설', '판타지', '현대판타지'],
       synopsis:
@@ -456,6 +456,7 @@ export const MockMyBook = {
       total: 790,
       current: 519,
       score: 9872,
+      status: { label: '연재중', value: 'in series' },
       episodes: [
         { ep: 1, platform: { label: '네이버시리즈', value: 'naver' } },
         { ep: 2, platform: { label: '네이버시리즈', value: 'naver' } },
@@ -520,6 +521,7 @@ export const MockMyBook = {
       total: 271,
       current: 200,
       score: 4504,
+      status: { label: '완결', value: 'complete' },
       episodes: [
         { ep: 1, platform: { label: '네이버시리즈', value: 'naver' } },
         { ep: 2, platform: { label: '네이버시리즈', value: 'naver' } },
@@ -640,6 +642,7 @@ export const MockMyBook = {
       total: 223,
       current: 98,
       score: 3092,
+      status: { label: '완결', value: 'complete' },
       episodes: [
         { ep: 1, platform: { label: '네이버시리즈', value: 'naver' } },
         { ep: 2, platform: { label: '네이버시리즈', value: 'naver' } },
