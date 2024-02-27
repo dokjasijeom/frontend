@@ -43,6 +43,13 @@ const BookInfoWrapper = styled.div`
       display: flex;
       flex-direction: column;
       gap: 4px;
+      .status {
+        ${({ theme }) => theme.typography.body4};
+        color: ${({ theme }) => theme.color.gray[950]};
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
       .title {
         ${({ theme }) => theme.typography.head1};
         color: ${({ theme }) => theme.color.gray[950]};
@@ -301,6 +308,19 @@ function LibraryDetail() {
             )}
             <div className="book_info_wrapper">
               <div className="book_info">
+                {!isEmpty(book.status) && (
+                  <div className="status">
+                    <Badge
+                      value={book.status.label}
+                      color={
+                        book.status.value === 'complete'
+                          ? theme.color.gray[300]
+                          : theme.color.main[100]
+                      }
+                    />
+                    총 {book.total}화
+                  </div>
+                )}
                 <div className="title">{book.title}</div>
                 <div className="sub">
                   {book.author}
