@@ -1,3 +1,4 @@
+import SearchResult from '@/components/Search/SearchResult'
 import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
@@ -38,10 +39,6 @@ const SearchBoxItem = styled.div`
       color: ${({ theme }) => theme.color.main[600]};
     }
   }
-`
-
-const SearchResultWrapper = styled.div`
-  padding-top: 20px;
 `
 
 const SearchKeywordsWrapper = styled.div`
@@ -195,11 +192,7 @@ function Search() {
           </KeywordsWrapper>
         </SearchKeywordsWrapper>
       )}
-      {showSearchResult && (
-        <SearchResultWrapper>
-          <SectionTitle>{`‘${search}’ 검색 결과`}</SectionTitle>
-        </SearchResultWrapper>
-      )}
+      {showSearchResult && <SearchResult search={search} />}
     </SearchContainer>
   )
 }
