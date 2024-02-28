@@ -3,6 +3,7 @@ import { Platform } from '@/@types/platform'
 import AddBookForm from '@/components/Library/AddBookForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
+import BookPosterItem from '@/components/common/BookPosterItem/BookPosterItem'
 import Button from '@/components/common/Button/Button'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import Icons from '@/components/common/Icons/Icons'
@@ -15,7 +16,6 @@ import { PLATFORM_TAB_LIST } from '@/constants/Tab'
 import useDebounce from '@/hooks/useDebounce'
 import useModal from '@/hooks/useModal'
 import { isEmpty } from 'lodash'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
@@ -27,45 +27,14 @@ const LibraryDetailContainer = styled.div`
 const BookInfoWrapper = styled.div`
   padding: 20px;
   display: flex;
-  .book_image {
-    border-radius: 12px;
-    margin-right: 18px;
-  }
-  .book_info_wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    height: 200px;
+  position: relative;
 
-    .book_info {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      .status {
-        ${({ theme }) => theme.typography.body4};
-        color: ${({ theme }) => theme.color.gray[950]};
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .title {
-        ${({ theme }) => theme.typography.head1};
-        color: ${({ theme }) => theme.color.gray[950]};
-      }
-      .sub {
-        ${({ theme }) => theme.typography.body2};
-        color: ${({ theme }) => theme.color.gray[800]};
-      }
-      .score {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        ${({ theme }) => theme.typography.body2};
-        color: ${({ theme }) => theme.color.main[600]};
-      }
-    }
+  .book_info {
+  }
+  .record_button {
+    position: absolute;
+    bottom: 40px;
+    left: 198px;
   }
 `
 
@@ -297,67 +266,38 @@ function LibraryDetail() {
       {book && (
         <>
           <BookInfoWrapper>
-            {!isEmpty(book.image) && (
-              <Image
-                className="book_image"
-                src={book.image}
-                width={140}
-                height={200}
-                alt=""
-              />
-            )}
-            <div className="book_info_wrapper">
-              <div className="book_info">
-                {!isEmpty(book.status) && (
-                  <div className="status">
-                    <Badge
-                      value={book.status.label}
-                      color={
-                        book.status.value === 'complete'
-                          ? theme.color.gray[300]
-                          : theme.color.main[100]
-                      }
-                    />
-                    총 {book.total}화
-                  </div>
-                )}
-                <div className="title">{book.title}</div>
-                <div className="sub">
-                  {book.author}
-                  {book.genre ? ` · ${book.genre}` : ''}
-                </div>
-                <div className="score">
-                  <Icons
-                    name="HeartActive"
-                    color={theme.color.main[600]}
-                    width="16px"
-                    height="16px"
-                  />
-                  {book.score.toLocaleString()}
-                </div>
-                {book.isDirect && (
-                  <Button
-                    type="text"
-                    width="auto"
-                    style={{ position: 'absolute', right: '40px' }}
-                    onClick={handleEditModal}
-                  >
-                    편집
-                  </Button>
-                )}
+            <BookPosterItem book={book} />
+            <div className="book_info">
+              {book.isDirect && (
                 <Button
                   type="text"
                   width="auto"
-                  style={{ position: 'absolute', right: '0' }}
-                  onClick={handleDeleteModal}
+                  style={{ position: 'absolute', right: '60px' }}
+                  onClick={handleEditModal}
                 >
-                  삭제
+                  편집
                 </Button>
-              </div>
-              <Button width="95px" onClick={handleRecordModal}>
-                기록하기
+              )}
+              <Button
+                type="text"
+                width="auto"
+                style={{ position: 'absolute', right: '20px' }}
+                onClick={handleDeleteModal}
+              >
+                삭제
               </Button>
             </div>
+            <Button
+              width="95px"
+              style={{
+                position: 'absolute',
+                bottom: '40px',
+                left: book.image ? '198px' : '40px',
+              }}
+              onClick={handleRecordModal}
+            >
+              기록하기
+            </Button>
           </BookInfoWrapper>
           {book.total > 0 && (
             <RecordBanner>
