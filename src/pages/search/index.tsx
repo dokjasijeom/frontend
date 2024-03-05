@@ -1,8 +1,11 @@
+import { Keyword } from '@/@types/search'
+import SearchMain from '@/components/Search/SearchMain'
 import SearchResult from '@/components/Search/SearchResult'
-import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
 import { isEmpty } from 'lodash'
+import { GetServerSideProps } from 'next'
+import { useRouter } from 'next/router'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -41,51 +44,24 @@ const SearchBoxItem = styled.div`
   }
 `
 
-const SearchKeywordsWrapper = styled.div`
-  padding-top: 20px;
-`
-
-const SectionTitleWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const SectionTitle = styled.div`
-  ${({ theme }) => theme.typography.head2};
-  color: ${({ theme }) => theme.color.gray[950]};
-  cursor: default;
-`
-
-const KeywordsWrapper = styled.div`
-  display: flex;
-  gap: 12px;
-  margin-top: 12px;
-  flex-wrap: wrap;
-`
-
-const KeywordBox = styled.div`
-  padding: 14px 20px;
-  border-radius: 12px;
-  ${({ theme }) => theme.typography.body2};
-  color: ${({ theme }) => theme.color.gray[950]};
-  background: ${({ theme }) => theme.color.gray[50]};
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  cursor: default;
-`
-
-interface Keyword {
-  id: number
-  text: string
+interface SearchPageProps {
+  query: any
 }
 
-function Search() {
-  const [search, setSearch] = useState('')
+function Search({ query }: SearchPageProps) {
+  const searchKeyword = query.keyword !== undefined ? query.keyword : ''
+  const [search, setSearch] = useState(searchKeyword)
   const [showSearchBox, setShowSearchBox] = useState(false)
-  const [showSearchResult, setShowSearchResult] = useState(false)
   const [keywords, setKeywords] = useState<Keyword[]>([])
+  const router = useRouter()
+
+  useEffect(() => {
+    if (searchKeyword) {
+      setSearch(searchKeyword)
+    } else {
+      setSearch('')
+    }
+  }, [router, searchKeyword])
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -107,26 +83,38 @@ function Search() {
   }
 
   const handleDeleteKeyword = (id: number) => {
+    // 최근 검색어 개별 삭제
     const filteredKeyword = keywords.filter((keyword) => keyword.id !== id)
     setKeywords(filteredKeyword)
   }
 
   const handleClearKeywords = () => {
+    // 최근 검색어 전체 삭제
     setKeywords([])
   }
 
+  const handleClearSearch = () => {
+    setSearch('')
+    router.push('/search')
+  }
+
   const handleShowSearchResult = () => {
+    // 검색 결과로 이동
     setShowSearchBox(false)
-    setShowSearchResult(true)
+    const trimSearchKeyword = search.trim()
+    router.push(`/search?keyword=${trimSearchKeyword}`)
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return
     if (e.key === 'Enter') {
       const { value } = e.currentTarget
-      handleAddKeyword(value)
-      setShowSearchBox(false)
-      handleShowSearchResult()
+      if (isEmpty(value)) {
+        handleClearSearch()
+      } else {
+        handleAddKeyword(value)
+        handleShowSearchResult()
+      }
     }
   }
   const handleChangeSearch = (value: string) => {
@@ -135,11 +123,6 @@ function Search() {
     if (!isEmpty(search)) {
       setShowSearchBox(true)
     }
-  }
-
-  const handleClearSearch = () => {
-    setSearch('')
-    setShowSearchResult(false)
   }
 
   return (
@@ -169,32 +152,24 @@ function Search() {
           </SearchBox>
         )}
       </SearchWrapper>
-      {!showSearchResult && !isEmpty(keywords) && (
-        <SearchKeywordsWrapper>
-          <SectionTitleWrapper>
-            <SectionTitle>최근 검색어</SectionTitle>
-            <Button width="auto" type="text" onClick={handleClearKeywords}>
-              전체 삭제
-            </Button>
-          </SectionTitleWrapper>
-          <KeywordsWrapper>
-            {keywords.map((keyword) => (
-              <KeywordBox key={keyword.id}>
-                {keyword.text}{' '}
-                <Icons
-                  width="20px"
-                  height="20px"
-                  name="Close"
-                  onClick={() => handleDeleteKeyword(keyword.id)}
-                />
-              </KeywordBox>
-            ))}
-          </KeywordsWrapper>
-        </SearchKeywordsWrapper>
+      {isEmpty(searchKeyword) && !isEmpty(keywords) && (
+        <SearchMain
+          keywords={keywords}
+          handleClearKeywords={handleClearKeywords}
+          handleDeleteKeyword={handleDeleteKeyword}
+        />
       )}
-      {showSearchResult && <SearchResult search={search} />}
+      {searchKeyword && <SearchResult search={search} />}
     </SearchContainer>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      query: context.query,
+    },
+  }
 }
 
 export default Search
