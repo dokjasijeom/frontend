@@ -1,6 +1,7 @@
 import { MockBook } from '@/constants/MockData'
 import React from 'react'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 import BookPosterItem from '../common/BookPosterItem/BookPosterItem'
 
 const SearchResultContainer = styled.div`
@@ -31,6 +32,7 @@ interface SearchResultProps {
 
 function SearchResult(props: SearchResultProps) {
   const { search } = props
+  const router = useRouter()
 
   return (
     <SearchResultContainer>
@@ -38,7 +40,10 @@ function SearchResult(props: SearchResultProps) {
       <SearchResultWrapper>
         {MockBook.webNovel.map((book) => (
           <BookItemWrapper key={book.id}>
-            <BookPosterItem book={book} />
+            <BookPosterItem
+              book={book}
+              onClick={() => router.push(`/book/${book.id}`)}
+            />
           </BookItemWrapper>
         ))}
       </SearchResultWrapper>

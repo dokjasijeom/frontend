@@ -53,13 +53,23 @@ const BookPosterItemWrapper = styled.div`
 
 interface BookPosterItemProps {
   book: Book | MyBook
+  onClick?: () => void
 }
 
 function BookPosterItem(props: BookPosterItemProps) {
-  const { book } = props
+  const { book, onClick } = props
   const theme = useTheme()
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick()
+    }
+  }
   return (
-    <BookPosterItemWrapper>
+    <BookPosterItemWrapper
+      onClick={handleClick}
+      style={{ cursor: onClick ? 'pointer' : 'default' }}
+    >
       {!isEmpty(book.image) && (
         <Image
           className="book_image"
