@@ -93,27 +93,27 @@ function Search({ query }: SearchPageProps) {
     setKeywords([])
   }
 
-  const handleClearSearch = () => {
+  const handleClearSearch = async () => {
+    await router.push('/search')
     setSearch('')
-    router.push('/search')
   }
 
-  const handleShowSearchResult = () => {
+  const handleShowSearchResult = async () => {
     // 검색 결과로 이동
     setShowSearchBox(false)
     const trimSearchKeyword = search.trim()
-    router.push(`/search?keyword=${trimSearchKeyword}`)
+    await router.push(`/search?keyword=${trimSearchKeyword}`)
   }
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return
     if (e.key === 'Enter') {
       const { value } = e.currentTarget
       if (isEmpty(value)) {
         handleClearSearch()
       } else {
+        await handleShowSearchResult()
         handleAddKeyword(value)
-        handleShowSearchResult()
       }
     }
   }
@@ -152,14 +152,22 @@ function Search({ query }: SearchPageProps) {
           </SearchBox>
         )}
       </SearchWrapper>
-      {isEmpty(searchKeyword) && !isEmpty(keywords) && (
+      {/* {isEmpty(searchKeyword) && (
+        <SearchMain
+          keywords={keywords}
+          handleClearKeywords={handleClearKeywords}
+          handleDeleteKeyword={handleDeleteKeyword}
+        />
+      )} */}
+      {searchKeyword ? (
+        <SearchResult search={search} />
+      ) : (
         <SearchMain
           keywords={keywords}
           handleClearKeywords={handleClearKeywords}
           handleDeleteKeyword={handleDeleteKeyword}
         />
       )}
-      {searchKeyword && <SearchResult search={search} />}
     </SearchContainer>
   )
 }
