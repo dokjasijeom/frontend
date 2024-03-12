@@ -1,12 +1,18 @@
 import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { BOOK_TYPE_TAB_LIST, SORT_TAB_LIST } from '@/constants/Tab'
+import {
+  BOOK_TYPE_TAB_LIST,
+  PLATFORM_TAB_LIST,
+  SORT_TAB_LIST,
+} from '@/constants/Tab'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useState } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { CATEGORY, CategoryItem } from '@/constants/Category'
 import { isEmpty } from 'lodash'
+import Checkbox from '@/components/common/Checkbox/Checkbox'
+import { Platform } from '@/@types/platform'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -41,19 +47,48 @@ const SubscribtionItem = styled.div`
 const CategoryFilterWrapper = styled.div`
   padding: 0 20px;
   margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .platform_wrapper {
+    display: flex;
+    gap: 12px;
+
+    .checkbox_label {
+      flex: 1;
+      ${({ theme }) => theme.typography.body1};
+    }
+  }
 `
 
 function Category() {
   const router = useRouter()
+  const theme = useTheme()
   const [selectedTab, setSelectedTab] = useState(BOOK_TYPE_TAB_LIST[0])
   const [selectedCategory, setSelectedCategory] = useState(
     CATEGORY[selectedTab.value][0],
   )
 
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform[]>([])
 
   const handleSelectedCategory = (category: CategoryItem) => {
     setSelectedCategory(category)
+  }
+
+  const handleSelectedPlatform = (platform: any) => {
+    const findPlatform = selectedPlatform.find(
+      (item) => item.value === platform.value,
+    )
+    if (findPlatform) {
+      const filterPlarform = selectedPlatform.filter(
+        (item) => item.value !== platform.value,
+      )
+      setSelectedPlatform(filterPlarform)
+    } else {
+      setSelectedPlatform([...selectedPlatform, platform])
+    }
   }
   return (
     <CategoryContainer>
@@ -94,6 +129,25 @@ function Category() {
               setSelectedSort(tab)
             }}
           />
+          <div className="platform_wrapper">
+            {PLATFORM_TAB_LIST.map((platform) => (
+              <Checkbox
+                key={platform.value}
+                style={{ gap: '4px' }}
+                checked={Boolean(
+                  selectedPlatform.find(
+                    (item) => item.value === platform.value,
+                  ),
+                )}
+                onChange={() => {
+                  handleSelectedPlatform(platform)
+                }}
+                checkColor={theme.color.main[600]}
+              >
+                <div className="checkbox_label">{platform.label}</div>
+              </Checkbox>
+            ))}
+          </div>
         </CategoryFilterWrapper>
       </CategoryWrapper>
     </CategoryContainer>
