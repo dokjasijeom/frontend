@@ -15,6 +15,7 @@ import Checkbox from '@/components/common/Checkbox/Checkbox'
 import { Platform } from '@/@types/platform'
 import { MockBook } from '@/constants/MockData'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
+import Pagination from '@/components/common/Pagination/Pagination'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -79,10 +80,15 @@ const CategoryListWrapper = styled.div`
     grid-template-columns: repeat(4, 137px);
     row-gap: 16px;
     column-gap: 4px;
-    padding: 12px 0 32px;
+    padding: 12px 0 20px;
+  }
+
+  .pagination_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `
-
 function Category() {
   const router = useRouter()
   const theme = useTheme()
@@ -94,7 +100,11 @@ function Category() {
   )
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
   const [selectedPlatform, setSelectedPlatform] = useState<Platform[]>([])
+  const [page, setPage] = useState(1)
 
+  const handleChangePage = (currentPage: number) => {
+    setPage(currentPage)
+  }
   const handleSelectedCategory = (category: CategoryItem) => {
     setSelectedCategory(category)
   }
@@ -177,6 +187,13 @@ function Category() {
             {MockBook[selectedBookTypeTab.value].map((book) => (
               <Thumbnail key={book.id} book={book} />
             ))}
+          </div>
+          <div className="pagination_wrapper">
+            <Pagination
+              pageCount={10}
+              currentPage={page}
+              onChangePage={handleChangePage}
+            />
           </div>
         </CategoryListWrapper>
       </CategoryWrapper>
