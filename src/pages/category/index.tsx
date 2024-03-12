@@ -13,6 +13,8 @@ import { CATEGORY, CategoryItem } from '@/constants/Category'
 import { isEmpty } from 'lodash'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import { Platform } from '@/@types/platform'
+import { MockBook } from '@/constants/MockData'
+import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -62,14 +64,34 @@ const CategoryFilterWrapper = styled.div`
   }
 `
 
+const CategoryListWrapper = styled.div`
+  padding: 20px;
+
+  .total_count {
+    ${({ theme }) => theme.typography.body1};
+    color: ${({ theme }) => theme.color.gray[800]};
+  }
+
+  .book_list {
+    display: grid;
+    justify-content: center;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 137px);
+    row-gap: 16px;
+    column-gap: 4px;
+    padding: 12px 0 32px;
+  }
+`
+
 function Category() {
   const router = useRouter()
   const theme = useTheme()
-  const [selectedTab, setSelectedTab] = useState(BOOK_TYPE_TAB_LIST[0])
-  const [selectedCategory, setSelectedCategory] = useState(
-    CATEGORY[selectedTab.value][0],
+  const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
+    BOOK_TYPE_TAB_LIST[0],
   )
-
+  const [selectedCategory, setSelectedCategory] = useState(
+    CATEGORY[selectedBookTypeTab.value][0],
+  )
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
   const [selectedPlatform, setSelectedPlatform] = useState<Platform[]>([])
 
@@ -102,15 +124,15 @@ function Category() {
         <Tab
           type="underbar"
           tabList={BOOK_TYPE_TAB_LIST}
-          selectedTab={selectedTab}
+          selectedTab={selectedBookTypeTab}
           onChange={(tab) => {
-            setSelectedTab(tab)
+            setSelectedBookTypeTab(tab)
             setSelectedCategory(CATEGORY[tab.value][0])
           }}
         />
         <CategoryTabWrapper>
-          {!isEmpty(selectedTab) &&
-            CATEGORY[selectedTab.value].map((category) => (
+          {!isEmpty(selectedBookTypeTab) &&
+            CATEGORY[selectedBookTypeTab.value].map((category) => (
               <SubscribtionItem
                 key={category.id}
                 onClick={() => handleSelectedCategory(category)}
@@ -149,6 +171,14 @@ function Category() {
             ))}
           </div>
         </CategoryFilterWrapper>
+        <CategoryListWrapper>
+          <div className="total_count">전체 21,234</div>
+          <div className="book_list">
+            {MockBook[selectedBookTypeTab.value].map((book) => (
+              <Thumbnail key={book.id} book={book} />
+            ))}
+          </div>
+        </CategoryListWrapper>
       </CategoryWrapper>
     </CategoryContainer>
   )
