@@ -1,7 +1,7 @@
 import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { BOOK_TYPE_TAB_LIST } from '@/constants/Tab'
+import { BOOK_TYPE_TAB_LIST, SORT_TAB_LIST } from '@/constants/Tab'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useState } from 'react'
 import styled from 'styled-components'
@@ -38,12 +38,19 @@ const SubscribtionItem = styled.div`
   }
 `
 
+const CategoryFilterWrapper = styled.div`
+  padding: 0 20px;
+  margin-top: 12px;
+`
+
 function Category() {
   const router = useRouter()
   const [selectedTab, setSelectedTab] = useState(BOOK_TYPE_TAB_LIST[0])
   const [selectedCategory, setSelectedCategory] = useState(
     CATEGORY[selectedTab.value][0],
   )
+
+  const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
 
   const handleSelectedCategory = (category: CategoryItem) => {
     setSelectedCategory(category)
@@ -78,6 +85,16 @@ function Category() {
               </SubscribtionItem>
             ))}
         </CategoryTabWrapper>
+        <CategoryFilterWrapper>
+          <Tab
+            type="text"
+            tabList={SORT_TAB_LIST}
+            selectedTab={selectedSort}
+            onChange={(tab) => {
+              setSelectedSort(tab)
+            }}
+          />
+        </CategoryFilterWrapper>
       </CategoryWrapper>
     </CategoryContainer>
   )
