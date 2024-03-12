@@ -20,3 +20,9 @@ export const WEEK_TAB_LIST = [
   { label: '토', value: 'sat' },
   { label: '일', value: 'sun' },
 ] as TabItem[]
+
+export const SORT_TAB_LIST = [
+  { label: '인기순', value: 'popular' },
+  { label: '찜 많은 순', value: 'heart' },
+  { label: '독자픽 순', value: 'dokjapick' },
+]
