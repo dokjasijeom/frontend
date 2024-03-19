@@ -9,8 +9,10 @@ import {
   WEEK_TAB_LIST,
 } from '@/constants/Tab'
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MockBook } from '@/constants/MockData'
+import { getSeries } from '@/api/series'
+import { Series } from '@/@types/series'
 
 const HomeContainer = styled.div``
 
@@ -50,6 +52,19 @@ export default function Home() {
     PLATFORM_TAB_LIST[0],
   )
 
+  const [weekSeries, setWeekSeries] = useState<Series[]>([])
+
+  useEffect(() => {
+    async function fetchWeekSeries() {
+      const res = await getSeries({
+        seriesType: selectedBookTypeTab.value,
+        publishDay: selectedWeek.value,
+      })
+      setWeekSeries(res.data.data)
+    }
+    fetchWeekSeries()
+  }, [selectedBookTypeTab.value, selectedWeek.value])
+
   return (
     <>
       <Head>
@@ -78,8 +93,8 @@ export default function Home() {
           />
         </WeekTabWrapper>
         <BookListWrapper>
-          {MockBook[selectedBookTypeTab.value].map((book) => (
-            <Thumbnail key={book.id} book={book} />
+          {weekSeries.map((item) => (
+            <Thumbnail key={item.hashId} series={item} />
           ))}
         </BookListWrapper>
         <TabTitleHeader
