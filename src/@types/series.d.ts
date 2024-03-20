@@ -1,6 +1,6 @@
 export type SeriesType = 'webnovel' | 'webtoon'
 
-export type GenreType = 'webnovel'
+export type GenreType = 'webnovel' | 'common'
 
 export type Day = 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN'
 
@@ -32,7 +32,7 @@ export interface Author {
   name: string
   CreatedAt: string
   UpdatedAt: string
-  DeletedAt: string
+  DeletedAt: string | null
 }
 
 export interface Episode {
@@ -55,6 +55,7 @@ export interface PublishDay {
 }
 
 export interface Publisher {
+  id?: number
   hashId: string
   name: string
   description: string

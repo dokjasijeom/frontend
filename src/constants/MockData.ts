@@ -1,6 +1,7 @@
 import { Book, MyBook } from '@/@types/book'
+import { Series } from '@/@types/series'
 
-export const MockSeries = [
+export const MockSeries: Series[] = [
   {
     hashId: 'JVLZnj',
     title: '20년만에 괴물 배우로 복귀했습니다.',
