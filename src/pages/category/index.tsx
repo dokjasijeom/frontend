@@ -2,7 +2,7 @@ import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import {
-  BOOK_TYPE_TAB_LIST,
+  SERIES_TYPE_TAB_LIST,
   PLATFORM_TAB_LIST,
   SORT_TAB_LIST,
 } from '@/constants/Tab'
@@ -73,7 +73,7 @@ const CategoryListWrapper = styled.div`
     color: ${({ theme }) => theme.color.gray[800]};
   }
 
-  .book_list {
+  .series_list {
     display: grid;
     justify-content: center;
     grid-template-rows: repeat(3, 1fr);
@@ -92,11 +92,11 @@ const CategoryListWrapper = styled.div`
 function Category() {
   const router = useRouter()
   const theme = useTheme()
-  const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
-    BOOK_TYPE_TAB_LIST[0],
+  const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] = useState(
+    SERIES_TYPE_TAB_LIST[0],
   )
   const [selectedCategory, setSelectedCategory] = useState(
-    CATEGORY[selectedBookTypeTab.value][0],
+    CATEGORY[selectedSeriesTypeTab.value][0],
   )
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
   const [selectedPlatform, setSelectedPlatform] = useState<Platform[]>([])
@@ -133,16 +133,16 @@ function Category() {
       <CategoryWrapper>
         <Tab
           type="underbar"
-          tabList={BOOK_TYPE_TAB_LIST}
-          selectedTab={selectedBookTypeTab}
+          tabList={SERIES_TYPE_TAB_LIST}
+          selectedTab={selectedSeriesTypeTab}
           onChange={(tab) => {
-            setSelectedBookTypeTab(tab)
+            setSelectedSeriesTypeTab(tab)
             setSelectedCategory(CATEGORY[tab.value][0])
           }}
         />
         <CategoryTabWrapper>
-          {!isEmpty(selectedBookTypeTab) &&
-            CATEGORY[selectedBookTypeTab.value].map((category) => (
+          {!isEmpty(selectedSeriesTypeTab) &&
+            CATEGORY[selectedSeriesTypeTab.value].map((category) => (
               <SubscribtionItem
                 key={category.id}
                 onClick={() => handleSelectedCategory(category)}
@@ -183,7 +183,7 @@ function Category() {
         </CategoryFilterWrapper>
         <CategoryListWrapper>
           <div className="total_count">전체 21,234</div>
-          <div className="book_list">
+          <div className="series_list">
             {MockSeries.map((series) => (
               <Thumbnail key={series.hashId} series={series} />
             ))}

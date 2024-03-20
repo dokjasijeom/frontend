@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BOOK_TYPE_TAB_LIST } from '@/constants/Tab'
+import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
 import { MockMyBook } from '@/constants/MockData'
@@ -36,7 +36,7 @@ function MyReadingListContainer() {
   const { showModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
   const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
-    BOOK_TYPE_TAB_LIST[0],
+    SERIES_TYPE_TAB_LIST[0],
   )
 
   const handleEditReadingList = () => {
@@ -65,7 +65,7 @@ function MyReadingListContainer() {
       <TabTitleHeader
         iconName="OpenedBook"
         title="읽고 있는 작품"
-        tabList={BOOK_TYPE_TAB_LIST}
+        tabList={SERIES_TYPE_TAB_LIST}
         moreButton={
           <Button type="text" width="auto">
             {isEdit ? '완료' : '편집'}
