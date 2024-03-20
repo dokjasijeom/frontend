@@ -42,7 +42,7 @@ function SearchResult(props: SearchResultProps) {
           <BookItemWrapper key={book.id}>
             <BookPosterItem
               book={book}
-              onClick={() => router.push(`/book/${book.id}`)}
+              onClick={() => router.push(`/series/${book.id}`)}
             />
           </BookItemWrapper>
         ))}
