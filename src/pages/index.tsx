@@ -11,7 +11,7 @@ import {
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import { useEffect, useState } from 'react'
 import { MockBook } from '@/constants/MockData'
-import { getSeries } from '@/api/series'
+import { getSeriesList } from '@/api/series'
 import { Series } from '@/@types/series'
 
 const HomeContainer = styled.div``
@@ -56,7 +56,7 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchWeekSeries() {
-      const res = await getSeries({
+      const res = await getSeriesList({
         seriesType: selectedBookTypeTab.value,
         publishDay: selectedWeek.value,
       })
