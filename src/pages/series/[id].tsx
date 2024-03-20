@@ -1,36 +1,39 @@
+import { IParams } from '@/@types/interface'
+import { Series } from '@/@types/series'
+import { getSeries } from '@/api/series'
 import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { MockBook } from '@/constants/MockData'
 import { isEmpty } from 'lodash'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import styled, { useTheme } from 'styled-components'
 
-const BookDetailContainer = styled.div`
+const SeriesDetailContainer = styled.div`
   padding-top: 56px;
 `
 
-const BookDetailWrapper = styled.div``
+const SeriesDetailWrapper = styled.div``
 
-const BookInfoWrapper = styled.div`
+const SeriesInfoWrapper = styled.div`
   position: relative;
   padding: 20px;
   display: flex;
-  .book_image {
+  .series_image {
     border-radius: 12px;
     margin-right: 20px;
   }
-  .book_info_wrapper {
+  .series_info_wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
     height: 200px;
 
-    .book_info {
+    .series_info {
       position: relative;
       display: flex;
       flex-direction: column;
@@ -96,7 +99,7 @@ const RequestButton = styled.button`
   text-decoration: underline;
 `
 
-const BookDetailBodyWrapper = styled.div``
+const SeriesDetailBodyWrapper = styled.div``
 
 const SectionTitle = styled.div`
   padding: 16px 20px 12px;
@@ -132,50 +135,51 @@ const PlatformItem = styled.div`
   color: ${({ theme }) => theme.color.gray[950]};
 `
 
-function BookDetail() {
+function SeriesDetail({
+  series,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const theme = useTheme()
-  const { id } = router.query
-
-  const book = MockBook.webNovel.find((item) => item.id === id)
 
   return (
-    <BookDetailContainer>
+    <SeriesDetailContainer>
       <TitleHeader title="" onClickBack={() => router.back()} isSearch />
-      {book && (
-        <BookDetailWrapper>
-          <BookInfoWrapper>
-            {!isEmpty(book.image) && (
+      {series && (
+        <SeriesDetailWrapper>
+          <SeriesInfoWrapper>
+            {!isEmpty(series.thumbnail) && (
               <Image
-                className="book_image"
-                src={book.image}
+                unoptimized
+                className="series_image"
+                src={series.thumbnail}
                 width={140}
                 height={200}
                 alt=""
               />
             )}
-            <div className="book_info_wrapper">
-              <div className="book_info">
-                <div className="title">{book.title}</div>
+            <div className="series_info_wrapper">
+              <div className="series_info">
+                <div className="title">{series.title}</div>
                 <div className="sub">
-                  {book.author} <span className="caption">저</span>
+                  {series.authors[0].name} <span className="caption">저</span>
                 </div>
                 <div className="sub">
-                  {book.publisher} <span className="caption">출판</span>
+                  {series.publisher.name} <span className="caption">출판</span>
                 </div>
                 <div className="sub">
-                  총 {book.total}화
-                  {book.status.value === 'complete' && (
+                  총 {series.totalEpisode}화
+                  {/* {series.status.value === 'complete' && (
                     <>
                       <div className="divider" />
-                      <span className="caption">{book.status.label}</span>
+                      <span className="caption">{series.status.label}</span>
                     </>
-                  )}
+                  )} */}
                 </div>
                 <div className="tags">
-                  {book.tags.map((tag) => (
+                  {/* {series.tags.map((tag) => (
                     <div key={tag}>#{tag}</div>
-                  ))}
+                  ))} */}
+                  {series.displayTags}
                 </div>
               </div>
               <div className="action_button_wrapper">
@@ -187,7 +191,7 @@ function BookDetail() {
                       height="20px"
                       color={theme.color.main[600]}
                     />
-                    {book.score.toLocaleString()}
+                    {/* {series.score.toLocaleString()} */}
                   </div>
                 </Button>
                 <Button type="secondary" width="auto">
@@ -204,34 +208,56 @@ function BookDetail() {
               </div>
             </div>
             <RequestButton>정보 수정 요청</RequestButton>
-          </BookInfoWrapper>
-          <BookDetailBodyWrapper>
+          </SeriesInfoWrapper>
+          <SeriesDetailBodyWrapper>
             <SectionTitle>줄거리</SectionTitle>
-            <SynopsisWrapper>{book.synopsis}</SynopsisWrapper>
+            <SynopsisWrapper>{series.description}</SynopsisWrapper>
             <SectionTitle>보러가기</SectionTitle>
             <PlarformWrapper>
-              {book.platforms.map((platform) => (
-                <PlatformItem key={platform.value}>
+              {series.providers.map((provider: any) => (
+                <PlatformItem key={provider.value}>
                   <Image
-                    key={platform.value}
-                    src={`/images/${platform.value}.png`}
-                    alt={platform.value}
+                    key={provider.value}
+                    src={`/images/${provider.value}.png`}
+                    alt={provider.value}
                     width={20}
                     height={20}
                   />
-                  {platform.label}
+                  {provider.label}
                 </PlatformItem>
               ))}
             </PlarformWrapper>
-          </BookDetailBodyWrapper>
-        </BookDetailWrapper>
+          </SeriesDetailBodyWrapper>
+        </SeriesDetailWrapper>
       )}
-    </BookDetailContainer>
+    </SeriesDetailContainer>
   )
 }
 
-BookDetail.getLayout = function getLayout(page: ReactElement) {
+SeriesDetail.getLayout = function getLayout(page: ReactElement) {
   return <OnlyFooterLayout>{page}</OnlyFooterLayout>
 }
 
-export default BookDetail
+export const getServerSideProps: GetServerSideProps<{
+  series: Series
+}> = async (context) => {
+  const { id } = context.params as IParams
+
+  let series = null
+
+  if (id) {
+    try {
+      series = (await getSeries(id)).data.data
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  return {
+    props: {
+      series,
+    },
+  }
+}
+
+export default SeriesDetail

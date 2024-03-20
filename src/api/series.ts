@@ -5,6 +5,10 @@ interface GetSeriesParams {
   seriesType?: string
 }
 
-export const getSeries = (params?: GetSeriesParams) => {
+export const getSeriesList = (params?: GetSeriesParams) => {
   return axiosInstance.get(`/series`, { params })
+}
+
+export const getSeries = (id: string) => {
+  return axiosInstance.get(`/series/${id}`)
 }
