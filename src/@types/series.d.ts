@@ -17,7 +17,7 @@ export interface Series {
   isbn: string
   providers: Array
   publisherId: number
-  seriseType: SeriesType
+  seriesType: SeriesType
   thumbnail: string
   totalEpisode: number
   episodes: Episode[]
