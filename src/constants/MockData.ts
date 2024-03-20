@@ -1,5 +1,1390 @@
 import { Book, MyBook } from '@/@types/book'
 
+export const MockSeries = [
+  {
+    hashId: 'JVLZnj',
+    title: '20년만에 괴물 배우로 복귀했습니다.',
+    description: '',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/e51814eb25ad465592f89e33eca728d2.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+    ],
+    episodes: [
+      {
+        id: 1,
+        episodeNumber: 1,
+      },
+      {
+        id: 2,
+        episodeNumber: 2,
+      },
+      {
+        id: 3,
+        episodeNumber: 3,
+      },
+      {
+        id: 4,
+        episodeNumber: 4,
+      },
+      {
+        id: 5,
+        episodeNumber: 5,
+      },
+      {
+        id: 6,
+        episodeNumber: 6,
+      },
+      {
+        id: 7,
+        episodeNumber: 7,
+      },
+      {
+        id: 8,
+        episodeNumber: 8,
+      },
+      {
+        id: 9,
+        episodeNumber: 9,
+      },
+      {
+        id: 10,
+        episodeNumber: 10,
+      },
+      {
+        id: 11,
+        episodeNumber: 11,
+      },
+      {
+        id: 12,
+        episodeNumber: 12,
+      },
+      {
+        id: 13,
+        episodeNumber: 13,
+      },
+      {
+        id: 14,
+        episodeNumber: 14,
+      },
+      {
+        id: 15,
+        episodeNumber: 15,
+      },
+      {
+        id: 16,
+        episodeNumber: 16,
+      },
+      {
+        id: 17,
+        episodeNumber: 17,
+      },
+      {
+        id: 18,
+        episodeNumber: 18,
+      },
+      {
+        id: 19,
+        episodeNumber: 19,
+      },
+      {
+        id: 20,
+        episodeNumber: 20,
+      },
+      {
+        id: 21,
+        episodeNumber: 21,
+      },
+      {
+        id: 22,
+        episodeNumber: 22,
+      },
+      {
+        id: 23,
+        episodeNumber: 23,
+      },
+      {
+        id: 24,
+        episodeNumber: 24,
+      },
+      {
+        id: 25,
+        episodeNumber: 25,
+      },
+      {
+        id: 26,
+        episodeNumber: 26,
+      },
+      {
+        id: 27,
+        episodeNumber: 27,
+      },
+      {
+        id: 28,
+        episodeNumber: 28,
+      },
+      {
+        id: 29,
+        episodeNumber: 29,
+      },
+      {
+        id: 30,
+        episodeNumber: 30,
+      },
+      {
+        id: 31,
+        episodeNumber: 31,
+      },
+      {
+        id: 32,
+        episodeNumber: 32,
+      },
+      {
+        id: 33,
+        episodeNumber: 33,
+      },
+      {
+        id: 34,
+        episodeNumber: 34,
+      },
+      {
+        id: 35,
+        episodeNumber: 35,
+      },
+      {
+        id: 36,
+        episodeNumber: 36,
+      },
+      {
+        id: 37,
+        episodeNumber: 37,
+      },
+      {
+        id: 38,
+        episodeNumber: 38,
+      },
+      {
+        id: 39,
+        episodeNumber: 39,
+      },
+      {
+        id: 40,
+        episodeNumber: 40,
+      },
+      {
+        id: 41,
+        episodeNumber: 41,
+      },
+      {
+        id: 42,
+        episodeNumber: 42,
+      },
+      {
+        id: 43,
+        episodeNumber: 43,
+      },
+      {
+        id: 44,
+        episodeNumber: 44,
+      },
+      {
+        id: 45,
+        episodeNumber: 45,
+      },
+      {
+        id: 46,
+        episodeNumber: 46,
+      },
+      {
+        id: 47,
+        episodeNumber: 47,
+      },
+      {
+        id: 48,
+        episodeNumber: 48,
+      },
+      {
+        id: 49,
+        episodeNumber: 49,
+      },
+      {
+        id: 50,
+        episodeNumber: 50,
+      },
+      {
+        id: 51,
+        episodeNumber: 51,
+      },
+      {
+        id: 52,
+        episodeNumber: 52,
+      },
+      {
+        id: 53,
+        episodeNumber: 53,
+      },
+      {
+        id: 54,
+        episodeNumber: 54,
+      },
+      {
+        id: 55,
+        episodeNumber: 55,
+      },
+      {
+        id: 56,
+        episodeNumber: 56,
+      },
+      {
+        id: 57,
+        episodeNumber: 57,
+      },
+      {
+        id: 58,
+        episodeNumber: 58,
+      },
+      {
+        id: 59,
+        episodeNumber: 59,
+      },
+      {
+        id: 60,
+        episodeNumber: 60,
+      },
+      {
+        id: 61,
+        episodeNumber: 61,
+      },
+      {
+        id: 62,
+        episodeNumber: 62,
+      },
+      {
+        id: 63,
+        episodeNumber: 63,
+      },
+      {
+        id: 64,
+        episodeNumber: 64,
+      },
+      {
+        id: 65,
+        episodeNumber: 65,
+      },
+      {
+        id: 66,
+        episodeNumber: 66,
+      },
+      {
+        id: 67,
+        episodeNumber: 67,
+      },
+      {
+        id: 68,
+        episodeNumber: 68,
+      },
+      {
+        id: 69,
+        episodeNumber: 69,
+      },
+      {
+        id: 70,
+        episodeNumber: 70,
+      },
+      {
+        id: 71,
+        episodeNumber: 71,
+      },
+      {
+        id: 72,
+        episodeNumber: 72,
+      },
+      {
+        id: 73,
+        episodeNumber: 73,
+      },
+      {
+        id: 74,
+        episodeNumber: 74,
+      },
+      {
+        id: 75,
+        episodeNumber: 75,
+      },
+      {
+        id: 76,
+        episodeNumber: 76,
+      },
+      {
+        id: 77,
+        episodeNumber: 77,
+      },
+      {
+        id: 78,
+        episodeNumber: 78,
+      },
+      {
+        id: 79,
+        episodeNumber: 79,
+      },
+      {
+        id: 80,
+        episodeNumber: 80,
+      },
+      {
+        id: 81,
+        episodeNumber: 81,
+      },
+      {
+        id: 82,
+        episodeNumber: 82,
+      },
+      {
+        id: 83,
+        episodeNumber: 83,
+      },
+      {
+        id: 84,
+        episodeNumber: 84,
+      },
+      {
+        id: 85,
+        episodeNumber: 85,
+      },
+      {
+        id: 86,
+        episodeNumber: 86,
+      },
+      {
+        id: 87,
+        episodeNumber: 87,
+      },
+      {
+        id: 88,
+        episodeNumber: 88,
+      },
+      {
+        id: 89,
+        episodeNumber: 89,
+      },
+      {
+        id: 90,
+        episodeNumber: 90,
+      },
+      {
+        id: 91,
+        episodeNumber: 91,
+      },
+      {
+        id: 92,
+        episodeNumber: 92,
+      },
+      {
+        id: 93,
+        episodeNumber: 93,
+      },
+      {
+        id: 94,
+        episodeNumber: 94,
+      },
+      {
+        id: 95,
+        episodeNumber: 95,
+      },
+      {
+        id: 96,
+        episodeNumber: 96,
+      },
+      {
+        id: 97,
+        episodeNumber: 97,
+      },
+      {
+        id: 98,
+        episodeNumber: 98,
+      },
+      {
+        id: 99,
+        episodeNumber: 99,
+      },
+      {
+        id: 100,
+        episodeNumber: 100,
+      },
+      {
+        id: 101,
+        episodeNumber: 101,
+      },
+      {
+        id: 102,
+        episodeNumber: 102,
+      },
+      {
+        id: 103,
+        episodeNumber: 103,
+      },
+      {
+        id: 104,
+        episodeNumber: 104,
+      },
+      {
+        id: 105,
+        episodeNumber: 105,
+      },
+      {
+        id: 106,
+        episodeNumber: 106,
+      },
+      {
+        id: 107,
+        episodeNumber: 107,
+      },
+      {
+        id: 108,
+        episodeNumber: 108,
+      },
+      {
+        id: 109,
+        episodeNumber: 109,
+      },
+      {
+        id: 110,
+        episodeNumber: 110,
+      },
+      {
+        id: 111,
+        episodeNumber: 111,
+      },
+      {
+        id: 112,
+        episodeNumber: 112,
+      },
+      {
+        id: 113,
+        episodeNumber: 113,
+      },
+      {
+        id: 114,
+        episodeNumber: 114,
+      },
+      {
+        id: 115,
+        episodeNumber: 115,
+      },
+      {
+        id: 116,
+        episodeNumber: 116,
+      },
+      {
+        id: 117,
+        episodeNumber: 117,
+      },
+      {
+        id: 118,
+        episodeNumber: 118,
+      },
+      {
+        id: 119,
+        episodeNumber: 119,
+      },
+      {
+        id: 120,
+        episodeNumber: 120,
+      },
+      {
+        id: 121,
+        episodeNumber: 121,
+      },
+      {
+        id: 122,
+        episodeNumber: 122,
+      },
+      {
+        id: 123,
+        episodeNumber: 123,
+      },
+      {
+        id: 124,
+        episodeNumber: 124,
+      },
+      {
+        id: 125,
+        episodeNumber: 125,
+      },
+      {
+        id: 126,
+        episodeNumber: 126,
+      },
+      {
+        id: 127,
+        episodeNumber: 127,
+      },
+      {
+        id: 128,
+        episodeNumber: 128,
+      },
+      {
+        id: 129,
+        episodeNumber: 129,
+      },
+      {
+        id: 130,
+        episodeNumber: 130,
+      },
+      {
+        id: 131,
+        episodeNumber: 131,
+      },
+      {
+        id: 132,
+        episodeNumber: 132,
+      },
+      {
+        id: 133,
+        episodeNumber: 133,
+      },
+      {
+        id: 134,
+        episodeNumber: 134,
+      },
+      {
+        id: 135,
+        episodeNumber: 135,
+      },
+      {
+        id: 136,
+        episodeNumber: 136,
+      },
+      {
+        id: 137,
+        episodeNumber: 137,
+      },
+      {
+        id: 138,
+        episodeNumber: 138,
+      },
+      {
+        id: 139,
+        episodeNumber: 139,
+      },
+      {
+        id: 140,
+        episodeNumber: 140,
+      },
+      {
+        id: 141,
+        episodeNumber: 141,
+      },
+      {
+        id: 142,
+        episodeNumber: 142,
+      },
+      {
+        id: 143,
+        episodeNumber: 143,
+      },
+      {
+        id: 144,
+        episodeNumber: 144,
+      },
+      {
+        id: 145,
+        episodeNumber: 145,
+      },
+      {
+        id: 146,
+        episodeNumber: 146,
+      },
+      {
+        id: 147,
+        episodeNumber: 147,
+      },
+      {
+        id: 148,
+        episodeNumber: 148,
+      },
+      {
+        id: 149,
+        episodeNumber: 149,
+      },
+      {
+        id: 150,
+        episodeNumber: 150,
+      },
+      {
+        id: 151,
+        episodeNumber: 151,
+      },
+      {
+        id: 152,
+        episodeNumber: 152,
+      },
+      {
+        id: 153,
+        episodeNumber: 153,
+      },
+      {
+        id: 154,
+        episodeNumber: 154,
+      },
+    ],
+    genres: [
+      {
+        id: 7,
+        hashId: 'Ldqg2D',
+        name: '현판',
+        genreType: 'webnovel',
+      },
+    ],
+    authors: [
+      {
+        id: 5,
+        hashId: 'EKaWXb',
+        name: '유현s',
+        CreatedAt: '2024-02-28T09:09:33.551Z',
+        UpdatedAt: '2024-02-28T09:09:33.585Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 0,
+    publisher: {
+      hashId: '',
+      name: '',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [],
+    displayTags: '#웹소설 #현판',
+    totalEpisode: 154,
+    isComplete: false,
+  },
+  {
+    hashId: 'gV3lwY',
+    title: '불곰국은 이제 제겁니다',
+    description: '한국에서는 불가능한 것들. 여기서는 모두 이루게 될 것이다.',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/ecca792fda8b437694e89c17c5b1478f.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 7,
+        hashId: 'Ldqg2D',
+        name: '현판',
+        genreType: 'webnovel',
+      },
+    ],
+    authors: [
+      {
+        id: 10,
+        hashId: '8Kp6XQ',
+        name: '코알라',
+        CreatedAt: '2024-02-28T09:10:11.822Z',
+        UpdatedAt: '2024-02-28T09:10:11.854Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 0,
+    publisher: {
+      hashId: '',
+      name: '',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [],
+    displayTags: '#웹소설 #현판',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: 'XnDkw6',
+    title: '현대에 강림한 정령사는 헌터 아이돌',
+    description: '',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/7b84c033b7984a37ae674c689a3f1893.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 7,
+        hashId: 'Ldqg2D',
+        name: '현판',
+        genreType: 'webnovel',
+      },
+    ],
+    authors: [
+      {
+        id: 13,
+        hashId: 'jNZgXb',
+        name: '온가을달',
+        CreatedAt: '2024-02-28T10:21:19.348Z',
+        UpdatedAt: '2024-02-28T10:21:19.38Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 0,
+    publisher: {
+      hashId: '',
+      name: '',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [],
+    displayTags: '#웹소설 #현판',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: 'JnOQVL',
+    title: '블랙기업조선',
+    description: '',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/a56974729d77475daeb1094d59d65f6e.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 3,
+        hashId: 'DAnXm4',
+        name: '판타지',
+        genreType: 'common',
+      },
+    ],
+    authors: [
+      {
+        id: 16,
+        hashId: '5XxpXP',
+        name: '국뽕',
+        CreatedAt: '2024-02-28T10:21:45.811Z',
+        UpdatedAt: '2024-02-28T10:21:45.837Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 0,
+    publisher: {
+      hashId: '',
+      name: '',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [],
+    displayTags: '#웹소설 #판타지',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: 'Ew29VD',
+    title: '피지컬 천재배우',
+    description: '',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/39a3bddf4f6d429cb2bf1c9998aad15f.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 7,
+        hashId: 'Ldqg2D',
+        name: '현판',
+        genreType: 'webnovel',
+      },
+    ],
+    authors: [
+      {
+        id: 20,
+        hashId: 'PKzykR',
+        name: '글디',
+        CreatedAt: '2024-02-28T10:33:46.301Z',
+        UpdatedAt: '2024-02-28T10:33:46.333Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 0,
+    publisher: {
+      hashId: '',
+      name: '',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [],
+    displayTags: '#웹소설 #현판',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: 'Pnpgwe',
+    title: '녹음의 관',
+    description: '',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/9c6d9a087f414aa1931daa3c9fb8db6c.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 2,
+        hashId: 'VmyWAg',
+        name: '로판',
+        genreType: 'common',
+      },
+    ],
+    authors: [
+      {
+        id: 23,
+        hashId: 'zXmDNn',
+        name: '시야',
+        CreatedAt: '2024-02-28T10:34:05.285Z',
+        UpdatedAt: '2024-02-28T10:34:05.314Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 0,
+    publisher: {
+      hashId: '',
+      name: '',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [],
+    displayTags: '#웹소설 #로판',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: 'aqldq4',
+    title: '필드의 외계인',
+    description: '',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/21762774f9624cd4a8ced78f02e700c8.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 1,
+        hashId: 'LdO12M',
+        name: '로맨스',
+        genreType: 'common',
+      },
+    ],
+    authors: [
+      {
+        id: 28,
+        hashId: 'EXlgN5',
+        name: '에에에',
+        CreatedAt: '2024-03-06T10:44:44.984Z',
+        UpdatedAt: '2024-03-06T10:44:45.019Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 0,
+    publisher: {
+      hashId: '',
+      name: '',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [],
+    displayTags: '#웹소설 #로맨스',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: 'xqW9wX',
+    title: '걷기만 해도 조만장자',
+    description: '',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/bb8532fce4b5432484ccc65efc395c6b.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 1,
+        hashId: 'LdO12M',
+        name: '로맨스',
+        genreType: 'common',
+      },
+    ],
+    authors: [
+      {
+        id: 29,
+        hashId: '5XWnNA',
+        name: '하늘곰',
+        CreatedAt: '2024-03-06T10:56:55.88Z',
+        UpdatedAt: '2024-03-06T10:56:55.91Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 6,
+    publisher: {
+      id: 6,
+      hashId: 'Rmg6z8',
+      name: '포텐',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [],
+    displayTags: '#웹소설 #로맨스',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: 'XqRrqe',
+    title: '빌런만 연기한다',
+    description:
+      '갑자기 떠오른 전쟁 영웅의 기억.\r\n연기와 먼 인생, 악역 배우로 성공한다.',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/57aecab1460d4c109cfafba90b542ff9.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+      {
+        id: 2,
+        day: 'TUE',
+        displayDay: '화',
+        displayOrder: 2,
+      },
+      {
+        id: 3,
+        day: 'WED',
+        displayDay: '수',
+        displayOrder: 3,
+      },
+      {
+        id: 4,
+        day: 'THU',
+        displayDay: '목',
+        displayOrder: 4,
+      },
+      {
+        id: 5,
+        day: 'FRI',
+        displayDay: '금',
+        displayOrder: 5,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 7,
+        hashId: 'Ldqg2D',
+        name: '현판',
+        genreType: 'webnovel',
+      },
+    ],
+    authors: [
+      {
+        id: 30,
+        hashId: '5XRjXP',
+        name: '다스 윙',
+        CreatedAt: '2024-03-06T11:00:36.958Z',
+        UpdatedAt: '2024-03-06T11:00:36.986Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 7,
+    publisher: {
+      id: 7,
+      hashId: 'BmV1z8',
+      name: 'KW북스',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [
+      {
+        id: 2,
+        hashId: 'vwg2VY',
+        name: 'kakao-page',
+        displayName: '카카오페이지',
+        description: '',
+        homepageUrl: '',
+        series: null,
+      },
+      {
+        id: 3,
+        hashId: '5VA8r3',
+        name: 'ridi',
+        displayName: '리디',
+        description: '',
+        homepageUrl: '',
+        series: null,
+      },
+    ],
+    displayTags: '#웹소설 #현판',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: '6nPNVd',
+    title: '천재 마법사는 게임으로 강해진다',
+    description:
+      '마나 서클 형성 장애라는 희귀 질병 때문에 탁월한 마법적인 재능에도 불구하고 중소 길드를 전전하던 백기준.\r\n결국 마지막 중소 길드에서마저도 해고당하고 집으로 돌아가려던 중, 아카데미의 후배 김지윤의 권유로 리얼 스피릿이라는 게임을 시작한다.\r\n리얼 스피릿이라는 게임은 현실의 초인들의 전투를 최대한으로 구현했다는 말을 듣고, 게임에서나마 자신의 마법사에 대한 꿈을 펼쳐내기 위해서였다.\r\n그렇게 게임을 시작하게 된 순간, 게임의 스킬과 능력치가 현실에서도 적용된다는 사실을 알게 되었고, 그날 부터 기준의 마법사의 재능은 날개를 달고 꽃을 피게 된다.',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/b08d9eb1019e4ff28250214d46924971.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+      {
+        id: 2,
+        day: 'TUE',
+        displayDay: '화',
+        displayOrder: 2,
+      },
+      {
+        id: 3,
+        day: 'WED',
+        displayDay: '수',
+        displayOrder: 3,
+      },
+      {
+        id: 4,
+        day: 'THU',
+        displayDay: '목',
+        displayOrder: 4,
+      },
+      {
+        id: 5,
+        day: 'FRI',
+        displayDay: '금',
+        displayOrder: 5,
+      },
+      {
+        id: 6,
+        day: 'SAT',
+        displayDay: '토',
+        displayOrder: 6,
+      },
+      {
+        id: 7,
+        day: 'SUN',
+        displayDay: '일',
+        displayOrder: 7,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 7,
+        hashId: 'Ldqg2D',
+        name: '현판',
+        genreType: 'webnovel',
+      },
+    ],
+    authors: [
+      {
+        id: 31,
+        hashId: 'dNPaXb',
+        name: '짬킹',
+        CreatedAt: '2024-03-06T11:05:32.053Z',
+        UpdatedAt: '2024-03-06T11:05:32.086Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 8,
+    publisher: {
+      id: 8,
+      hashId: 'EzD5me',
+      name: '라온E&M',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [
+      {
+        id: 1,
+        hashId: 'zwpoVG',
+        name: 'naver-series',
+        displayName: '네이버 시리즈',
+        description: '',
+        homepageUrl: '',
+        series: null,
+      },
+      {
+        id: 2,
+        hashId: 'vwg2VY',
+        name: 'kakao-page',
+        displayName: '카카오페이지',
+        description: '',
+        homepageUrl: '',
+        series: null,
+      },
+      {
+        id: 3,
+        hashId: '5VA8r3',
+        name: 'ridi',
+        displayName: '리디',
+        description: '',
+        homepageUrl: '',
+        series: null,
+      },
+    ],
+    displayTags: '#웹소설 #현판',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: '8q0Knz',
+    title: '잊혀진 세계의 구원자가 되었다',
+    description:
+      '[반복되는 시간이 폐기됩니다]\r\n[스킬이 랜덤 부여됩니다]\r\n\r\n매 회귀마다 죽었던 월드 랭킹 1위 김도진\r\n그의 유령이 내 앞에 나타났다.\r\n\r\n제자가 되는 조건으로\r\n동생의 병을 고칠 수 있게 도와준다고?\r\n그런데..일곱 제자 중에 숨어 있는 배신자를 찾아 달라니?',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/5dd8a0d060064531ab02a632214c1913.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+      {
+        id: 2,
+        day: 'TUE',
+        displayDay: '화',
+        displayOrder: 2,
+      },
+      {
+        id: 3,
+        day: 'WED',
+        displayDay: '수',
+        displayOrder: 3,
+      },
+      {
+        id: 4,
+        day: 'THU',
+        displayDay: '목',
+        displayOrder: 4,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 3,
+        hashId: 'DAnXm4',
+        name: '판타지',
+        genreType: 'common',
+      },
+    ],
+    authors: [
+      {
+        id: 32,
+        hashId: 'xX0ZK3',
+        name: '이대혁',
+        CreatedAt: '2024-03-06T11:15:26.079Z',
+        UpdatedAt: '2024-03-06T11:15:26.12Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 9,
+    publisher: {
+      id: 9,
+      hashId: 'kzkWz2',
+      name: 'JC미디어',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [
+      {
+        id: 3,
+        hashId: '5VA8r3',
+        name: 'ridi',
+        displayName: '리디',
+        description: '',
+        homepageUrl: '',
+        series: null,
+      },
+    ],
+    displayTags: '#웹소설 #판타지',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+  {
+    hashId: 'ywYbnA',
+    title: '엔딩 이후 기사로 사는 법',
+    description: '내가 즐겨하던 게임 속으로 들어왔다.\r\n그런데 뭔가 이상하다.',
+    thumbnail:
+      'https://res.cloudinary.com/do2iutomx/series/64b6cbca0b62446bbb064dce6735ecda.jpg',
+    isbn: '',
+    ecn: '',
+    seriesType: 'webnovel',
+    publishDays: [
+      {
+        id: 1,
+        day: 'MON',
+        displayDay: '월',
+        displayOrder: 1,
+      },
+      {
+        id: 2,
+        day: 'TUE',
+        displayDay: '화',
+        displayOrder: 2,
+      },
+      {
+        id: 3,
+        day: 'WED',
+        displayDay: '수',
+        displayOrder: 3,
+      },
+      {
+        id: 4,
+        day: 'THU',
+        displayDay: '목',
+        displayOrder: 4,
+      },
+      {
+        id: 5,
+        day: 'FRI',
+        displayDay: '금',
+        displayOrder: 5,
+      },
+    ],
+    episodes: [],
+    genres: [
+      {
+        id: 3,
+        hashId: 'DAnXm4',
+        name: '판타지',
+        genreType: 'common',
+      },
+    ],
+    authors: [
+      {
+        id: 33,
+        hashId: '3KYbNo',
+        name: 'sayren',
+        CreatedAt: '2024-03-11T14:46:54.534Z',
+        UpdatedAt: '2024-03-11T14:46:54.593Z',
+        DeletedAt: null,
+      },
+    ],
+    publisherId: 10,
+    publisher: {
+      id: 10,
+      hashId: 'ezZYOQ',
+      name: '노이컴퍼니',
+      description: '',
+      homepageUrl: '',
+      series: null,
+    },
+    providers: [
+      {
+        id: 1,
+        hashId: 'zwpoVG',
+        name: 'naver-series',
+        displayName: '네이버 시리즈',
+        description: '',
+        homepageUrl: '',
+        series: null,
+      },
+    ],
+    displayTags: '#웹소설 #판타지',
+    totalEpisode: 0,
+    isComplete: false,
+  },
+]
+
 export const MockBook = {
   webToon: [
     {

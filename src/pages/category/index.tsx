@@ -13,7 +13,7 @@ import { CATEGORY, CategoryItem } from '@/constants/Category'
 import { isEmpty } from 'lodash'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import { Platform } from '@/@types/platform'
-import { MockBook } from '@/constants/MockData'
+import { MockSeries } from '@/constants/MockData'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import Pagination from '@/components/common/Pagination/Pagination'
 
@@ -184,9 +184,12 @@ function Category() {
         <CategoryListWrapper>
           <div className="total_count">전체 21,234</div>
           <div className="book_list">
-            {MockBook[selectedBookTypeTab.value].map((book) => (
-              <Thumbnail key={book.id} book={book} />
+            {MockSeries.map((series) => (
+              <Thumbnail key={series.hashId} series={series} />
             ))}
+            {/* {MockBook[selectedBookTypeTab.value].map((book) => (
+              <Thumbnail key={book.id} book={book} />
+            ))} */}
           </div>
           <div className="pagination_wrapper">
             <Pagination

@@ -4,7 +4,7 @@ export interface CategoryItem {
 }
 
 export const CATEGORY = {
-  webNovel: [
+  webnovel: [
     { id: 0, label: '전체' },
     { id: 1, label: '로맨스' },
     { id: 2, label: '로맨스 판타지' },
@@ -16,7 +16,7 @@ export const CATEGORY = {
     { id: 8, label: 'BL' },
     { id: 9, label: '19+ 성인' },
   ],
-  webToon: [
+  webtoon: [
     { id: 10, label: '전체' },
     { id: 11, label: '로맨스' },
     { id: 12, label: '로맨스 판타지' },
