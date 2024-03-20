@@ -61,7 +61,7 @@ function PosterThumbnail(props: PosterThumbnailProps) {
 
   const router = useRouter()
   return (
-    <PosterThumbnailContainer onClick={() => router.push(`/book/${book.id}`)}>
+    <PosterThumbnailContainer onClick={() => router.push(`/series/${book.id}`)}>
       <ThumbnailImageWrapper>
         <ThumbnailImage src={book.image} />
         <div className="book_info_wrapper">

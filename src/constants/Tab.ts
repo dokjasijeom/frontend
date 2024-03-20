@@ -1,8 +1,8 @@
 import { TabItem } from '@/components/common/Tab/Tab'
 
 export const BOOK_TYPE_TAB_LIST = [
-  { label: '웹소설', value: 'webNovel' },
-  { label: '웹툰', value: 'webToon' },
+  { label: '웹소설', value: 'webnovel' },
+  { label: '웹툰', value: 'webtoon' },
 ] as TabItem[]
 
 export const PLATFORM_TAB_LIST = [
@@ -12,13 +12,13 @@ export const PLATFORM_TAB_LIST = [
 ] as TabItem[]
 
 export const WEEK_TAB_LIST = [
-  { label: '월', value: 'mon' },
-  { label: '화', value: 'tue' },
-  { label: '수', value: 'wed' },
-  { label: '목', value: 'thu' },
-  { label: '금', value: 'fri' },
-  { label: '토', value: 'sat' },
-  { label: '일', value: 'sun' },
+  { label: '월', value: 'MON' },
+  { label: '화', value: 'TUE' },
+  { label: '수', value: 'WED' },
+  { label: '목', value: 'THU' },
+  { label: '금', value: 'FRI' },
+  { label: '토', value: 'SAT' },
+  { label: '일', value: 'SUN' },
 ] as TabItem[]
 
 export const SORT_TAB_LIST = [

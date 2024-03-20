@@ -38,6 +38,11 @@ const ButtonTabContainer = styled.div`
   align-items: center;
   width: 100%;
   background: ${({ theme }) => theme.color.system.w};
+
+  .button_tab_wrapper {
+    width: 100%;
+    display: flex;
+  }
 `
 
 const ButtonTabItemWrapper = styled.div`
@@ -122,7 +127,7 @@ function Tab(props: TabProps) {
       return (
         <ButtonTabContainer>
           {tabList.map((tab, index) => (
-            <>
+            <div className="button_tab_wrapper" key={tab.value}>
               <ButtonTabItemWrapper
                 className={selectedTab.value === tab.value ? 'active' : ''}
                 key={tab.value}
@@ -131,7 +136,7 @@ function Tab(props: TabProps) {
                 {tab.label}
               </ButtonTabItemWrapper>
               {tabList.length !== index + 1 && <ButtonTabDivider />}
-            </>
+            </div>
           ))}
         </ButtonTabContainer>
       )

@@ -1,8 +1,8 @@
-import { Book } from '@/@types/book'
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { Series } from '@/@types/series'
 import Icons from '../Icons/Icons'
 
 const ThumbnailContainer = styled.div`
@@ -13,11 +13,11 @@ const ThumbnailContainer = styled.div`
   gap: 8px;
   cursor: pointer;
 
-  .book_info_wrapper {
+  .series_info_wrapper {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    .book_title {
+    .series_title {
       ${({ theme }) => theme.typography.body1};
       color: ${({ theme }) => theme.color.gray[950]};
       overflow: hidden;
@@ -25,11 +25,11 @@ const ThumbnailContainer = styled.div`
       text-overflow: ellipsis;
       word-break: break-all;
     }
-    .book_info {
+    .series_info {
       ${({ theme }) => theme.typography.body5};
       color: ${({ theme }) => theme.color.gray[600]};
     }
-    .book_score {
+    .series_score {
       ${({ theme }) => theme.typography.caption};
       color: ${({ theme }) => theme.color.main[600]};
       display: flex;
@@ -57,40 +57,41 @@ const ThumbnailImage = styled.img`
 `
 
 interface ThumbnailProps {
-  book: Book
+  series: Series
 }
 
 function Thumbnail(props: ThumbnailProps) {
-  const { book } = props
+  const { series } = props
   const theme = useTheme()
   const router = useRouter()
+
   return (
-    <ThumbnailContainer onClick={() => router.push(`/book/${book.id}`)}>
+    <ThumbnailContainer onClick={() => router.push(`/series/${series.hashId}`)}>
       <ThumbnailImageWrapper>
         <div className="platform_wrapper">
-          {book.platforms.map((platform) => (
+          {series.providers.map((provider: any) => (
             <Image
-              key={platform.value}
-              src={`/images/${platform.value}.png`}
-              alt={platform.value}
+              key={provider.value}
+              src={`/images/${provider.value}.png`}
+              alt={provider.value}
               width={20}
               height={20}
             />
           ))}
         </div>
-        <ThumbnailImage src={book.image} />
+        <ThumbnailImage src={series.thumbnail} />
       </ThumbnailImageWrapper>
-      <div className="book_info_wrapper">
-        <div className="book_title">{book.title}</div>
-        <div className="book_info">{`${book.author} · ${book.genre}`}</div>
-        <div className="book_score">
+      <div className="series_info_wrapper">
+        <div className="series_title">{series.title}</div>
+        <div className="series_info">{`${series.authors[0].name} · ${series.genres[0].name}`}</div>
+        <div className="series_score">
           <Icons
             name="HeartActive"
             color={theme.color.main[600]}
             width="12px"
             height="12px"
           />
-          {book.score}
+          {/* {series.score} */}
         </div>
       </div>
     </ThumbnailContainer>
