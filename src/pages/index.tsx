@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import SwiperPosterThumbnail from '@/components/common/SwiperPosterThumbnail/SwiperPosterThumbnail'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import {
-  BOOK_TYPE_TAB_LIST,
+  SERIES_TYPE_TAB_LIST,
   PLATFORM_TAB_LIST,
   WEEK_TAB_LIST,
 } from '@/constants/Tab'
@@ -43,7 +43,7 @@ const SwiperBookListWrapper = styled.div`
 
 export default function Home() {
   const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
-    BOOK_TYPE_TAB_LIST[0],
+    SERIES_TYPE_TAB_LIST[0],
   )
   const [selectedWeek, setSelectedWeek] = useState(WEEK_TAB_LIST[0])
   const [selectedWebNovelPlatformTab, setSelectedWebNovelPlatformTab] =
@@ -78,7 +78,7 @@ export default function Home() {
           iconName="Calendar"
           title="요일별 연재 작품"
           selectedTab={selectedBookTypeTab}
-          tabList={BOOK_TYPE_TAB_LIST}
+          tabList={SERIES_TYPE_TAB_LIST}
           onChangeTab={(tab) => {
             setSelectedBookTypeTab(tab)
           }}

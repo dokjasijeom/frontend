@@ -4,7 +4,7 @@ import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { MockMyBook } from '@/constants/MockData'
-import { BOOK_TYPE_TAB_LIST } from '@/constants/Tab'
+import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -41,7 +41,7 @@ const CompleteBookWrapper = styled.div`
 `
 function Complete() {
   const router = useRouter()
-  const [selectedTab, setSelectedTab] = useState(BOOK_TYPE_TAB_LIST[0])
+  const [selectedTab, setSelectedTab] = useState(SERIES_TYPE_TAB_LIST[0])
   const theme = useTheme()
 
   return (
@@ -50,7 +50,7 @@ function Complete() {
       <CompleteWrapper>
         <Tab
           type="underbar"
-          tabList={BOOK_TYPE_TAB_LIST}
+          tabList={SERIES_TYPE_TAB_LIST}
           selectedTab={selectedTab}
           onChange={(tab) => setSelectedTab(tab)}
         />
