@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
+import { useForm } from 'react-hook-form'
 import Checkbox from '../common/Checkbox/Checkbox'
 import Divider from '../common/Divider/Divider'
 import Button from '../common/Button/Button'
@@ -42,7 +43,41 @@ interface TermOfUseProps {
 
 function TermOfUseContainer(props: TermOfUseProps) {
   const { onNextStep } = props
-  const [all, setAll] = useState(false)
+
+  const { register, setValue, watch } = useForm({
+    defaultValues: {
+      selectAll: false,
+      reason1: false,
+      reason2: false,
+      reason3: false,
+    },
+  })
+
+  const watchSelectAll = watch('selectAll')
+  const watchReason1 = watch('reason1')
+  const watchReason2 = watch('reason2')
+  const watchReason3 = watch('reason3')
+
+  const handleSelectAll = () => {
+    if (!watchSelectAll) {
+      setValue('selectAll', true)
+      setValue('reason1', true)
+      setValue('reason2', true)
+      setValue('reason3', true)
+    } else {
+      setValue('selectAll', false)
+      setValue('reason1', false)
+      setValue('reason2', false)
+      setValue('reason3', false)
+    }
+  }
+
+  const isValid = useMemo(() => {
+    if (watchReason1 && watchReason2 && watchReason3) {
+      return true
+    }
+    return false
+  }, [watchReason1, watchReason2, watchReason3])
 
   return (
     <TermOfUseWrapper>
@@ -52,10 +87,9 @@ function TermOfUseContainer(props: TermOfUseProps) {
       </Title>
       <ContentsWrapper>
         <Checkbox
-          checked={all}
-          onChange={() => {
-            setAll(!all)
-          }}
+          checked={watchSelectAll}
+          {...register('selectAll')}
+          onChange={handleSelectAll}
         >
           모두 동의합니다.
         </Checkbox>
@@ -63,9 +97,10 @@ function TermOfUseContainer(props: TermOfUseProps) {
         <TermOfUseDetailWrapper>
           <CheckboxLabelWrapper>
             <Checkbox
-              checked={all}
+              checked={watchReason1}
+              {...register('reason1')}
               onChange={() => {
-                setAll(!all)
+                setValue('reason1', !watchReason1)
               }}
             >
               [필수] 이용약관에 동의합니다.
@@ -74,9 +109,10 @@ function TermOfUseContainer(props: TermOfUseProps) {
           </CheckboxLabelWrapper>
           <CheckboxLabelWrapper>
             <Checkbox
-              checked={all}
+              checked={watchReason2}
+              {...register('reason2')}
               onChange={() => {
-                setAll(!all)
+                setValue('reason2', !watchReason2)
               }}
             >
               [필수] 개인정보 수집 및 이용에 동의합니다.
@@ -84,16 +120,19 @@ function TermOfUseContainer(props: TermOfUseProps) {
             <div className="show_detail">보기</div>
           </CheckboxLabelWrapper>
           <Checkbox
-            checked={all}
+            checked={watchReason3}
+            {...register('reason3')}
             onChange={() => {
-              setAll(!all)
+              setValue('reason3', !watchReason3)
             }}
           >
             [필수] 본인은 만 14세 이상합니다.
           </Checkbox>
         </TermOfUseDetailWrapper>
       </ContentsWrapper>
-      <Button onClick={onNextStep}>다음</Button>
+      <Button disabled={!isValid} onClick={onNextStep}>
+        다음
+      </Button>
     </TermOfUseWrapper>
   )
 }

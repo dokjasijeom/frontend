@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
+import { useForm } from 'react-hook-form'
 import Button from '../common/Button/Button'
 import Input from '../common/Input/Input'
 
@@ -40,6 +41,18 @@ const ContentsWrapper = styled.div`
 
 function EmailJoinFormContainer() {
   const { showModal } = useModal()
+  const { register, formState, setValue, watch, clearErrors, setError } =
+    useForm({
+      defaultValues: {
+        email: '',
+        password: '',
+        comparePassword: '',
+      },
+    })
+
+  const watchEmail = watch('email')
+  const watchPassword = watch('password')
+  const watchComparePassword = watch('comparePassword')
 
   const handleJoin = () => {
     showModal({
@@ -47,6 +60,50 @@ function EmailJoinFormContainer() {
       body: '독자시점에 오신 것을 환영합니다!',
     })
   }
+
+  useEffect(() => {
+    register('email', {
+      required: {
+        value: true,
+        message: '이메일을 입력해주세요.',
+      },
+      pattern: {
+        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+        message: '이메일을 올바르게 입력해주세요.',
+      },
+    })
+    register('password', {
+      required: {
+        value: true,
+        message: '비밀번호를 입력해주세요.',
+      },
+      pattern: {
+        value:
+          /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,16}$/,
+        message: '영문, 숫자를 포함하여 8자리 이상 입력해주세요.',
+      },
+    })
+    register('comparePassword', {
+      required: {
+        value: true,
+        message: '비밀번호를 재입력해주세요.',
+      },
+      pattern: {
+        value:
+          /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,16}$/,
+        message: '영문, 숫자를 포함하여 8자리 이상 입력해주세요.',
+      },
+      validate: (value) =>
+        value !== watchPassword ? '비밀번호가 일치하지 않습니다.' : true,
+    })
+  }, [register, watchPassword])
+
+  useEffect(() => {
+    if (watchPassword === watchComparePassword) {
+      clearErrors('comparePassword')
+    }
+  }, [clearErrors, setError, watchComparePassword, watchPassword])
+
   return (
     <EmailJoinFormWrapper>
       <Title>
@@ -58,29 +115,52 @@ function EmailJoinFormContainer() {
           <div className="form_item">
             <div className="label">이메일</div>
             <Input
-              value=""
+              value={watchEmail}
               placeholder="이메일을 입력해주세요."
-              onChange={() => {}}
+              {...register('email')}
+              error={!!formState.errors.email}
+              errorMessage={formState.errors.email?.message}
+              onChange={(e) => {
+                setValue('email', e.target.value, { shouldValidate: true })
+              }}
             />
           </div>
           <div className="form_item">
             <div className="label">비밀번호</div>
             <Input
-              value=""
+              type="password"
+              value={watchPassword}
               placeholder="영문, 숫자를 포함하여 8자리 이상 입력해주세요."
-              onChange={() => {}}
+              {...register('password')}
+              error={!!formState.errors.password}
+              errorMessage={formState.errors.password?.message}
+              onChange={(e) => {
+                setValue('password', e.target.value, { shouldValidate: true })
+              }}
             />
           </div>
           <div className="form_item">
             <div className="label">비밀번호 확인</div>
             <Input
-              value=""
+              type="password"
+              value={watchComparePassword}
               placeholder="비밀번호를 재입력해주세요."
-              onChange={() => {}}
+              {...register('comparePassword')}
+              error={!!formState.errors.comparePassword}
+              errorMessage={formState.errors.comparePassword?.message}
+              onChange={(e) => {
+                setValue('comparePassword', e.target.value, {
+                  shouldValidate: true,
+                })
+              }}
             />
           </div>
           <div className="button_wrapper">
-            <Button type="primary" onClick={handleJoin}>
+            <Button
+              type="primary"
+              onClick={handleJoin}
+              disabled={!formState.isValid}
+            >
               완료
             </Button>
           </div>
