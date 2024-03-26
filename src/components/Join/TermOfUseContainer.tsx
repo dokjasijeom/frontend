@@ -45,7 +45,6 @@ function TermOfUseContainer(props: TermOfUseProps) {
   const { onNextStep } = props
 
   const { register, setValue, watch } = useForm({
-    mode: 'onSubmit',
     defaultValues: {
       selectAll: false,
       reason1: false,
