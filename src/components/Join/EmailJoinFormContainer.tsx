@@ -128,6 +128,7 @@ function EmailJoinFormContainer() {
           <div className="form_item">
             <div className="label">비밀번호</div>
             <Input
+              type="password"
               value={watchPassword}
               placeholder="영문, 숫자를 포함하여 8자리 이상 입력해주세요."
               {...register('password')}
@@ -141,6 +142,7 @@ function EmailJoinFormContainer() {
           <div className="form_item">
             <div className="label">비밀번호 확인</div>
             <Input
+              type="password"
               value={watchComparePassword}
               placeholder="비밀번호를 재입력해주세요."
               {...register('comparePassword')}
