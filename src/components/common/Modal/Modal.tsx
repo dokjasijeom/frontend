@@ -85,12 +85,16 @@ function Modal(props: ModalProps) {
   } = props
 
   const handleNegativeClick = () => {
-    if (onNegativeClick) return onNegativeClick()
+    if (onNegativeClick) {
+      onNegativeClick()
+    }
     return onClose()
   }
 
   const handlePositiveClick = () => {
-    if (onPositiveClick) return onPositiveClick()
+    if (onPositiveClick) {
+      onPositiveClick()
+    }
     return onClose()
   }
 
