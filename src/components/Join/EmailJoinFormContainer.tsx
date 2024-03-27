@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
 import { useForm } from 'react-hook-form'
+import { setUser } from '@/api/user'
+import { useRouter } from 'next/router'
 import Button from '../common/Button/Button'
 import Input from '../common/Input/Input'
 
@@ -41,6 +43,7 @@ const ContentsWrapper = styled.div`
 
 function EmailJoinFormContainer() {
   const { showModal } = useModal()
+  const router = useRouter()
   const { register, formState, setValue, watch, clearErrors, setError } =
     useForm({
       defaultValues: {
@@ -54,11 +57,27 @@ function EmailJoinFormContainer() {
   const watchPassword = watch('password')
   const watchComparePassword = watch('comparePassword')
 
-  const handleJoin = () => {
-    showModal({
-      title: '회원가입 완료',
-      body: '독자시점에 오신 것을 환영합니다!',
+  const handleJoin = async () => {
+    await setUser({
+      email: watchEmail,
+      password: watchPassword,
+      compare_password: watchComparePassword,
     })
+      .then(() => {
+        showModal({
+          title: '회원가입 완료',
+          body: '독자시점에 오신 것을 환영합니다!',
+          onPositiveClick: () => router.push('/auth/login'),
+        })
+      })
+      .catch((e) => {
+        if (e.response.status === 409) {
+          showModal({
+            title: '회원가입 오류',
+            body: '이미 가입된 이메일 입니다!',
+          })
+        }
+      })
   }
 
   useEffect(() => {
