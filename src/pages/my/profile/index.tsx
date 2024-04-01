@@ -4,6 +4,7 @@ import Input from '@/components/common/Input/Input'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import useModal from '@/hooks/useModal'
+import { deleteCookie } from 'cookies-next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
@@ -105,6 +106,9 @@ function Profile() {
 
   const handleLogout = () => {
     // TODO: 로그아웃
+    deleteCookie('DS_AUT')
+    deleteCookie('DS_USER')
+    router.push('/')
   }
 
   const handleWithdrawal = () => {
