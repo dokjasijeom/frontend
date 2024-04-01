@@ -4,6 +4,9 @@ import Button from '@/components/common/Button/Button'
 import Input from '@/components/common/Input/Input'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
+import { login } from '@/api/user'
+import { useForm } from 'react-hook-form'
+import { setCookie } from 'cookies-next'
 
 const LoginContainer = styled.div`
   padding: 16px 20px;
@@ -52,6 +55,34 @@ const FindPasswordFormWrapper = styled.div`
 function Login() {
   const router = useRouter()
   const { showModal } = useModal()
+  const { setValue, watch, setError, formState } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  })
+
+  const watchEmail = watch('email')
+  const watchPassword = watch('password')
+
+  const handleLogin = async () => {
+    await login({ email: watchEmail, password: watchPassword })
+      .then((res: any) => {
+        setCookie('DS_AUT', res.data.data.token)
+        setCookie('DS_USER', res.data)
+        router.push('/')
+      })
+      .catch(() => {
+        setError('email', {
+          type: 'authError',
+          message: '이메일 혹은 비밀번호를 확인해주세요.',
+        })
+        setError('password', {
+          type: 'authError',
+          message: '이메일 혹은 비밀번호를 확인해주세요.',
+        })
+      })
+  }
 
   const handleSnedFindPasswordMail = () => {
     showModal({
@@ -93,21 +124,30 @@ function Login() {
         <div className="form_item">
           <div className="label">이메일</div>
           <Input
-            value=""
+            value={watchEmail}
             placeholder="이메일을 입력해주세요."
-            onChange={() => {}}
+            error={!!formState.errors.email}
+            errorMessage={formState.errors.email?.message}
+            onChange={(e) => {
+              setValue('email', e.target.value, { shouldValidate: true })
+            }}
           />
         </div>
         <div className="form_item">
           <div className="label">비밀번호</div>
           <Input
-            value=""
+            type="password"
+            value={watchPassword}
             placeholder="비밀번호를 입력해주세요."
-            onChange={() => {}}
+            error={!!formState.errors.password}
+            errorMessage={formState.errors.password?.message}
+            onChange={(e) => {
+              setValue('password', e.target.value, { shouldValidate: true })
+            }}
           />
         </div>
         <div className="button_wrapper">
-          <Button type="primary" onClick={() => {}}>
+          <Button type="primary" onClick={handleLogin}>
             로그인
           </Button>
           <Button
