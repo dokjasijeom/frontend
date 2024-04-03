@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -8,7 +7,7 @@ export function middleware(request: NextRequest) {
   // TODO: 로그인 여부 조건 필요
 
   const isLogin = request.cookies.get('DS_AUT')?.value
-  if (isEmpty(isLogin)) {
+  if (!isLogin) {
     return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 }
