@@ -44,14 +44,13 @@ const ContentsWrapper = styled.div`
 function EmailJoinFormContainer() {
   const { showModal } = useModal()
   const router = useRouter()
-  const { register, formState, setValue, watch, clearErrors, setError } =
-    useForm({
-      defaultValues: {
-        email: '',
-        password: '',
-        comparePassword: '',
-      },
-    })
+  const { register, formState, setValue, watch, clearErrors } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+      comparePassword: '',
+    },
+  })
 
   const watchEmail = watch('email')
   const watchPassword = watch('password')
@@ -121,7 +120,7 @@ function EmailJoinFormContainer() {
     if (watchPassword === watchComparePassword) {
       clearErrors('comparePassword')
     }
-  }, [clearErrors, setError, watchComparePassword, watchPassword])
+  }, [clearErrors, watchComparePassword, watchPassword])
 
   return (
     <EmailJoinFormWrapper>
