@@ -26,7 +26,7 @@ const TabTitleHeaderContainer = styled.div`
   }
 `
 
-const MoreButton = styled.button``
+const MoreButton = styled.div``
 
 interface TabTitleHeaderProps {
   iconName: IconNameType

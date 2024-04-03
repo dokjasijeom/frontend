@@ -70,6 +70,9 @@ function ReadingListItem(props: ReadingListItemProps) {
   const theme = useTheme()
   const router = useRouter()
   const progressValue = (total: number, current: number) => {
+    if (!total || !current) {
+      return 0
+    }
     return (current / total) * 100
   }
 
