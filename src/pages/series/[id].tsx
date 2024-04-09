@@ -182,9 +182,9 @@ function SeriesDetail({
                     {series.authors[0].name} <span className="caption">저</span>
                   </div>
                 )}
-                {!isEmpty(series.publisher) && (
+                {!isEmpty(series.publishers) && (
                   <div className="sub">
-                    {series.publisher.name}{' '}
+                    {series.publishers[0].name}{' '}
                     <span className="caption">출판</span>
                   </div>
                 )}

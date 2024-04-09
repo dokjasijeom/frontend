@@ -16,14 +16,13 @@ export interface Series {
   isComplete: boolean
   isbn: string
   providers: Array
-  publisherId: number
   seriesType: SeriesType
   thumbnail: string
   totalEpisode: number
   episodes: Episode[]
   genres: Genre[]
   publishDays: PublishDay[]
-  publisher: Publisher
+  publishers: Publisher[]
   likeCount: number
 }
 
