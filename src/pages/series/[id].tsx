@@ -5,11 +5,12 @@ import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
+import { webnovelText, webtoonText } from '@/constants/Series'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const SeriesDetailContainer = styled.div`
@@ -141,6 +142,22 @@ function SeriesDetail({
   const router = useRouter()
   const theme = useTheme()
 
+  const tags = useMemo(() => {
+    const result = []
+
+    if (!isEmpty(series.seriesType)) {
+      if (series.seriesType === 'webnovel') {
+        result.push(webnovelText)
+      } else {
+        result.push(webtoonText)
+      }
+    }
+
+    series.genres.map((genre) => result.push(genre.name))
+
+    return result
+  }, [series])
+
   return (
     <SeriesDetailContainer>
       <TitleHeader title="" onClickBack={() => router.back()} isSearch />
@@ -160,25 +177,30 @@ function SeriesDetail({
             <div className="series_info_wrapper">
               <div className="series_info">
                 <div className="title">{series.title}</div>
-                <div className="sub">
-                  {series.authors[0].name} <span className="caption">저</span>
-                </div>
-                <div className="sub">
-                  {series.publisher.name} <span className="caption">출판</span>
-                </div>
+                {!isEmpty(series.authors) && (
+                  <div className="sub">
+                    {series.authors[0].name} <span className="caption">저</span>
+                  </div>
+                )}
+                {!isEmpty(series.publisher) && (
+                  <div className="sub">
+                    {series.publisher.name}{' '}
+                    <span className="caption">출판</span>
+                  </div>
+                )}
                 <div className="sub">
                   총 {series.totalEpisode}화
-                  {/* {series.status.value === 'complete' && (
+                  {series.isComplete && (
                     <>
                       <div className="divider" />
-                      <span className="caption">{series.status.label}</span>
+                      <span className="caption">완결</span>
                     </>
-                  )} */}
+                  )}
                 </div>
                 <div className="tags">
-                  {/* {series.tags.map((tag) => (
+                  {tags.map((tag) => (
                     <div key={tag}>#{tag}</div>
-                  ))} */}
+                  ))}
                   {series.displayTags}
                 </div>
               </div>
@@ -191,7 +213,7 @@ function SeriesDetail({
                       height="20px"
                       color={theme.color.main[600]}
                     />
-                    {/* {series.score.toLocaleString()} */}
+                    {series.likeCount.toLocaleString()}
                   </div>
                 </Button>
                 <Button type="secondary" width="auto">
@@ -214,18 +236,19 @@ function SeriesDetail({
             <SynopsisWrapper>{series.description}</SynopsisWrapper>
             <SectionTitle>보러가기</SectionTitle>
             <PlarformWrapper>
-              {series.providers.map((provider: any) => (
-                <PlatformItem key={provider.value}>
-                  <Image
-                    key={provider.value}
-                    src={`/images/${provider.value}.png`}
-                    alt={provider.value}
-                    width={20}
-                    height={20}
-                  />
-                  {provider.label}
-                </PlatformItem>
-              ))}
+              {!isEmpty(series.providers) &&
+                series.providers.map((provider: any) => (
+                  <PlatformItem key={provider.value}>
+                    <Image
+                      key={provider.value}
+                      src={`/images/${provider.value}.png`}
+                      alt={provider.value}
+                      width={20}
+                      height={20}
+                    />
+                    {provider.label}
+                  </PlatformItem>
+                ))}
             </PlarformWrapper>
           </SeriesDetailBodyWrapper>
         </SeriesDetailWrapper>

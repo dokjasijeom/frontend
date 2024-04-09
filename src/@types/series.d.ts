@@ -24,6 +24,7 @@ export interface Series {
   genres: Genre[]
   publishDays: PublishDay[]
   publisher: Publisher
+  likeCount: number
 }
 
 export interface Author {
@@ -41,7 +42,6 @@ export interface Episode {
 }
 
 export interface Genre {
-  id: number
   hashId: string
   genreType: GenreType
   name: string

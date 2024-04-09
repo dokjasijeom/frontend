@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { Series } from '@/@types/series'
+import { isEmpty } from 'lodash'
 import Icons from '../Icons/Icons'
 
 const ThumbnailContainer = styled.div`
@@ -69,21 +70,24 @@ function Thumbnail(props: ThumbnailProps) {
     <ThumbnailContainer onClick={() => router.push(`/series/${series.hashId}`)}>
       <ThumbnailImageWrapper>
         <div className="platform_wrapper">
-          {series.providers.map((provider: any) => (
-            <Image
-              key={provider.value}
-              src={`/images/${provider.value}.png`}
-              alt={provider.value}
-              width={20}
-              height={20}
-            />
-          ))}
+          {!isEmpty(series.providers) &&
+            series.providers.map((provider: any) => (
+              <Image
+                key={provider.value}
+                src={`/images/${provider.value}.png`}
+                alt={provider.value}
+                width={20}
+                height={20}
+              />
+            ))}
         </div>
         <ThumbnailImage src={series.thumbnail} />
       </ThumbnailImageWrapper>
       <div className="series_info_wrapper">
         <div className="series_title">{series.title}</div>
-        <div className="series_info">{`${series.authors[0].name} · ${series.genres[0].name}`}</div>
+        {!isEmpty(series.authors) && !isEmpty(series.genres) && (
+          <div className="series_info">{`${series.authors[0].name} · ${series.genres[0].name}`}</div>
+        )}
         <div className="series_score">
           <Icons
             name="HeartActive"
@@ -91,7 +95,7 @@ function Thumbnail(props: ThumbnailProps) {
             width="12px"
             height="12px"
           />
-          {/* {series.score} */}
+          {series.likeCount}
         </div>
       </div>
     </ThumbnailContainer>
