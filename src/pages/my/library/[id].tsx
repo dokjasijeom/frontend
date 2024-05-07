@@ -3,11 +3,11 @@ import { Platform } from '@/@types/platform'
 import AddBookForm from '@/components/Library/AddBookForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
-import BookPosterItem from '@/components/common/BookPosterItem/BookPosterItem'
 import Button from '@/components/common/Button/Button'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
+import SeriesPosterItem from '@/components/common/SeriesPosterItem/SeriesPosterItem'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
@@ -266,7 +266,7 @@ function LibraryDetail() {
       {book && (
         <>
           <BookInfoWrapper>
-            <BookPosterItem book={book} />
+            {/* <SeriesPosterItem series={book} /> */}
             <div className="book_info">
               {book.isDirect && (
                 <Button

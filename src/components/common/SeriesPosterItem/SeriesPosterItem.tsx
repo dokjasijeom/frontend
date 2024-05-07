@@ -1,12 +1,12 @@
-import { Book, MyBook } from '@/@types/book'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
+import { Series } from '@/@types/series'
 import Badge from '../Badge/Badge'
 import Icons from '../Icons/Icons'
 
-const BookPosterItemWrapper = styled.div`
+const SeriesPosterItemWrapper = styled.div`
   padding: 20px;
   display: flex;
   .book_image {
@@ -51,14 +51,22 @@ const BookPosterItemWrapper = styled.div`
   }
 `
 
-interface BookPosterItemProps {
-  book: Book | MyBook
+interface SeriesPosterItemProps {
+  series: Series
   onClick?: () => void
 }
 
-function BookPosterItem(props: BookPosterItemProps) {
-  const { book, onClick } = props
+function SeriesPosterItem(props: SeriesPosterItemProps) {
+  const { series, onClick } = props
   const theme = useTheme()
+
+  const authorGenreText = useMemo(() => {
+    const authorText = series.authors.map((value) => value.name).join('/')
+    const genreText = series.genres.map((value) => value.name).join('/')
+
+    const result = authorText.concat(' · ', genreText)
+    return result
+  }, [series])
 
   const handleClick = () => {
     if (onClick) {
@@ -66,14 +74,14 @@ function BookPosterItem(props: BookPosterItemProps) {
     }
   }
   return (
-    <BookPosterItemWrapper
+    <SeriesPosterItemWrapper
       onClick={handleClick}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
-      {!isEmpty(book.image) && (
+      {!isEmpty(series.thumbnail) && (
         <Image
           className="book_image"
-          src={book.image}
+          src={series.thumbnail}
           width={140}
           height={200}
           alt=""
@@ -81,24 +89,21 @@ function BookPosterItem(props: BookPosterItemProps) {
       )}
       <div className="book_info_wrapper">
         <div className="book_info">
-          {!isEmpty(book.status) && (
+          {series.isComplete && (
             <div className="status">
               <Badge
-                value={book.status.label}
+                value="완결"
                 color={
-                  book.status.value === 'complete'
+                  series.isComplete
                     ? theme.color.gray[300]
                     : theme.color.main[100]
                 }
               />
-              총 {book.total}화
+              총 {series.totalEpisode}화
             </div>
           )}
-          <div className="title">{book.title}</div>
-          <div className="sub">
-            {book.author}
-            {book.genre ? ` · ${book.genre}` : ''}
-          </div>
+          <div className="title">{series.title}</div>
+          <div className="sub">{authorGenreText}</div>
           <div className="score">
             <Icons
               name="HeartActive"
@@ -106,12 +111,12 @@ function BookPosterItem(props: BookPosterItemProps) {
               width="16px"
               height="16px"
             />
-            {book.score.toLocaleString()}
+            {series.likeCount ? series.likeCount.toLocaleString() : 0}
           </div>
         </div>
       </div>
-    </BookPosterItemWrapper>
+    </SeriesPosterItemWrapper>
   )
 }
 
-export default BookPosterItem
+export default SeriesPosterItem
