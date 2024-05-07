@@ -5,12 +5,11 @@ import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { webnovelText, webtoonText } from '@/constants/Series'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useMemo } from 'react'
+import React, { ReactElement } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const SeriesDetailContainer = styled.div`
@@ -142,22 +141,6 @@ function SeriesDetail({
   const router = useRouter()
   const theme = useTheme()
 
-  const tags = useMemo(() => {
-    const result = []
-
-    if (!isEmpty(series.seriesType)) {
-      if (series.seriesType === 'webnovel') {
-        result.push(webnovelText)
-      } else {
-        result.push(webtoonText)
-      }
-    }
-
-    series.genres.map((genre) => result.push(genre.name))
-
-    return result
-  }, [series])
-
   return (
     <SeriesDetailContainer>
       <TitleHeader title="" onClickBack={() => router.back()} isSearch />
@@ -197,12 +180,7 @@ function SeriesDetail({
                     </>
                   )}
                 </div>
-                <div className="tags">
-                  {tags.map((tag) => (
-                    <div key={tag}>#{tag}</div>
-                  ))}
-                  {series.displayTags}
-                </div>
+                <div className="tags">{series.displayTags}</div>
               </div>
               <div className="action_button_wrapper">
                 <Button type="secondary" width="auto">
@@ -213,7 +191,7 @@ function SeriesDetail({
                       height="20px"
                       color={theme.color.main[600]}
                     />
-                    {series.likeCount.toLocaleString()}
+                    {/* {series.likeCount.toLocaleString()} */}
                   </div>
                 </Button>
                 <Button type="secondary" width="auto">
