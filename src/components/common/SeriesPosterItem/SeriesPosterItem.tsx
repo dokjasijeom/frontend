@@ -3,29 +3,43 @@ import Image from 'next/image'
 import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { Series } from '@/@types/series'
+import { webnovelText, webtoonText } from '@/constants/Series'
 import Badge from '../Badge/Badge'
 import Icons from '../Icons/Icons'
 
 const SeriesPosterItemWrapper = styled.div`
   padding: 20px;
   display: flex;
-  .book_image {
+  flex-direction: row;
+  gap: 18px;
+  .thumbnail_wrapper {
+    flex-shrink: 0;
+    width: 140px;
+    height: 200px;
     border-radius: 12px;
-    margin-right: 18px;
+    overflow: hidden;
+    position: relative;
+    .type_badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      color: ${({ theme }) => theme.color.system.w};
+    }
   }
-  .book_info_wrapper {
+  .series_info_wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
     height: 200px;
 
-    .book_info {
+    .series_info {
       position: relative;
       display: flex;
       flex-direction: column;
       gap: 4px;
-      .status {
+
+      .episode_wrapper {
         ${({ theme }) => theme.typography.body4};
         color: ${({ theme }) => theme.color.gray[950]};
         display: flex;
@@ -79,18 +93,21 @@ function SeriesPosterItem(props: SeriesPosterItemProps) {
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
       {!isEmpty(series.thumbnail) && (
-        <Image
-          className="book_image"
-          src={series.thumbnail}
-          width={140}
-          height={200}
-          alt=""
-        />
+        <div className="thumbnail_wrapper">
+          <Badge
+            className="type_badge"
+            value={
+              series.seriesType === 'webnovel' ? webnovelText : webtoonText
+            }
+            color={theme.color.gray[950]}
+          />
+          <Image src={series.thumbnail} width={140} height={200} alt="" />
+        </div>
       )}
-      <div className="book_info_wrapper">
-        <div className="book_info">
-          {series.isComplete && (
-            <div className="status">
+      <div className="series_info_wrapper">
+        <div className="series_info">
+          <div className="episode_wrapper">
+            {series.isComplete && (
               <Badge
                 value="완결"
                 color={
@@ -99,9 +116,9 @@ function SeriesPosterItem(props: SeriesPosterItemProps) {
                     : theme.color.main[100]
                 }
               />
-              총 {series.totalEpisode}화
-            </div>
-          )}
+            )}
+            <div>총 {series.totalEpisode}화</div>
+          </div>
           <div className="title">{series.title}</div>
           <div className="sub">{authorGenreText}</div>
           <div className="score">
