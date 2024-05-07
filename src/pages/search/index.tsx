@@ -1,8 +1,10 @@
-import { Keyword } from '@/@types/search'
+import { AutoComplete, Keyword } from '@/@types/search'
+import { getSearchAutoComplete } from '@/api/search'
 import SearchMain from '@/components/Search/SearchMain'
 import SearchResult from '@/components/Search/SearchResult'
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
+import useDebounce from '@/hooks/useDebounce'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
@@ -52,8 +54,11 @@ function Search({ query }: SearchPageProps) {
   const searchKeyword = query.keyword !== undefined ? query.keyword : ''
   const [search, setSearch] = useState(searchKeyword)
   const [showSearchBox, setShowSearchBox] = useState(false)
+  const [autoCompleteList, setAutoCompleteList] = useState<AutoComplete[]>([])
   const [keywords, setKeywords] = useState<Keyword[]>([])
   const router = useRouter()
+
+  const debounceSearch = useDebounce(search, 200)
 
   useEffect(() => {
     if (searchKeyword) {
@@ -125,6 +130,15 @@ function Search({ query }: SearchPageProps) {
     }
   }
 
+  useEffect(() => {
+    async function fetchAutoCompleteList() {
+      const res = await getSearchAutoComplete(debounceSearch)
+      setAutoCompleteList(res.data.data)
+    }
+
+    fetchAutoCompleteList()
+  }, [debounceSearch])
+
   return (
     <SearchContainer>
       <SearchWrapper>
@@ -146,9 +160,16 @@ function Search({ query }: SearchPageProps) {
           onChange={(e) => handleChangeSearch(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        {showSearchBox && (
+        {autoCompleteList && search && (
           <SearchBox>
-            <SearchBoxItem onClick={() => {}}>나 혼자만 레벨업</SearchBoxItem>
+            {autoCompleteList.map((autoComplete) => (
+              <SearchBoxItem
+                key={autoComplete.hashId}
+                onClick={() => router.push(`/series/${autoComplete.hashId}`)}
+              >
+                {autoComplete.title}
+              </SearchBoxItem>
+            ))}
           </SearchBox>
         )}
       </SearchWrapper>
