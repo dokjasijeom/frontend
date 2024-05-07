@@ -75,8 +75,12 @@ function SeriesPosterItem(props: SeriesPosterItemProps) {
   const theme = useTheme()
 
   const authorGenreText = useMemo(() => {
-    const authorText = series.authors.map((value) => value.name).join('/')
-    const genreText = series.genres.map((value) => value.name).join('/')
+    const authorText = series.authors
+      ? series.authors.map((value) => value.name).join('/')
+      : ''
+    const genreText = series.genres
+      ? series.genres.map((value) => value.name).join('/')
+      : ''
 
     const result = authorText.concat(' · ', genreText)
     return result

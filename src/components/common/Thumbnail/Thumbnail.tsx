@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -66,6 +66,18 @@ function Thumbnail(props: ThumbnailProps) {
   const theme = useTheme()
   const router = useRouter()
 
+  const authorGenreText = useMemo(() => {
+    const authorText = series.authors
+      ? series.authors.map((value) => value.name).join('/')
+      : ''
+    const genreText = series.genres
+      ? series.genres.map((value) => value.name).join('/')
+      : ''
+
+    const result = authorText.concat(' · ', genreText)
+    return result
+  }, [series])
+
   return (
     <ThumbnailContainer onClick={() => router.push(`/series/${series.hashId}`)}>
       <ThumbnailImageWrapper>
@@ -85,9 +97,7 @@ function Thumbnail(props: ThumbnailProps) {
       </ThumbnailImageWrapper>
       <div className="series_info_wrapper">
         <div className="series_title">{series.title}</div>
-        {!isEmpty(series.authors) && !isEmpty(series.genres) && (
-          <div className="series_info">{`${series.authors[0].name} · ${series.genres[0].name}`}</div>
-        )}
+        <div className="series_info">{authorGenreText}</div>
         <div className="series_score">
           <Icons
             name="HeartActive"
@@ -95,7 +105,7 @@ function Thumbnail(props: ThumbnailProps) {
             width="12px"
             height="12px"
           />
-          {series.likeCount}
+          {series.likeCount ? series.likeCount.toLocaleString() : 0}
         </div>
       </div>
     </ThumbnailContainer>
