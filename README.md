@@ -1,4 +1,5 @@
-<img width="900" alt="Frame 9" src="https://github.com/dokjasijeom/frontend/assets/51918951/c13efb86-76dd-4fc8-9500-cb949a451e90">
+<img width="900" alt="Frame 8" src="https://github.com/dokjasijeom/frontend/assets/51918951/5f87f913-3fb4-4de4-8d7b-72bfd8c71813">
+
 
 # ⚙️ 기술 스택
 |⚒️|🔮|
