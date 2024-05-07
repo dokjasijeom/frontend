@@ -28,6 +28,9 @@ const nextConfig = {
     return config
   },
   reactStrictMode: true,
+  images: {
+    domains: ['res.cloudinary.com'],
+  },
   compiler: {
     styledComponents: true,
   },
