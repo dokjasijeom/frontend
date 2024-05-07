@@ -185,7 +185,7 @@ function Search({ query }: SearchPageProps) {
         />
       )} */}
       {searchKeyword ? (
-        <SearchResult keyword={keyword} />
+        <SearchResult keyword={searchKeyword} />
       ) : (
         <SearchMain
           keywords={keywords}
