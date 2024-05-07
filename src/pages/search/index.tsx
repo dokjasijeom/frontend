@@ -25,7 +25,9 @@ const SearchBox = styled.div`
   top: 54px;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.color.gray[200]};
+  background: ${({ theme }) => theme.color.system.w};
   overflow: hidden;
+  z-index: 1;
 `
 
 const SearchBoxItem = styled.div`
@@ -127,6 +129,8 @@ function Search({ query }: SearchPageProps) {
 
     if (!isEmpty(keyword)) {
       setShowSearchBox(true)
+    } else {
+      setShowSearchBox(false)
     }
   }
 
@@ -160,7 +164,7 @@ function Search({ query }: SearchPageProps) {
           onChange={(e) => handleChangeSearch(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        {!isEmpty(autoCompleteList) && !isEmpty(keyword) && (
+        {!isEmpty(autoCompleteList) && !isEmpty(keyword) && showSearchBox && (
           <SearchBox>
             {autoCompleteList.map((autoComplete) => (
               <SearchBoxItem
