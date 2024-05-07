@@ -1,8 +1,9 @@
-import { MockBook } from '@/constants/MockData'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-import BookPosterItem from '../common/BookPosterItem/BookPosterItem'
+import { getSearchList } from '@/api/search'
+import { Series } from '@/@types/series'
+import SeriesPosterItem from '../common/SeriesPosterItem/SeriesPosterItem'
 
 const SearchResultContainer = styled.div`
   padding-top: 20px;
@@ -27,22 +28,33 @@ const BookItemWrapper = styled.div`
 `
 
 interface SearchResultProps {
-  search: string
+  keyword: string
 }
 
 function SearchResult(props: SearchResultProps) {
-  const { search } = props
+  const { keyword } = props
   const router = useRouter()
+
+  const [searchList, setSearchList] = useState<Series[]>([])
+
+  useEffect(() => {
+    async function fetchSearchList() {
+      const res = await getSearchList(keyword)
+      setSearchList(res.data.data)
+    }
+
+    fetchSearchList()
+  }, [keyword])
 
   return (
     <SearchResultContainer>
-      <SectionTitle>{`‘${search}’ 검색 결과`}</SectionTitle>
+      <SectionTitle>{`‘${keyword}’ 검색 결과`}</SectionTitle>
       <SearchResultWrapper>
-        {MockBook.webNovel.map((book) => (
-          <BookItemWrapper key={book.id}>
-            <BookPosterItem
-              book={book}
-              onClick={() => router.push(`/series/${book.id}`)}
+        {searchList.map((series) => (
+          <BookItemWrapper key={series.hashId}>
+            <SeriesPosterItem
+              series={series}
+              onClick={() => router.push(`/series/${series.hashId}`)}
             />
           </BookItemWrapper>
         ))}
