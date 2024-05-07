@@ -52,19 +52,19 @@ interface SearchPageProps {
 
 function Search({ query }: SearchPageProps) {
   const searchKeyword = query.keyword !== undefined ? query.keyword : ''
-  const [search, setSearch] = useState(searchKeyword)
+  const [keyword, setKeyword] = useState(searchKeyword)
   const [showSearchBox, setShowSearchBox] = useState(false)
   const [autoCompleteList, setAutoCompleteList] = useState<AutoComplete[]>([])
   const [keywords, setKeywords] = useState<Keyword[]>([])
   const router = useRouter()
 
-  const debounceSearch = useDebounce(search, 200)
+  const debounceSearch = useDebounce(keyword, 200)
 
   useEffect(() => {
     if (searchKeyword) {
-      setSearch(searchKeyword)
+      setKeyword(searchKeyword)
     } else {
-      setSearch('')
+      setKeyword('')
     }
   }, [router, searchKeyword])
 
@@ -89,7 +89,7 @@ function Search({ query }: SearchPageProps) {
 
   const handleDeleteKeyword = (id: number) => {
     // 최근 검색어 개별 삭제
-    const filteredKeyword = keywords.filter((keyword) => keyword.id !== id)
+    const filteredKeyword = keywords.filter((value) => value.id !== id)
     setKeywords(filteredKeyword)
   }
 
@@ -100,13 +100,13 @@ function Search({ query }: SearchPageProps) {
 
   const handleClearSearch = async () => {
     await router.push('/search')
-    setSearch('')
+    setKeyword('')
   }
 
   const handleShowSearchResult = async () => {
     // 검색 결과로 이동
     setShowSearchBox(false)
-    const trimSearchKeyword = search.trim()
+    const trimSearchKeyword = keyword.trim()
     await router.push(`/search?keyword=${trimSearchKeyword}`)
   }
 
@@ -123,9 +123,9 @@ function Search({ query }: SearchPageProps) {
     }
   }
   const handleChangeSearch = (value: string) => {
-    setSearch(value)
+    setKeyword(value)
 
-    if (!isEmpty(search)) {
+    if (!isEmpty(keyword)) {
       setShowSearchBox(true)
     }
   }
@@ -143,10 +143,10 @@ function Search({ query }: SearchPageProps) {
     <SearchContainer>
       <SearchWrapper>
         <Input
-          value={search}
+          value={keyword}
           placeholder="제목이나 작가를 검색해보세요."
           suffix={
-            !isEmpty(search) ? (
+            !isEmpty(keyword) ? (
               <Icons
                 name="CloseCircle"
                 width="22px"
@@ -160,7 +160,7 @@ function Search({ query }: SearchPageProps) {
           onChange={(e) => handleChangeSearch(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        {autoCompleteList && search && (
+        {!isEmpty(autoCompleteList) && !isEmpty(keyword) && (
           <SearchBox>
             {autoCompleteList.map((autoComplete) => (
               <SearchBoxItem
@@ -181,7 +181,7 @@ function Search({ query }: SearchPageProps) {
         />
       )} */}
       {searchKeyword ? (
-        <SearchResult search={search} />
+        <SearchResult keyword={keyword} />
       ) : (
         <SearchMain
           keywords={keywords}
