@@ -7,7 +7,7 @@ import Button from '@/components/common/Button/Button'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
-import SeriesPosterItem from '@/components/common/SeriesPosterItem/SeriesPosterItem'
+// import SeriesPosterItem from '@/components/common/SeriesPosterItem/SeriesPosterItem'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
@@ -266,7 +266,8 @@ function LibraryDetail() {
       {book && (
         <>
           <BookInfoWrapper>
-            {/* <SeriesPosterItem series={book} /> */}
+            {/* 데이터 연결 후 주석 제거
+            <SeriesPosterItem series={book} />  */}
             <div className="book_info">
               {book.isDirect && (
                 <Button
