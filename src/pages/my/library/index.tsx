@@ -5,6 +5,7 @@ import Divider from '@/components/common/Divider/Divider'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import useModal from '@/hooks/useModal'
+import { GetServerSideProps } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
@@ -75,6 +76,31 @@ function Library() {
 
 Library.getLayout = function getLayout(page: ReactElement) {
   return <OnlyFooterLayout>{page}</OnlyFooterLayout>
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const cookiesString = context.req.headers.cookie as string
+  const cookies = {} as any
+
+  cookiesString.split(';').forEach((cookie) => {
+    const [key, value] = cookie.split('=').map((c) => c.trim())
+    cookies[key] = value
+  })
+
+  const isLogin = cookies.DS_AUT
+
+  if (!isLogin) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }
 
 export default Library
