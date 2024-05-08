@@ -8,7 +8,11 @@ export function middleware(request: NextRequest) {
 
   const isLogin = request.cookies.get('DS_AUT')?.value
   if (!isLogin) {
-    return NextResponse.redirect(new URL('/auth/login', request.url))
+    const redirectResponse = NextResponse.redirect(
+      new URL('/auth/login', request.url),
+    )
+    redirectResponse.headers.set('x-middleware-cache', 'no-cache')
+    return redirectResponse
   }
 }
 
