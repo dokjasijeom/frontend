@@ -28,6 +28,8 @@ function SwiperPosterThumbnail(props: SwiperPosterThumbnailProps) {
         modules={[Navigation]}
         slidesPerView="auto"
         spaceBetween={4}
+        slidesOffsetAfter={20}
+        slidesOffsetBefore={20}
         loop={false}
         onSlideChange={(swiper) => {
           setActiveIndex(swiper.activeIndex)

@@ -39,7 +39,7 @@ const BookListWrapper = styled.div`
 
 const SwiperBookListWrapper = styled.div`
   position: relative;
-  padding: 4px 20px 32px;
+  padding: 4px 0px 32px;
   width: 100%;
   .swiper {
     .swiper-slide {
