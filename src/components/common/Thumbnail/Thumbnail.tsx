@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash'
 import Icons from '../Icons/Icons'
 
 const ThumbnailContainer = styled.div`
-  width: 137px;
+  width: 100%;
   font-size: 0;
   display: flex;
   flex-direction: column;
@@ -51,10 +51,11 @@ const ThumbnailImageWrapper = styled.div`
   }
 `
 const ThumbnailImage = styled.img`
-  width: 137px;
-  height: 130px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 12px;
+  aspect-ratio: 1;
 `
 
 interface ThumbnailProps {
