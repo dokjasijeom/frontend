@@ -81,6 +81,13 @@ const CategoryListWrapper = styled.div`
     row-gap: 16px;
     column-gap: 4px;
     padding: 12px 0 20px;
+
+    @media (max-width: 560px) {
+      grid-template-columns: repeat(3, 137px);
+    }
+    @media (max-width: 419px) {
+      grid-template-columns: repeat(2, 137px);
+    }
   }
 
   .pagination_wrapper {

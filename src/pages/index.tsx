@@ -28,6 +28,13 @@ const BookListWrapper = styled.div`
   row-gap: 16px;
   column-gap: 4px;
   padding: 16px 0 32px;
+
+  @media (max-width: 560px) {
+    grid-template-columns: repeat(3, 137px);
+  }
+  @media (max-width: 419px) {
+    grid-template-columns: repeat(2, 137px);
+  }
 `
 
 const SwiperBookListWrapper = styled.div`
