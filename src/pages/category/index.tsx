@@ -76,17 +76,16 @@ const CategoryListWrapper = styled.div`
   .series_list {
     display: grid;
     justify-content: center;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: repeat(4, 137px);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     row-gap: 16px;
     column-gap: 4px;
     padding: 12px 0 20px;
 
     @media (max-width: 560px) {
-      grid-template-columns: repeat(3, 137px);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     @media (max-width: 419px) {
-      grid-template-columns: repeat(2, 137px);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
