@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { Series } from '@/@types/series'
+import { Provider, Series } from '@/@types/series'
 import { isEmpty } from 'lodash'
 import Icons from '../Icons/Icons'
 
@@ -84,11 +84,11 @@ function Thumbnail(props: ThumbnailProps) {
       <ThumbnailImageWrapper>
         <div className="platform_wrapper">
           {!isEmpty(series.providers) &&
-            series.providers.map((provider: any) => (
+            series.providers.map((provider: Provider) => (
               <Image
-                key={provider.value}
-                src={`/images/${provider.value}.png`}
-                alt={provider.value}
+                key={provider.hashId}
+                src={`/images/${provider.name}.png`}
+                alt={provider.name}
                 width={20}
                 height={20}
               />

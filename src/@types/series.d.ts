@@ -15,7 +15,7 @@ export interface Series {
   ecn: string
   isComplete: boolean
   isbn: string
-  providers: Array
+  providers: Provider[]
   seriesType: SeriesType
   thumbnail: string
   totalEpisode: number
@@ -60,4 +60,14 @@ export interface Publisher {
   description: string
   series: null | string
   homepageUrl: string
+}
+
+export interface Provider {
+  id: number
+  hashId: string
+  description: string
+  displayName: string
+  homepageUrl: string
+  link: string
+  name: string
 }
