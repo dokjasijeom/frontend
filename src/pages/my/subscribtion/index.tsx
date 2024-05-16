@@ -2,7 +2,7 @@ import { Platform } from '@/@types/platform'
 import Button from '@/components/common/Button/Button'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { PLATFORM_TAB_LIST } from '@/constants/Tab'
+import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useState } from 'react'
@@ -69,23 +69,23 @@ function Subscribtion() {
           선택해주세요.
         </div>
         <div className="platform_wrapper">
-          {PLATFORM_TAB_LIST.map((platform) => (
+          {PROVIDER_TAB_LIST.map((provider) => (
             <SubscribtionItem
-              key={platform.value}
-              onClick={() => handleChangeSubscribtion(platform)}
+              key={provider.value}
+              onClick={() => handleChangeSubscribtion(provider)}
               className={
-                subscribtion?.find((v) => v.value === platform.value)
+                subscribtion?.find((v) => v.value === provider.value)
                   ? 'active'
                   : ''
               }
             >
               <Image
-                src={`/images/${platform.value}.png`}
-                alt={platform.label}
+                src={`/images/${provider.value}.png`}
+                alt={provider.label}
                 width={16}
                 height={16}
               />
-              {platform.label}
+              {provider.label}
             </SubscribtionItem>
           ))}
         </div>

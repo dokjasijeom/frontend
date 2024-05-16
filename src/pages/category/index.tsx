@@ -3,8 +3,8 @@ import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import {
   SERIES_TYPE_TAB_LIST,
-  PLATFORM_TAB_LIST,
   SORT_TAB_LIST,
+  PROVIDER_TAB_LIST,
 } from '@/constants/Tab'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useState } from 'react'
@@ -105,7 +105,7 @@ function Category() {
     CATEGORY[selectedSeriesTypeTab.value][0],
   )
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform[]>([])
+  const [selectedProvider, setSelectedProvider] = useState<Platform[]>([])
   const [page, setPage] = useState(1)
 
   const handleChangePage = (currentPage: number) => {
@@ -115,17 +115,17 @@ function Category() {
     setSelectedCategory(category)
   }
 
-  const handleSelectedPlatform = (platform: any) => {
-    const findPlatform = selectedPlatform.find(
+  const handleselectedProvider = (platform: any) => {
+    const findPlatform = selectedProvider.find(
       (item) => item.value === platform.value,
     )
     if (findPlatform) {
-      const filterPlarform = selectedPlatform.filter(
+      const filterPlarform = selectedProvider.filter(
         (item) => item.value !== platform.value,
       )
-      setSelectedPlatform(filterPlarform)
+      setSelectedProvider(filterPlarform)
     } else {
-      setSelectedPlatform([...selectedPlatform, platform])
+      setSelectedProvider([...selectedProvider, platform])
     }
   }
   return (
@@ -168,21 +168,21 @@ function Category() {
             }}
           />
           <div className="platform_wrapper">
-            {PLATFORM_TAB_LIST.map((platform) => (
+            {PROVIDER_TAB_LIST.map((provider) => (
               <Checkbox
-                key={platform.value}
+                key={provider.value}
                 style={{ gap: '4px' }}
                 checked={Boolean(
-                  selectedPlatform.find(
-                    (item) => item.value === platform.value,
+                  selectedProvider.find(
+                    (item) => item.value === provider.value,
                   ),
                 )}
                 onChange={() => {
-                  handleSelectedPlatform(platform)
+                  handleselectedProvider(provider)
                 }}
                 checkColor={theme.color.main[600]}
               >
-                <div className="checkbox_label">{platform.label}</div>
+                <div className="checkbox_label">{provider.label}</div>
               </Checkbox>
             ))}
           </div>

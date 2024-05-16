@@ -5,9 +5,9 @@ export const SERIES_TYPE_TAB_LIST = [
   { label: '웹툰', value: 'webtoon' },
 ] as TabItem[]
 
-export const PLATFORM_TAB_LIST = [
-  { label: '네이버시리즈', value: 'naver' },
-  { label: '카카오페이지', value: 'kakao' },
+export const PROVIDER_TAB_LIST = [
+  { label: '네이버시리즈', value: 'series' },
+  { label: '카카오페이지', value: 'kakao-page' },
   { label: '리디북스', value: 'ridi' },
 ] as TabItem[]
 

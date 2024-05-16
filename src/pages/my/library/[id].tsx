@@ -12,7 +12,7 @@ import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { MockMyBook } from '@/constants/MockData'
-import { PLATFORM_TAB_LIST } from '@/constants/Tab'
+import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import useDebounce from '@/hooks/useDebounce'
 import useModal from '@/hooks/useModal'
 import { isEmpty } from 'lodash'
@@ -156,7 +156,7 @@ function LibraryDetail() {
   const [isEdit, setIsEdit] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedEpisodes, setSelectedEpisodes] = useState<Episode[]>([])
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform[]>([])
+  const [selectedProvider, setSelectedProvider] = useState<Platform[]>([])
 
   const debounceSearch = useDebounce(search, 200)
 
@@ -217,9 +217,9 @@ function LibraryDetail() {
       return filter
     }
 
-    if (!isEmpty(selectedPlatform)) {
+    if (!isEmpty(selectedProvider)) {
       const filter = episodes.filter((episode) =>
-        selectedPlatform.find(
+        selectedProvider.find(
           (platform) => platform.value === episode.platform.value,
         ),
       )
@@ -228,7 +228,7 @@ function LibraryDetail() {
     }
 
     return episodes
-  }, [book, debounceSearch, selectedPlatform])
+  }, [book, debounceSearch, selectedProvider])
 
   const handleClickEpisode = (episode: Episode) => {
     const findEpisodes = selectedEpisodes.find((item) => item.ep === episode.ep)
@@ -242,17 +242,17 @@ function LibraryDetail() {
     }
   }
 
-  const handleSelectedPlatform = (platform: any) => {
-    const findPlatform = selectedPlatform.find(
+  const handleselectedProvider = (platform: any) => {
+    const findPlatform = selectedProvider.find(
       (item) => item.value === platform.value,
     )
     if (findPlatform) {
-      const filterPlarform = selectedPlatform.filter(
+      const filterPlarform = selectedProvider.filter(
         (item) => item.value !== platform.value,
       )
-      setSelectedPlatform(filterPlarform)
+      setSelectedProvider(filterPlarform)
     } else {
-      setSelectedPlatform([...selectedPlatform, platform])
+      setSelectedProvider([...selectedProvider, platform])
     }
   }
 
@@ -321,21 +321,21 @@ function LibraryDetail() {
               <div className="record_filter_wrapper">
                 <div className="total_text">전체 {book.total}</div>
                 <div className="platform_wrapper">
-                  {PLATFORM_TAB_LIST.map((platform) => (
+                  {PROVIDER_TAB_LIST.map((provider) => (
                     <Checkbox
-                      key={platform.value}
+                      key={provider.value}
                       style={{ gap: '4px' }}
                       checked={Boolean(
-                        selectedPlatform.find(
-                          (item) => item.value === platform.value,
+                        selectedProvider.find(
+                          (item) => item.value === provider.value,
                         ),
                       )}
                       onChange={() => {
-                        handleSelectedPlatform(platform)
+                        handleselectedProvider(provider)
                       }}
                       checkColor={theme.color.main[600]}
                     >
-                      <div className="checkbox_label">{platform.label}</div>
+                      <div className="checkbox_label">{provider.label}</div>
                     </Checkbox>
                   ))}
                 </div>

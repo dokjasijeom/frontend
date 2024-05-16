@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 import styled, { useTheme } from 'styled-components'
-import { PLATFORM_TAB_LIST } from '@/constants/Tab'
+import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import { isEmpty } from 'lodash'
 import { MyBook } from '@/@types/book'
 import Checkbox from '../common/Checkbox/Checkbox'
@@ -121,7 +121,7 @@ function RecordModalBody(props: RecordModalBodyProps) {
 
         <Selector
           value={isEmpty(platform) ? '선택' : platform.label}
-          options={PLATFORM_TAB_LIST}
+          options={PROVIDER_TAB_LIST}
           onClickOption={(option) => handleChangePlatform(option)}
         />
         <RecordEpisodes isMulti={isMulti} setEpisodes={setEpisodes} />
