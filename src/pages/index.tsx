@@ -9,10 +9,12 @@ import {
   PROVIDER_TAB_LIST,
 } from '@/constants/Tab'
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
-import { useEffect, useState } from 'react'
+import { Children, useEffect, useState } from 'react'
 import { getNewSeriesList, getSeriesList } from '@/api/series'
 import { Series } from '@/@types/series'
 import { WEBNOVEL, WEBTOON } from '@/constants/Series'
+import Skeleton from '@/components/common/Skeleton/Skeleton'
+import { isEmpty, range } from 'lodash'
 
 const HomeContainer = styled.div``
 
@@ -35,6 +37,12 @@ const BookListWrapper = styled.div`
   @media (max-width: 419px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+`
+
+const SkeletonItem = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 const SwiperBookListWrapper = styled.div`
@@ -124,9 +132,30 @@ export default function Home() {
           />
         </WeekTabWrapper>
         <BookListWrapper>
-          {weekSeries.slice(0, 12).map((item) => (
-            <Thumbnail key={item.hashId} series={item} />
-          ))}
+          {isEmpty(weekSeries) ? (
+            <>
+              {Children.toArray(
+                range(12).map(() => (
+                  <SkeletonItem>
+                    <Skeleton
+                      width="100%"
+                      height="100%"
+                      style={{ aspectRatio: 1, margin: 0 }}
+                    />
+                    <Skeleton height="18px" style={{ marginTop: '8px' }} />
+                    <Skeleton width="50%" />
+                    <Skeleton width="30%" />
+                  </SkeletonItem>
+                )),
+              )}
+            </>
+          ) : (
+            <>
+              {weekSeries.slice(0, 12).map((item) => (
+                <Thumbnail key={item.hashId} series={item} />
+              ))}
+            </>
+          )}
         </BookListWrapper>
         <TabTitleHeader
           iconName="New"
