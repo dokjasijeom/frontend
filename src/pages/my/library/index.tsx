@@ -1,3 +1,4 @@
+import { getUser } from '@/api/user'
 import AddBookModalBody from '@/components/Library/AddBookModalBody'
 import MyInfoContainer from '@/components/Library/MyInfoContainer'
 import MyReadingListContainer from '@/components/Library/MyReadingListContainer'
@@ -5,6 +6,8 @@ import Divider from '@/components/common/Divider/Divider'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import useModal from '@/hooks/useModal'
+import { useQuery } from '@tanstack/react-query'
+import { isEmpty } from 'lodash'
 import { GetServerSideProps } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -39,6 +42,14 @@ function Library() {
   const theme = useTheme()
   const { showModal } = useModal()
 
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await getUser()
+      return res.data.data
+    },
+  })
+
   const handleAddBook = () => {}
 
   const handlePlusButton = () => {
@@ -53,7 +64,7 @@ function Library() {
   return (
     <LibraryContainer>
       <TitleHeader title="내 서재" onClickBack={() => router.back()} />
-      <MyInfoContainer />
+      {!isEmpty(user) && <MyInfoContainer user={user} />}
       <Divider
         size="xlarge"
         color={theme.color.gray[50]}

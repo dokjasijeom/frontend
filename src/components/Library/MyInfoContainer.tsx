@@ -5,6 +5,7 @@ import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 import { Platform } from '@/@types/platform'
+import { User } from '@/@types/user'
 
 const MyInfoWrapper = styled.div`
   padding: 16px 20px 20px;
@@ -109,7 +110,12 @@ const SubscribtionPlatformWrapper = styled.div`
   position: relative;
 `
 
-function MyInfoContainer() {
+interface MyInfoContainerProps {
+  user: User
+}
+
+function MyInfoContainer(props: MyInfoContainerProps) {
+  const { user } = props
   const router = useRouter()
   const theme = useTheme()
   const handleEditMyInfo = () => {
@@ -137,7 +143,7 @@ function MyInfoContainer() {
         />
         <div className="account_wrapper">
           <div className="nickname">독시</div>
-          <div className="email">email@gmail.com</div>
+          <div className="email">{user.email}</div>
         </div>
       </ProfileWrppaer>
       <MyContentsWrapper>

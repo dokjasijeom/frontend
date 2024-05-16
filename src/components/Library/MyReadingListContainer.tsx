@@ -10,7 +10,9 @@ import RecordModalBody from './RecordModalBody'
 import { TabItem } from '../common/Tab/Tab'
 import Button from '../common/Button/Button'
 
-const MyReadingListContainerWrapper = styled.div``
+const MyReadingListContainerWrapper = styled.div`
+  padding-bottom: 88px;
+`
 
 // const EmptyWrapper = styled.div`
 //   height: 100%;

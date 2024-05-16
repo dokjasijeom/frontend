@@ -18,3 +18,7 @@ export const setUser = (params: SetUserParams) => {
 export const login = (params: LoginParams) => {
   return axiosInstance.post('/user/auth', params)
 }
+
+export const getUser = () => {
+  return axiosInstance.get('/user')
+}
