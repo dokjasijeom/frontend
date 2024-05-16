@@ -10,6 +10,7 @@
     "vercel-deploy": "next build && next export"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.36.2",
     "@types/lodash": "^4.14.202",
     "axios": "^1.6.8",
     "cookies-next": "^4.1.1",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
+    "@tanstack/eslint-plugin-query": "^5.35.6",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",
