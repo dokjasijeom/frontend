@@ -1,5 +1,5 @@
 import { IParams } from '@/@types/interface'
-import { Series } from '@/@types/series'
+import { Provider, Series } from '@/@types/series'
 import { getSeries } from '@/api/series'
 import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
@@ -133,6 +133,7 @@ const PlatformItem = styled.div`
   border-radius: 12px;
   ${({ theme }) => theme.typography.body4};
   color: ${({ theme }) => theme.color.gray[950]};
+  cursor: pointer;
 `
 
 function SeriesDetail({
@@ -162,12 +163,13 @@ function SeriesDetail({
                 <div className="title">{series.title}</div>
                 {!isEmpty(series.authors) && (
                   <div className="sub">
-                    {series.authors[0].name} <span className="caption">저</span>
+                    {series.authors.map((value) => value.name).join('/')}{' '}
+                    <span className="caption">저</span>
                   </div>
                 )}
                 {!isEmpty(series.publishers) && (
                   <div className="sub">
-                    {series.publishers[0].name}{' '}
+                    {series.publishers.map((value) => value.name).join('/')}{' '}
                     <span className="caption">출판</span>
                   </div>
                 )}
@@ -191,7 +193,7 @@ function SeriesDetail({
                       height="20px"
                       color={theme.color.main[600]}
                     />
-                    {/* {series.likeCount.toLocaleString()} */}
+                    {series.likeCount ? series.likeCount.toLocaleString() : 0}
                   </div>
                 </Button>
                 <Button type="secondary" width="auto">
@@ -215,16 +217,19 @@ function SeriesDetail({
             <SectionTitle>보러가기</SectionTitle>
             <PlarformWrapper>
               {!isEmpty(series.providers) &&
-                series.providers.map((provider: any) => (
-                  <PlatformItem key={provider.value}>
+                series.providers.map((provider: Provider) => (
+                  <PlatformItem
+                    key={provider.hashId}
+                    onClick={() => window.open(provider.link)}
+                  >
                     <Image
-                      key={provider.value}
-                      src={`/images/${provider.value}.png`}
-                      alt={provider.value}
+                      key={provider.hashId}
+                      src={`/images/${provider.name}.png`}
+                      alt={provider.displayName}
                       width={20}
                       height={20}
                     />
-                    {provider.label}
+                    {provider.displayName}
                   </PlatformItem>
                 ))}
             </PlarformWrapper>
