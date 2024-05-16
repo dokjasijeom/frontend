@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { KeyboardEvent } from 'react'
 import Button from '@/components/common/Button/Button'
 import Input from '@/components/common/Input/Input'
 import styled from 'styled-components'
@@ -7,6 +7,7 @@ import useModal from '@/hooks/useModal'
 import { login } from '@/api/user'
 import { useForm } from 'react-hook-form'
 import { setCookie } from 'cookies-next'
+import { isEmpty } from 'lodash'
 
 const LoginContainer = styled.div`
   padding: 16px 20px;
@@ -117,6 +118,13 @@ function Login() {
     })
   }
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    // Enter
+    if (e.keyCode === 13 && !isEmpty(watchEmail) && !isEmpty(watchPassword)) {
+      handleLogin()
+    }
+  }
+
   return (
     <LoginContainer>
       <div className="title">로그인</div>
@@ -131,6 +139,7 @@ function Login() {
             onChange={(e) => {
               setValue('email', e.target.value, { shouldValidate: true })
             }}
+            onKeyDown={handleKeyDown}
           />
         </div>
         <div className="form_item">
@@ -144,6 +153,7 @@ function Login() {
             onChange={(e) => {
               setValue('password', e.target.value, { shouldValidate: true })
             }}
+            onKeyDown={handleKeyDown}
           />
         </div>
         <div className="button_wrapper">
