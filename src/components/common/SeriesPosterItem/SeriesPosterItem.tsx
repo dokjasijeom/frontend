@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { Series } from '@/@types/series'
-import { webnovelText, webtoonText } from '@/constants/Series'
+import { WEBNOVEL, WEBNOVEL_TEXT, WEBTOON_TEXT } from '@/constants/Series'
 import Badge from '../Badge/Badge'
 import Icons from '../Icons/Icons'
 
@@ -101,7 +101,7 @@ function SeriesPosterItem(props: SeriesPosterItemProps) {
           <Badge
             className="type_badge"
             value={
-              series.seriesType === 'webnovel' ? webnovelText : webtoonText
+              series.seriesType === WEBNOVEL ? WEBNOVEL_TEXT : WEBTOON_TEXT
             }
             color={theme.color.gray[950]}
           />

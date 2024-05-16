@@ -5,14 +5,14 @@ import SwiperPosterThumbnail from '@/components/common/SwiperPosterThumbnail/Swi
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import {
   SERIES_TYPE_TAB_LIST,
-  PLATFORM_TAB_LIST,
   WEEK_TAB_LIST,
+  PROVIDER_TAB_LIST,
 } from '@/constants/Tab'
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import { useEffect, useState } from 'react'
-import { MockBook } from '@/constants/MockData'
-import { getSeriesList } from '@/api/series'
+import { getNewSeriesList, getSeriesList } from '@/api/series'
 import { Series } from '@/@types/series'
+import { WEBNOVEL } from '@/constants/Series'
 
 const HomeContainer = styled.div``
 
@@ -53,13 +53,14 @@ export default function Home() {
     SERIES_TYPE_TAB_LIST[0],
   )
   const [selectedWeek, setSelectedWeek] = useState(WEEK_TAB_LIST[0])
-  const [selectedWebNovelPlatformTab, setSelectedWebNovelPlatformTab] =
-    useState(PLATFORM_TAB_LIST[0])
-  const [selectedWebToonPlatformTab, setSelectedWebToonPlatformTab] = useState(
-    PLATFORM_TAB_LIST[0],
-  )
+  const [selectedWebNovelProviderTab, setSelectedWebNovelProviderTab] =
+    useState(PROVIDER_TAB_LIST[0])
+  // const [selectedWebToonPlatformTab, setSelectedWebToonPlatformTab] = useState(
+  //   PLATFORM_TAB_LIST[0],
+  // )
 
   const [weekSeries, setWeekSeries] = useState<Series[]>([])
+  const [newWebNovelSeries, setNewWebNovelSeries] = useState<Series[]>([])
 
   useEffect(() => {
     async function fetchWeekSeries() {
@@ -71,6 +72,17 @@ export default function Home() {
     }
     fetchWeekSeries()
   }, [selectedBookTypeTab.value, selectedWeek.value])
+
+  useEffect(() => {
+    async function fetchNewWebNovelSeries() {
+      const res = await getNewSeriesList({
+        seriesType: WEBNOVEL,
+        provider: selectedWebNovelProviderTab.value,
+      })
+      setNewWebNovelSeries(res.data.data)
+    }
+    fetchNewWebNovelSeries()
+  }, [selectedWebNovelProviderTab.value])
 
   return (
     <>
@@ -100,22 +112,22 @@ export default function Home() {
           />
         </WeekTabWrapper>
         <BookListWrapper>
-          {weekSeries.map((item) => (
+          {weekSeries.slice(0, 12).map((item) => (
             <Thumbnail key={item.hashId} series={item} />
           ))}
         </BookListWrapper>
         <TabTitleHeader
           iconName="New"
           title="웹소설 신작"
-          selectedTab={selectedWebNovelPlatformTab}
-          tabList={PLATFORM_TAB_LIST}
-          onChangeTab={(tab: TabItem) => setSelectedWebNovelPlatformTab(tab)}
+          selectedTab={selectedWebNovelProviderTab}
+          tabList={PROVIDER_TAB_LIST}
+          onChangeTab={(tab: TabItem) => setSelectedWebNovelProviderTab(tab)}
           onClickMore={() => {}}
         />
         <SwiperBookListWrapper>
-          <SwiperPosterThumbnail bookList={MockBook.webNovel} />
+          <SwiperPosterThumbnail seriesList={newWebNovelSeries} />
         </SwiperBookListWrapper>
-        <TabTitleHeader
+        {/* <TabTitleHeader
           iconName="New"
           title="웹툰 신작"
           selectedTab={selectedWebToonPlatformTab}
@@ -124,8 +136,8 @@ export default function Home() {
           onClickMore={() => {}}
         />
         <SwiperBookListWrapper>
-          <SwiperPosterThumbnail bookList={MockBook.webToon} />
-        </SwiperBookListWrapper>
+          <SwiperPosterThumbnail seriesList={newWebNovelSeries} />
+        </SwiperBookListWrapper> */}
       </HomeContainer>
     </>
   )

@@ -5,8 +5,17 @@ interface GetSeriesParams {
   seriesType?: string
 }
 
+interface GetNewSeriesParams {
+  provider?: string
+  seriesType?: string
+}
+
 export const getSeriesList = (params?: GetSeriesParams) => {
   return axiosInstance.get(`/series`, { params })
+}
+
+export const getNewSeriesList = (params?: GetNewSeriesParams) => {
+  return axiosInstance.get(`/series/new`, { params })
 }
 
 export const getSeries = (id: string) => {

@@ -1,4 +1,4 @@
-import { Book } from '@/@types/book'
+import { Series } from '@/@types/series'
 import { useRouter } from 'next/router'
 import React from 'react'
 import styled from 'styled-components'
@@ -17,7 +17,7 @@ const ThumbnailImageWrapper = styled.div`
   width: 184px;
   border-radius: 12px;
   overflow: hidden;
-  .book_info_wrapper {
+  .series_info_wrapper {
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -26,7 +26,7 @@ const ThumbnailImageWrapper = styled.div`
     flex-direction: column;
     gap: 4px;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 10%, #000 83.85%);
-    .book_title {
+    .series_title {
       width: 100%;
       padding: 0 20px;
       ${({ theme }) => theme.typography.head1};
@@ -39,7 +39,7 @@ const ThumbnailImageWrapper = styled.div`
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
     }
-    .book_author {
+    .series_author {
       text-align: center;
       ${({ theme }) => theme.typography.body4};
       color: ${({ theme }) => theme.color.system.w};
@@ -54,19 +54,23 @@ const ThumbnailImage = styled.img`
 `
 
 interface PosterThumbnailProps {
-  book: Book
+  series: Series
 }
 function PosterThumbnail(props: PosterThumbnailProps) {
-  const { book } = props
+  const { series } = props
 
   const router = useRouter()
   return (
-    <PosterThumbnailContainer onClick={() => router.push(`/series/${book.id}`)}>
+    <PosterThumbnailContainer
+      onClick={() => router.push(`/series/${series.hashId}`)}
+    >
       <ThumbnailImageWrapper>
-        <ThumbnailImage src={book.image} />
-        <div className="book_info_wrapper">
-          <div className="book_title">{book.title}</div>
-          <div className="book_author">{book.author}</div>
+        <ThumbnailImage src={series.thumbnail} />
+        <div className="series_info_wrapper">
+          <div className="series_title">{series.title}</div>
+          <div className="series_author">
+            {series.authors.map((value) => value.name).join('/')}
+          </div>
         </div>
       </ThumbnailImageWrapper>
     </PosterThumbnailContainer>

@@ -1,4 +1,6 @@
-export type SeriesType = 'webnovel' | 'webtoon'
+import { WEBTOON, WEBNOVEL } from '../constants/Series'
+
+export type SeriesType = WEBNOVEL | WEBTOON
 
 export type GenreType = 'webnovel' | 'common'
 

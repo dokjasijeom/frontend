@@ -5,17 +5,17 @@ import 'swiper/css'
 import 'swiper/css/virtual'
 import { Navigation } from 'swiper/modules'
 import styled from 'styled-components'
-import { Book } from '@/@types/book'
+import { Series } from '@/@types/series'
 import SwiperNavigationButton from './SwiperNavigationButton'
 
 const SwiperPosterThumbnailContainer = styled.div``
 
 interface SwiperPosterThumbnailProps {
-  bookList: Book[]
+  seriesList: Series[]
 }
 
 function SwiperPosterThumbnail(props: SwiperPosterThumbnailProps) {
-  const { bookList } = props
+  const { seriesList } = props
   const [activeIndex, setActiveIndex] = useState(0)
   const [isHover, setIsHover] = useState(false)
 
@@ -35,10 +35,10 @@ function SwiperPosterThumbnail(props: SwiperPosterThumbnailProps) {
           setActiveIndex(swiper.activeIndex)
         }}
       >
-        {bookList &&
-          bookList.map((book) => (
-            <SwiperSlide key={book.id}>
-              <PosterThumbnail book={book} />
+        {seriesList &&
+          seriesList.map((series) => (
+            <SwiperSlide key={series.hashId}>
+              <PosterThumbnail series={series} />
             </SwiperSlide>
           ))}
         {isHover && (
