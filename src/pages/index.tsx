@@ -12,7 +12,7 @@ import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import { useEffect, useState } from 'react'
 import { getNewSeriesList, getSeriesList } from '@/api/series'
 import { Series } from '@/@types/series'
-import { WEBNOVEL } from '@/constants/Series'
+import { WEBNOVEL, WEBTOON } from '@/constants/Series'
 
 const HomeContainer = styled.div``
 
@@ -55,12 +55,13 @@ export default function Home() {
   const [selectedWeek, setSelectedWeek] = useState(WEEK_TAB_LIST[0])
   const [selectedWebNovelProviderTab, setSelectedWebNovelProviderTab] =
     useState(PROVIDER_TAB_LIST[0])
-  // const [selectedWebToonPlatformTab, setSelectedWebToonPlatformTab] = useState(
-  //   PLATFORM_TAB_LIST[0],
-  // )
+  const [selectedWebToonProviderTab, setSelectedWebToonProviderTab] = useState(
+    PROVIDER_TAB_LIST[0],
+  )
 
   const [weekSeries, setWeekSeries] = useState<Series[]>([])
   const [newWebNovelSeries, setNewWebNovelSeries] = useState<Series[]>([])
+  const [newWebToonSeries, setNewWebToonSeries] = useState<Series[]>([])
 
   useEffect(() => {
     async function fetchWeekSeries() {
@@ -83,6 +84,17 @@ export default function Home() {
     }
     fetchNewWebNovelSeries()
   }, [selectedWebNovelProviderTab.value])
+
+  useEffect(() => {
+    async function fetchNewWebToonSeries() {
+      const res = await getNewSeriesList({
+        seriesType: WEBTOON,
+        provider: selectedWebToonProviderTab.value,
+      })
+      setNewWebToonSeries(res.data.data)
+    }
+    fetchNewWebToonSeries()
+  }, [selectedWebToonProviderTab.value])
 
   return (
     <>
@@ -127,17 +139,17 @@ export default function Home() {
         <SwiperBookListWrapper>
           <SwiperPosterThumbnail seriesList={newWebNovelSeries} />
         </SwiperBookListWrapper>
-        {/* <TabTitleHeader
+        <TabTitleHeader
           iconName="New"
           title="웹툰 신작"
-          selectedTab={selectedWebToonPlatformTab}
-          tabList={PLATFORM_TAB_LIST}
-          onChangeTab={(tab: TabItem) => setSelectedWebToonPlatformTab(tab)}
+          selectedTab={selectedWebToonProviderTab}
+          tabList={PROVIDER_TAB_LIST}
+          onChangeTab={(tab: TabItem) => setSelectedWebToonProviderTab(tab)}
           onClickMore={() => {}}
         />
         <SwiperBookListWrapper>
-          <SwiperPosterThumbnail seriesList={newWebNovelSeries} />
-        </SwiperBookListWrapper> */}
+          <SwiperPosterThumbnail seriesList={newWebToonSeries} />
+        </SwiperBookListWrapper>
       </HomeContainer>
     </>
   )
