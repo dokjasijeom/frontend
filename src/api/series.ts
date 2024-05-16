@@ -18,6 +18,10 @@ export const getNewSeriesList = (params?: GetNewSeriesParams) => {
   return axiosInstance.get(`/series/new`, { params })
 }
 
-export const getSeries = (id: string) => {
-  return axiosInstance.get(`/series/${id}`)
+export const getSeries = (hashId: string) => {
+  return axiosInstance.get(`/series/${hashId}`)
+}
+
+export const likeSeries = (hashId: string) => {
+  return axiosInstance.post(`/series/${hashId}/like`)
 }

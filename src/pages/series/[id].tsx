@@ -1,10 +1,11 @@
 import { IParams } from '@/@types/interface'
 import { Provider, Series } from '@/@types/series'
-import { getSeries } from '@/api/series'
+import { getSeries, likeSeries } from '@/api/series'
 import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
@@ -137,10 +138,26 @@ const PlatformItem = styled.div`
 `
 
 function SeriesDetail({
-  series,
+  hashId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const theme = useTheme()
+
+  const queryClient = useQueryClient()
+
+  const { data: series } = useQuery<Series>({
+    queryKey: ['seriesDetail'],
+    queryFn: async () => {
+      const res = await getSeries(hashId)
+      return res.data.data
+    },
+  })
+
+  const handleLikeSeries = async () => {
+    await likeSeries(hashId).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['seriesDetail'] })
+    })
+  }
 
   return (
     <SeriesDetailContainer>
@@ -185,7 +202,11 @@ function SeriesDetail({
                 <div className="tags">{series.displayTags}</div>
               </div>
               <div className="action_button_wrapper">
-                <Button type="secondary" width="auto">
+                <Button
+                  type="secondary"
+                  width="auto"
+                  onClick={handleLikeSeries}
+                >
                   <div className="button_body">
                     <Icons
                       name="HeartDefault"
@@ -245,23 +266,13 @@ SeriesDetail.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps: GetServerSideProps<{
-  series: Series
+  hashId: string
 }> = async (context) => {
   const { id } = context.params as IParams
 
-  let series = null
-
-  if (id) {
-    try {
-      series = (await getSeries(id)).data.data
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
   return {
     props: {
-      series,
+      hashId: id,
     },
   }
 }
