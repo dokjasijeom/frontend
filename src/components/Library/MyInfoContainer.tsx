@@ -63,6 +63,7 @@ const Box = styled.div`
   .title {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 4px;
     ${({ theme }) => theme.typography.body4};
     color: ${({ theme }) => theme.color.gray[800]};
