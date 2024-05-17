@@ -140,7 +140,9 @@ function Search({ query }: SearchPageProps) {
       setAutoCompleteList(res.data.data)
     }
 
-    fetchAutoCompleteList()
+    if (!isEmpty(debounceSearch)) {
+      fetchAutoCompleteList()
+    }
   }, [debounceSearch])
 
   return (
