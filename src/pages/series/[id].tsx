@@ -1,16 +1,18 @@
 import { IParams } from '@/@types/interface'
 import { Provider, Series } from '@/@types/series'
-import { getSeries, likeSeries } from '@/api/series'
+import { User } from '@/@types/user'
+import { deleteLikeSeries, getSeries, setLikeSeries } from '@/api/series'
+import { getUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const SeriesDetailContainer = styled.div`
@@ -153,10 +155,34 @@ function SeriesDetail({
     },
   })
 
-  const handleLikeSeries = async () => {
-    await likeSeries(hashId).then(() => {
+  const { data: user } = useQuery<User>({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await getUser()
+      return res.data.data
+    },
+  })
+
+  const isUserLikeSeries = useMemo(() => {
+    if (isEmpty(user)) return false
+    return user.likeSeries.find((item) => item.hashId === hashId)
+  }, [hashId, user])
+
+  const seriesLikeMutation = useMutation({
+    mutationFn: () => {
+      if (isUserLikeSeries) {
+        return deleteLikeSeries(hashId)
+      }
+      return setLikeSeries(hashId)
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['seriesDetail'] })
-    })
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+    },
+  })
+
+  const handleLikeSeries = async () => {
+    seriesLikeMutation.mutate()
   }
 
   return (
@@ -203,16 +229,20 @@ function SeriesDetail({
               </div>
               <div className="action_button_wrapper">
                 <Button
-                  type="secondary"
+                  type={isUserLikeSeries ? 'primary' : 'secondary'}
                   width="auto"
                   onClick={handleLikeSeries}
                 >
                   <div className="button_body">
                     <Icons
-                      name="HeartDefault"
+                      name={isUserLikeSeries ? 'HeartActive' : 'HeartDefault'}
                       width="20px"
                       height="20px"
-                      color={theme.color.main[600]}
+                      color={
+                        isUserLikeSeries
+                          ? theme.color.system.w
+                          : theme.color.main[600]
+                      }
                     />
                     {series.likeCount ? series.likeCount.toLocaleString() : 0}
                   </div>
