@@ -11,7 +11,7 @@ import { TabItem } from '../common/Tab/Tab'
 import Button from '../common/Button/Button'
 
 const MyRecordSeriesListContainerWrapper = styled.div`
-  padding-bottom: 88px;
+  padding-bottom: 160px;
 `
 
 // const EmptyWrapper = styled.div`
@@ -70,7 +70,7 @@ function MyRecordSeriesListContainer() {
         tabList={SERIES_TYPE_TAB_LIST}
         moreButton={
           <Button type="text" width="auto">
-            {isEdit ? '완료' : '편집'}
+            {isEdit ? '완료' : '편집 모드'}
           </Button>
         }
         onClickMore={() => setIsEdit(!isEdit)}

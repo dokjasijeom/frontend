@@ -49,14 +49,20 @@ const SeriesItemWrapper = styled.div`
     align-items: center;
     justify-content: space-between;
     .series_info {
+      width: 100%;
+      max-width: calc(100% - 90px);
       display: flex;
       flex-direction: column;
       gap: 5px;
-      flex: 1;
       .series_title {
+        width: 100%;
         align-items: center;
         ${({ theme }) => theme.typography.body1};
         color: ${({ theme }) => theme.color.gray[950]};
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
 
         span {
           margin-left: 12px;
@@ -76,6 +82,7 @@ const SeriesItemWrapper = styled.div`
     align-items: center;
     gap: 8px;
     z-index: 1;
+    flex-shrink: 0;
     .current {
       ${({ theme }) => theme.typography.head2};
       color: ${({ theme }) => theme.color.main[600]};
@@ -90,6 +97,11 @@ const SeriesItemWrapper = styled.div`
     .series_info_wrapper {
       flex-direction: column;
       align-items: flex-start;
+      width: calc(100% - 70px);
+      .series_info {
+        width: 100%;
+        max-width: 100%;
+      }
     }
     .platform_wrapper {
       display: none !important;
@@ -117,6 +129,7 @@ const RecordSeriesListItemAddButton = styled.button`
   justify-content: center;
   align-items: center;
   width: 50px;
+  flex-shrink: 0;
   background: ${({ theme }) => theme.color.sub[200]};
   border-radius: 12px;
 `
@@ -187,9 +200,9 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
       </ReadingItem>
       {isEdit ? (
         <Button
-          style={{ marginLeft: '12px' }}
+          style={{ marginLeft: '12px', flexShrink: '0' }}
           type="text"
-          width="auto"
+          width="38px"
           onClick={onEdit}
         >
           삭제
