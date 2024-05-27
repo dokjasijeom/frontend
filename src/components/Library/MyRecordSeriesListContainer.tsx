@@ -5,12 +5,12 @@ import useModal from '@/hooks/useModal'
 import { MockMyBook } from '@/constants/MockData'
 import { MyBook } from '@/@types/book'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
-import ReadingListItem from './ReadingListItem'
+import RecordSeriesListItem from './RecordSeriesListItem'
 import RecordModalBody from './RecordModalBody'
 import { TabItem } from '../common/Tab/Tab'
 import Button from '../common/Button/Button'
 
-const MyReadingListContainerWrapper = styled.div`
+const MyRecordSeriesListContainerWrapper = styled.div`
   padding-bottom: 88px;
 `
 
@@ -34,7 +34,7 @@ const ListWrapper = styled.div`
   padding: 0 20px;
 `
 
-function MyReadingListContainer() {
+function MyRecordSeriesListContainer() {
   const { showModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
   const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
@@ -63,7 +63,7 @@ function MyReadingListContainer() {
     })
   }
   return (
-    <MyReadingListContainerWrapper>
+    <MyRecordSeriesListContainerWrapper>
       <TabTitleHeader
         iconName="OpenedBook"
         title="읽고 있는 작품"
@@ -90,7 +90,7 @@ function MyReadingListContainer() {
       </EmptyWrapper> */}
       <ListWrapper>
         {MockMyBook.webNovel.map((book) => (
-          <ReadingListItem
+          <RecordSeriesListItem
             book={book}
             key={book.id}
             isEdit={isEdit}
@@ -99,8 +99,8 @@ function MyReadingListContainer() {
           />
         ))}
       </ListWrapper>
-    </MyReadingListContainerWrapper>
+    </MyRecordSeriesListContainerWrapper>
   )
 }
 
-export default MyReadingListContainer
+export default MyRecordSeriesListContainer

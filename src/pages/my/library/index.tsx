@@ -1,7 +1,6 @@
 import { getUser } from '@/api/user'
 import AddBookModalBody from '@/components/Library/AddBookModalBody'
 import MyInfoContainer from '@/components/Library/MyInfoContainer'
-import MyReadingListContainer from '@/components/Library/MyReadingListContainer'
 import Divider from '@/components/common/Divider/Divider'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
@@ -13,6 +12,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import styled, { useTheme } from 'styled-components'
+import MyRecordSeriesListContainer from '@/components/Library/MyRecordSeriesListContainer'
 
 const LibraryContainer = styled.div`
   padding-top: 56px;
@@ -70,7 +70,7 @@ function Library() {
         color={theme.color.gray[50]}
         style={{ margin: 0 }}
       />
-      <MyReadingListContainer />
+      <MyRecordSeriesListContainer />
       <AddPlusButtonWrapper>
         <AddPlusButton onClick={handlePlusButton}>
           <Image
