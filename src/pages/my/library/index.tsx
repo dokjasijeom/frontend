@@ -1,5 +1,4 @@
 import { getUser } from '@/api/user'
-import AddBookModalBody from '@/components/Library/AddBookModalBody'
 import MyInfoContainer from '@/components/Library/MyInfoContainer'
 import Divider from '@/components/common/Divider/Divider'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
@@ -13,6 +12,7 @@ import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import styled, { useTheme } from 'styled-components'
 import MyRecordSeriesListContainer from '@/components/Library/MyRecordSeriesListContainer'
+import AddSeriesModalBody from '@/components/Library/AddSeriesModalBody'
 
 const LibraryContainer = styled.div`
   padding-top: 56px;
@@ -50,14 +50,14 @@ function Library() {
     },
   })
 
-  const handleAddBook = () => {}
+  const handleAddSeries = () => {}
 
   const handlePlusButton = () => {
     showModal({
-      title: '웹소설 작품 추가하기',
-      body: <AddBookModalBody />,
+      title: '읽고 있는 작품 추가하기',
+      body: <AddSeriesModalBody />,
       positiveText: '추가',
-      onPositiveClick: handleAddBook,
+      onPositiveClick: handleAddSeries,
     })
   }
 

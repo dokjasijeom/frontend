@@ -1,6 +1,6 @@
 import { Episode } from '@/@types/book'
 import { Platform } from '@/@types/platform'
-import AddBookForm from '@/components/Library/AddBookForm'
+import AddSeriesForm from '@/components/Library/AddSeriesForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
 import Button from '@/components/common/Button/Button'
@@ -185,14 +185,14 @@ function LibraryDetail() {
     })
   }
 
-  const handleAddBook = () => {}
+  const handleAddSeries = () => {}
 
   const handleEditModal = () => {
     showModal({
       title: '편집',
-      body: <AddBookForm title="" />,
+      body: <AddSeriesForm title="" />,
       positiveText: '추가',
-      onPositiveClick: handleAddBook,
+      onPositiveClick: handleAddSeries,
     })
   }
 

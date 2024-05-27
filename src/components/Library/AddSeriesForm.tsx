@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Input from '../common/Input/Input'
 
-const AddBookFormWrapper = styled.div`
+const AddSeriesFormWrapper = styled.div`
   width: 396px;
   .add_book_form_wrapper {
     display: flex;
@@ -21,14 +21,14 @@ const AddBookFormWrapper = styled.div`
     }
   }
 `
-interface AddBookFormProps {
+interface AddSeriesFormProps {
   title: string
 }
 
-function AddBookForm(props: AddBookFormProps) {
+function AddSeriesForm(props: AddSeriesFormProps) {
   const { title } = props
   return (
-    <AddBookFormWrapper>
+    <AddSeriesFormWrapper>
       <form className="add_book_form_wrapper">
         <div className="form_item">
           <div className="label">제목</div>
@@ -63,8 +63,8 @@ function AddBookForm(props: AddBookFormProps) {
           />
         </div>
       </form>
-    </AddBookFormWrapper>
+    </AddSeriesFormWrapper>
   )
 }
 
-export default AddBookForm
+export default AddSeriesForm
