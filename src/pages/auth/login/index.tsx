@@ -41,8 +41,9 @@ const LoginContainer = styled.div`
 `
 
 const FindPasswordFormWrapper = styled.div`
-  width: 396px;
+  width: 100%;
   margin-top: 32px;
+
   .label {
     ${({ theme }) => theme.typography.head2};
     color: ${({ theme }) => theme.color.gray[800]};
