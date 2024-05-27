@@ -21,7 +21,10 @@ export interface LikeSeries {
 
 export interface RecordSeries {
   id: number
-  series: Series
+  title?: string
+  author?: string
+  genre?: string
+  series?: Series
   totalEpisode: number
   recordEpisodeCount: number
   recordEpisodes: RecordEmpisode[]

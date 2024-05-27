@@ -62,10 +62,14 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
       ),
       positiveText: '삭제',
       onPositiveClick: async () => {
-        await deleteRecordSeries(recordSeries.series.hashId).then(async () => {
-          await queryClient.invalidateQueries({ queryKey: ['user'] })
-          setIsEdit(false)
-        })
+        if (!isEmpty(recordSeries.series)) {
+          await deleteRecordSeries(recordSeries.series.hashId).then(
+            async () => {
+              await queryClient.invalidateQueries({ queryKey: ['user'] })
+              setIsEdit(false)
+            },
+          )
+        }
       },
     })
   }
