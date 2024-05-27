@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { useForm } from 'react-hook-form'
 import Checkbox from '../common/Checkbox/Checkbox'
 import Divider from '../common/Divider/Divider'
@@ -35,6 +35,11 @@ const CheckboxLabelWrapper = styled.div`
     ${({ theme }) => theme.typography.body4};
     color: ${({ theme }) => theme.color.gray[600]};
   }
+  .link {
+    display: inline-block;
+    color: ${({ theme }) => theme.color.main[600]};
+    cursor: pointer;
+  }
 `
 
 interface TermOfUseProps {
@@ -43,6 +48,7 @@ interface TermOfUseProps {
 
 function TermOfUseContainer(props: TermOfUseProps) {
   const { onNextStep } = props
+  const theme = useTheme()
 
   const { register, setValue, watch } = useForm({
     defaultValues: {
@@ -87,6 +93,7 @@ function TermOfUseContainer(props: TermOfUseProps) {
       </Title>
       <ContentsWrapper>
         <Checkbox
+          checkColor={theme.color.main[600]}
           checked={watchSelectAll}
           {...register('selectAll')}
           onChange={handleSelectAll}
@@ -97,29 +104,33 @@ function TermOfUseContainer(props: TermOfUseProps) {
         <TermOfUseDetailWrapper>
           <CheckboxLabelWrapper>
             <Checkbox
+              checkColor={theme.color.main[600]}
               checked={watchReason1}
               {...register('reason1')}
               onChange={() => {
                 setValue('reason1', !watchReason1)
               }}
             >
-              [필수] 이용약관에 동의합니다.
+              [필수] <div className="link">이용약관</div>에 동의합니다.
             </Checkbox>
-            <div className="show_detail">보기</div>
+            {/* <div className="show_detail">보기</div> */}
           </CheckboxLabelWrapper>
           <CheckboxLabelWrapper>
             <Checkbox
+              checkColor={theme.color.main[600]}
               checked={watchReason2}
               {...register('reason2')}
               onChange={() => {
                 setValue('reason2', !watchReason2)
               }}
             >
-              [필수] 개인정보 수집 및 이용에 동의합니다.
+              [필수] <div className="link">개인정보 수집 및 이용</div>에
+              동의합니다.
             </Checkbox>
-            <div className="show_detail">보기</div>
+            {/* <div className="show_detail">보기</div> */}
           </CheckboxLabelWrapper>
           <Checkbox
+            checkColor={theme.color.main[600]}
             checked={watchReason3}
             {...register('reason3')}
             onChange={() => {
