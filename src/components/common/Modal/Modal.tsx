@@ -25,12 +25,15 @@ const ModalBackground = styled.div`
 const ModalWrapper = styled.div`
   z-index: 11;
   background: ${({ theme }) => theme.color.system.w};
+  width: 100%;
+  max-width: 460px;
   min-width: 320px;
   box-shadow: 5px 3px 20px 0px rgba(154, 153, 159, 0.1);
   border-radius: 20px;
   padding: 28px 32px;
   display: flex;
   flex-direction: column;
+  margin: 20px;
 `
 const ModalContents = styled.div``
 
