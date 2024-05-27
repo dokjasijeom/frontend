@@ -25,6 +25,11 @@ export const getSeries = (hashId: string) => {
 export const setLikeSeries = (hashId: string) => {
   return axiosInstance.post(`/series/${hashId}/like`)
 }
+
 export const deleteLikeSeries = (hashId: string) => {
   return axiosInstance.delete(`/series/${hashId}/like`)
+}
+
+export const recordSeries = (hashId: string) => {
+  return axiosInstance.post(`/series/${hashId}/record`)
 }

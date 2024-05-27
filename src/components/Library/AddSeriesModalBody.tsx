@@ -5,20 +5,26 @@ import Image from 'next/image'
 import { AutoComplete } from '@/@types/search'
 import useDebounce from '@/hooks/useDebounce'
 import { getSearchAutoComplete } from '@/api/search'
-import { getSeries } from '@/api/series'
+import { getSeries, recordSeries } from '@/api/series'
 import { Series } from '@/@types/series'
+import { useQueryClient } from '@tanstack/react-query'
+import useModal from '@/hooks/useModal'
 import Input from '../common/Input/Input'
 import Icons from '../common/Icons/Icons'
 import Badge from '../common/Badge/Badge'
 import AddSeriesForm from './AddSeriesForm'
+import Button from '../common/Button/Button'
 
 const AddSeriesModalBodyWrapper = styled.div`
   width: 100%;
-  min-height: 266px;
+  min-height: 364px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `
 const SearchWrapper = styled.div`
   position: relative;
-  margin-top: 32px;
+  margin-top: 20px;
 `
 
 const SearchBox = styled.div`
@@ -96,6 +102,8 @@ function AddSeriesModalBody() {
   const theme = useTheme()
 
   const debounceSearch = useDebounce(keyword, 200)
+  const queryClient = useQueryClient()
+  const { showModal } = useModal()
 
   const handleChangeSearch = (value: string) => {
     setKeyword(value)
@@ -149,6 +157,28 @@ function AddSeriesModalBody() {
     }
     return result
   }, [selectedSeries])
+
+  const handleAddSeries = async () => {
+    if (!isEmpty(selectedSeries)) {
+      await recordSeries(selectedSeries?.hashId)
+        .then(() => {
+          showModal({
+            title: '읽고 있는 작품 추가 완료',
+            body: `${selectedSeries.title} 작품이 추가 완료되었습니다.`,
+          })
+
+          queryClient.invalidateQueries({ queryKey: ['user'] })
+        })
+        .catch((error) => {
+          if (error.response.status === 400) {
+            showModal({
+              title: '오류',
+              body: `이미 추가 완료된 작품입니다.`,
+            })
+          }
+        })
+    }
+  }
 
   return (
     <AddSeriesModalBodyWrapper>
@@ -220,6 +250,13 @@ function AddSeriesModalBody() {
             </div>
           </SearchResultWrapper>
         )}
+      <Button
+        disabled={!showSearchResult}
+        style={{ marginTop: '32px' }}
+        onClick={handleAddSeries}
+      >
+        추가
+      </Button>
     </AddSeriesModalBodyWrapper>
   )
 }

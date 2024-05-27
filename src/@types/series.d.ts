@@ -8,6 +8,8 @@ export type Day = 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN'
 
 export type DisplayDay = '월' | '화' | '수' | '목' | '금' | '토' | '일'
 
+export type ProviderNameType = 'series' | 'kakao-page' | 'ridi'
+
 export interface Series {
   hashId: string
   authors: Author[]
@@ -71,5 +73,5 @@ export interface Provider {
   displayName: string
   homepageUrl: string
   link: string
-  name: string
+  name: ProviderNameType
 }

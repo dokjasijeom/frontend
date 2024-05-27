@@ -1,4 +1,4 @@
-import { Series, SeriesType } from './series'
+import { ProviderNameType, Series, SeriesType } from './series'
 
 export interface User {
   hashId: string
@@ -6,7 +6,7 @@ export interface User {
   Roles: string | null
   likeSeries: Series[]
   likeSeriesCount: number
-  recordSeries: Series[]
+  recordSeries: RecordSeries[]
 }
 
 export interface LikeSeries {
@@ -17,4 +17,19 @@ export interface LikeSeries {
   thumbnail: string
   title: string
   totalEpisode: number
+}
+
+export interface RecordSeries {
+  id: number
+  series: Series
+  totalEpisode: number
+  recordEpisodeCount: number
+  recordEpisodes: RecordEmpisode[]
+}
+
+export interface RecordEmpisode {
+  id: number
+  episodeNumber: number
+  watched: boolean
+  providerName: ProviderNameType
 }

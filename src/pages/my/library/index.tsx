@@ -13,6 +13,7 @@ import React, { ReactElement } from 'react'
 import styled, { useTheme } from 'styled-components'
 import MyRecordSeriesListContainer from '@/components/Library/MyRecordSeriesListContainer'
 import AddSeriesModalBody from '@/components/Library/AddSeriesModalBody'
+import { User } from '@/@types/user'
 
 const LibraryContainer = styled.div`
   padding-top: 56px;
@@ -42,7 +43,7 @@ function Library() {
   const theme = useTheme()
   const { showModal } = useModal()
 
-  const { data: user } = useQuery({
+  const { data: user } = useQuery<User>({
     queryKey: ['user'],
     queryFn: async () => {
       const res = await getUser()
@@ -50,14 +51,11 @@ function Library() {
     },
   })
 
-  const handleAddSeries = () => {}
-
   const handlePlusButton = () => {
     showModal({
+      type: 'self',
       title: '읽고 있는 작품 추가하기',
       body: <AddSeriesModalBody />,
-      positiveText: '추가',
-      onPositiveClick: handleAddSeries,
     })
   }
 
@@ -70,7 +68,9 @@ function Library() {
         color={theme.color.gray[50]}
         style={{ margin: 0 }}
       />
-      <MyRecordSeriesListContainer />
+      <MyRecordSeriesListContainer
+        recordSeriesList={user?.recordSeries ?? []}
+      />
       <AddPlusButtonWrapper>
         <AddPlusButton onClick={handlePlusButton}>
           <Image

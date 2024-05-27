@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { isEmpty } from 'lodash'
+import { RecordSeries } from '@/@types/user'
 import Icons from '../common/Icons/Icons'
 import Button from '../common/Button/Button'
 
@@ -135,15 +136,16 @@ const RecordSeriesListItemAddButton = styled.button`
 `
 
 interface RecordSeriesListItemProps {
-  book: any
+  recordSeries: RecordSeries
   isEdit?: boolean
   onEdit?: () => void
   onRecord?: () => void
 }
 
 function RecordSeriesListItem(props: RecordSeriesListItemProps) {
-  const { book, isEdit = false, onEdit, onRecord } = props
+  const { recordSeries, isEdit = false, onEdit, onRecord } = props
   const theme = useTheme()
+  const { series } = recordSeries
   const router = useRouter()
   const progressValue = (total: number, current: number) => {
     if (!total || !current) {
@@ -156,14 +158,15 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
     <RecordSeriesListItemWrapper>
       <ReadingItem
         onClick={() => {
-          router.push(`/my/library/${book.id}`)
+          router.push(`/my/library/${recordSeries.id}`)
         }}
       >
         <SeriesItemWrapper>
-          {!isEmpty(book.image) && (
+          {!isEmpty(series.thumbnail) && (
             <Image
+              unoptimized
               className="series_thumbnail_image"
-              src={book.image}
+              src={series.thumbnail}
               width={50}
               height={50}
               alt=""
@@ -172,14 +175,14 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
           <div className="series_info_wrapper">
             <div className="series_info">
               <div className="series_title">
-                {book.title}
-                <span>
+                {series.title}
+                {/* <span>
                   {book.author}
                   {book.genre ? ` · ${book.genre}` : ''}
-                </span>
+                </span> */}
               </div>
               <div className="platform_wrapper">
-                {book.platforms.map((platform: any) => (
+                {/* {book.platforms.map((platform: any) => (
                   <Image
                     key={platform.value}
                     src={`/images/${platform.value}.png`}
@@ -187,16 +190,23 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
                     width={20}
                     height={20}
                   />
-                ))}
+                ))} */}
               </div>
             </div>
             <div className="series_count_wrapper">
-              <span className="current">{book.current}화</span>
-              <span className="total">/{book.total}화</span>
+              <span className="current">
+                {recordSeries.recordEpisodeCount}화
+              </span>
+              <span className="total">/{recordSeries.totalEpisode}화</span>
             </div>
           </div>
         </SeriesItemWrapper>
-        <ProgressValue value={progressValue(book.total, book.current)} />
+        <ProgressValue
+          value={progressValue(
+            recordSeries.totalEpisode,
+            recordSeries.recordEpisodeCount,
+          )}
+        />
       </ReadingItem>
       {isEdit ? (
         <Button

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import { isEmpty } from 'lodash'
-import { MyBook } from '@/@types/book'
+import { RecordSeries } from '@/@types/user'
 import Checkbox from '../common/Checkbox/Checkbox'
 import Selector, { OptionItem } from '../common/Selector/Selector'
 import RecordEpisodes, { Episodes } from './RecordEpisodes'
@@ -11,7 +11,7 @@ import Button from '../common/Button/Button'
 
 const RecordModalBodyContainer = styled.div`
   padding-top: 20px;
-  width: 460px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -66,12 +66,13 @@ const RecordWrapper = styled.div`
 `
 
 interface RecordModalBodyProps {
-  book: MyBook
+  recordSeries: RecordSeries
 }
 
 function RecordModalBody(props: RecordModalBodyProps) {
-  const { book } = props
+  const { recordSeries } = props
   const theme = useTheme()
+  const { series } = recordSeries
   const [isMulti, setIsMulti] = useState(false)
   const [platform, setPlarform] = useState<OptionItem | null>(null)
   const [episodes, setEpisodes] = useState<Episodes>({ start: '0', end: '0' })
@@ -88,22 +89,29 @@ function RecordModalBody(props: RecordModalBodyProps) {
     <RecordModalBodyContainer>
       <BookWrapper>
         <Image
+          unoptimized
           className="book_thumbnail"
-          src={book.image}
+          src={series.thumbnail}
           width={50}
           height={50}
           alt=""
         />
         <div className="book_info">
           <div className="title">
-            {book.title}
-            <span className="sub">
+            {series.title}
+            {/* <span className="sub">
               {book.author} · {book.genre}
-            </span>
+            </span> */}
           </div>
           <div className="description">
-            <Image src="/images/naver.png" width={16} height={16} alt="" />
-            네이버시리즈에서 {book.current}화까지 읽었어요!
+            <Image
+              unoptimized
+              src="/images/naver.png"
+              width={16}
+              height={16}
+              alt=""
+            />
+            네이버시리즈에서 {recordSeries.recordEpisodeCount}화까지 읽었어요!
           </div>
         </div>
       </BookWrapper>

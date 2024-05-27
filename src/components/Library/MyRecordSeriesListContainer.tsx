@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
-import { MockMyBook } from '@/constants/MockData'
-import { MyBook } from '@/@types/book'
+import { RecordSeries } from '@/@types/user'
+import { isEmpty } from 'lodash'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import RecordSeriesListItem from './RecordSeriesListItem'
 import RecordModalBody from './RecordModalBody'
@@ -34,7 +34,12 @@ const ListWrapper = styled.div`
   padding: 0 20px;
 `
 
-function MyRecordSeriesListContainer() {
+interface MyRecordSeriesListContainerProps {
+  recordSeriesList: RecordSeries[]
+}
+
+function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
+  const { recordSeriesList } = props
   const { showModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
   const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
@@ -55,11 +60,11 @@ function MyRecordSeriesListContainer() {
     })
   }
 
-  const handleRecordReadingList = (book: MyBook) => {
+  const handleRecordReadingList = (series: RecordSeries) => {
     showModal({
       type: 'self',
       title: '기록하기',
-      body: <RecordModalBody book={book} />,
+      body: <RecordModalBody recordSeries={series} />,
     })
   }
   return (
@@ -89,15 +94,16 @@ function MyRecordSeriesListContainer() {
         기록해보세요!
       </EmptyWrapper> */}
       <ListWrapper>
-        {MockMyBook.webNovel.map((book) => (
-          <RecordSeriesListItem
-            book={book}
-            key={book.id}
-            isEdit={isEdit}
-            onEdit={handleEditReadingList}
-            onRecord={() => handleRecordReadingList(book)}
-          />
-        ))}
+        {!isEmpty(recordSeriesList) &&
+          recordSeriesList.map((series) => (
+            <RecordSeriesListItem
+              recordSeries={series}
+              key={series.id}
+              isEdit={isEdit}
+              onEdit={handleEditReadingList}
+              onRecord={() => handleRecordReadingList(series)}
+            />
+          ))}
       </ListWrapper>
     </MyRecordSeriesListContainerWrapper>
   )
