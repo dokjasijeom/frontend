@@ -1,10 +1,12 @@
-import { SeriesType } from './series'
+import { Series, SeriesType } from './series'
 
 export interface User {
   hashId: string
   email: string
   Roles: string | null
-  likeSeries: LikeSeries[]
+  likeSeries: Series[]
+  likeSeriesCount: number
+  recordSeries: Series[]
 }
 
 export interface LikeSeries {

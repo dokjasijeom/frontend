@@ -50,6 +50,10 @@ const MyContentsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: 8px;
+
+  @media (max-width: 490px) {
+    flex-direction: column;
+  }
 `
 const Box = styled.div`
   height: 114px;
@@ -77,6 +81,10 @@ const Box = styled.div`
       color: ${({ theme }) => theme.color.gray[950]};
     }
   }
+
+  @media (max-width: 490px) {
+    flex-direction: row;
+  }
 `
 
 const PlusButton = styled.button`
@@ -99,6 +107,9 @@ const PlatformIcon = styled.div<{ index: number }>`
   right: calc(${({ index }) => index} * 23px);
   bottom: -4px;
   cursor: pointer;
+  @media (max-width: 490px) {
+    bottom: 0px;
+  }
 `
 
 const SubscribtionPlatformWrapper = styled.div`
@@ -165,7 +176,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
                 router.push('/my/library/like')
               }}
             >
-              24
+              {user.likeSeries.length}
             </button>
           </div>
         </Box>
