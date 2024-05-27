@@ -153,7 +153,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
           alt="profile"
         />
         <div className="account_wrapper">
-          <div className="nickname">독시</div>
+          <div className="nickname">{user.email}</div>
           <div className="email">{user.email}</div>
         </div>
       </ProfileWrppaer>
@@ -176,7 +176,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
                 router.push('/my/library/like')
               }}
             >
-              {user.likeSeries.length}
+              {user.likeSeriesCount}
             </button>
           </div>
         </Box>
