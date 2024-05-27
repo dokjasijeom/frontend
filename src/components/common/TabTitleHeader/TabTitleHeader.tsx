@@ -24,6 +24,26 @@ const TabTitleHeaderContainer = styled.div`
       gap: 4px;
     }
   }
+
+  @media (max-width: 450px) {
+    align-items: flex-start;
+    .tab_title_wrapper {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  }
+
+  &.inline {
+    @media (max-width: 450px) {
+      align-items: center;
+      .tab_title_wrapper {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+      }
+    }
+  }
 `
 
 const MoreButton = styled.div``
@@ -51,7 +71,9 @@ function TabTitleHeader(props: TabTitleHeaderProps) {
   const theme = useTheme()
 
   return (
-    <TabTitleHeaderContainer>
+    <TabTitleHeaderContainer
+      className={iconName === 'Calendar' ? 'inline' : ''}
+    >
       <div className="tab_title_wrapper">
         <div className="tab_title">
           <Icons name={iconName} color={theme.color.main[300]} />
