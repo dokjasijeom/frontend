@@ -33,3 +33,7 @@ export const deleteLikeSeries = (hashId: string) => {
 export const recordSeries = (hashId: string) => {
   return axiosInstance.post(`/series/${hashId}/record`)
 }
+
+export const deleteRecordSeries = (hashId: string) => {
+  return axiosInstance.delete(`/series/${hashId}/record`)
+}
