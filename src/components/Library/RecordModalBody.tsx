@@ -100,13 +100,13 @@ function RecordModalBody(props: RecordModalBodyProps) {
   }, [recordSeries])
 
   const handleRecord = async () => {
-    const param = {
+    const params = {
       userRecordSeriesId: recordSeries.id,
       providerName: provider?.value ?? PROVIDER_TAB_LIST[0].value,
       from: isMulti ? Number(episodes.from) : Number(episodes.to),
       to: Number(episodes.to),
     }
-    await recordSeriesEpisode(param).then(() => {
+    await recordSeriesEpisode(params).then(() => {
       queryclient.invalidateQueries({ queryKey: ['mySeriesDetail'] })
       queryclient.invalidateQueries({ queryKey: ['user'] })
       onCloseModal()

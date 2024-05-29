@@ -10,6 +10,13 @@ interface GetNewSeriesParams {
   seriesType?: string
 }
 
+interface NonExistRecordSeriesParams {
+  title: string
+  author: string
+  genre: string
+  totalEpisode: number
+}
+
 export const getSeriesList = (params?: GetSeriesParams) => {
   return axiosInstance.get(`/series`, { params })
 }
@@ -36,4 +43,8 @@ export const recordSeries = (hashId: string) => {
 
 export const deleteRecordSeries = (hashId: string) => {
   return axiosInstance.delete(`/series/${hashId}/record`)
+}
+
+export const nonExistRecordSeries = (params: NonExistRecordSeriesParams) => {
+  return axiosInstance.post(`/series/non-exist/record`, params)
 }

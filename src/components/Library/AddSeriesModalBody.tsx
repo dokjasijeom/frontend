@@ -57,6 +57,11 @@ const SearchBoxItem = styled.div`
 const SearchResultWrapper = styled.div`
   display: flex;
   margin-top: 20px;
+  flex-direction: column;
+`
+
+const SeriesInfoWrapper = styled.div`
+  display: flex;
   gap: 18px;
   .thumbnail {
     border-radius: 12px;
@@ -91,14 +96,18 @@ const SearchResultWrapper = styled.div`
   }
 `
 
-function AddSeriesModalBody() {
+interface AddSeriesModalBodyProps {
+  onCloseModal: () => void
+}
+
+function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
+  const { onCloseModal } = props
   const [keyword, setKeyword] = useState('')
   const [showSearchBox, setShowSearchBox] = useState(false)
   const [autoCompleteList, setAutoCompleteList] = useState<AutoComplete[]>([])
   const [showSearchResult, setShowSearchResult] = useState(false)
   const [selectedSeries, setSelectedSeries] = useState<Series>()
   const [isDirect, setIsDirect] = useState(false)
-  const [title, setTitle] = useState('')
   const theme = useTheme()
 
   const debounceSearch = useDebounce(keyword, 200)
@@ -107,7 +116,6 @@ function AddSeriesModalBody() {
 
   const handleChangeSearch = (value: string) => {
     setKeyword(value)
-    setTitle(value)
     setShowSearchBox(true)
   }
   const handleAddSeriesDirect = () => {
@@ -215,45 +223,49 @@ function AddSeriesModalBody() {
           </SearchBox>
         )}
       </SearchWrapper>
-      {isDirect && <AddSeriesForm title={title} />}
+      {isDirect && (
+        <AddSeriesForm keyword={keyword} onCloseModal={onCloseModal} />
+      )}
       {!isEmpty(keyword) &&
         !isDirect &&
         showSearchResult &&
         !isEmpty(selectedSeries) && (
           <SearchResultWrapper>
-            <Image
-              className="thumbnail"
-              src={selectedSeries.thumbnail}
-              width={142}
-              height={200}
-              alt=""
-            />
-            <div className="book_info_wrapper">
-              <div className="episode_info">
-                {selectedSeries.isComplete && <Badge value="완결" />}총{' '}
-                {selectedSeries.totalEpisode}화
+            <SeriesInfoWrapper>
+              <Image
+                className="thumbnail"
+                src={selectedSeries.thumbnail}
+                width={142}
+                height={200}
+                alt=""
+              />
+              <div className="book_info_wrapper">
+                <div className="episode_info">
+                  {selectedSeries.isComplete && <Badge value="완결" />}총{' '}
+                  {selectedSeries.totalEpisode}화
+                </div>
+                <div className="title">{selectedSeries.title}</div>
+                <div className="sub">{authorGenreText}</div>
+                <div className="count">
+                  <Icons
+                    name="HeartActive"
+                    width="16px"
+                    height="16px"
+                    color={theme.color.main[600]}
+                  />
+                  {selectedSeries.likeCount}
+                </div>
               </div>
-              <div className="title">{selectedSeries.title}</div>
-              <div className="sub">{authorGenreText}</div>
-              <div className="count">
-                <Icons
-                  name="HeartActive"
-                  width="16px"
-                  height="16px"
-                  color={theme.color.main[600]}
-                />
-                {selectedSeries.likeCount}
-              </div>
-            </div>
+            </SeriesInfoWrapper>
+            <Button
+              disabled={!showSearchResult}
+              style={{ marginTop: '32px' }}
+              onClick={handleAddSeries}
+            >
+              추가
+            </Button>
           </SearchResultWrapper>
         )}
-      <Button
-        disabled={!showSearchResult}
-        style={{ marginTop: '32px' }}
-        onClick={handleAddSeries}
-      >
-        추가
-      </Button>
     </AddSeriesModalBodyWrapper>
   )
 }

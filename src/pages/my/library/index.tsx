@@ -41,7 +41,7 @@ const AddPlusButton = styled.button`
 function Library() {
   const router = useRouter()
   const theme = useTheme()
-  const { showModal } = useModal()
+  const { showModal, closeModal } = useModal()
 
   const { data: user } = useQuery<User>({
     queryKey: ['user'],
@@ -55,7 +55,7 @@ function Library() {
     showModal({
       type: 'self',
       title: '읽고 있는 작품 추가하기',
-      body: <AddSeriesModalBody />,
+      body: <AddSeriesModalBody onCloseModal={closeModal} />,
     })
   }
 
