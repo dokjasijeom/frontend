@@ -1,9 +1,11 @@
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import { isEmpty } from 'lodash'
 import { RecordSeries } from '@/@types/user'
+import { recordSeriesEpisode } from '@/api/user'
+import { useQueryClient } from '@tanstack/react-query'
 import Checkbox from '../common/Checkbox/Checkbox'
 import Selector, { OptionItem } from '../common/Selector/Selector'
 import RecordEpisodes, { Episodes } from './RecordEpisodes'
@@ -67,50 +69,76 @@ const RecordWrapper = styled.div`
 
 interface RecordModalBodyProps {
   recordSeries: RecordSeries
+  onCloseModal: () => void
 }
 
 function RecordModalBody(props: RecordModalBodyProps) {
-  const { recordSeries } = props
+  const { recordSeries, onCloseModal } = props
   const theme = useTheme()
-  const { series } = recordSeries
   const [isMulti, setIsMulti] = useState(false)
-  const [platform, setPlarform] = useState<OptionItem | null>(null)
-  const [episodes, setEpisodes] = useState<Episodes>({ start: '0', end: '0' })
-  const handleChangePlatform = (option: OptionItem) => {
-    setPlarform(option)
+  const [provider, setProvider] = useState<OptionItem | null>(null)
+  const [episodes, setEpisodes] = useState<Episodes>({ from: '0', to: '0' })
+  const queryclient = useQueryClient()
+
+  const handleChangeProvider = (option: OptionItem) => {
+    setProvider(option)
   }
 
-  const handleRecord = () => {
-    // TODO: 기록하기 저장
-    console.log(platform, episodes)
+  const authorGenreText = useMemo(() => {
+    let result = ''
+    if (!isEmpty(recordSeries) && !isEmpty(recordSeries.series)) {
+      const authorText = recordSeries.series.authors
+        ? recordSeries.series.authors.map((value) => value.name).join('/')
+        : ''
+      const genreText = recordSeries.series.genres
+        ? recordSeries.series.genres.map((value) => value.name).join('/')
+        : ''
+
+      result = authorText.concat(' · ', genreText)
+    }
+    return result
+  }, [recordSeries])
+
+  const handleRecord = async () => {
+    const param = {
+      userRecordSeriesId: recordSeries.id,
+      providerName: provider?.value ?? PROVIDER_TAB_LIST[0].value,
+      from: isMulti ? Number(episodes.from) : Number(episodes.to),
+      to: Number(episodes.to),
+    }
+    await recordSeriesEpisode(param).then(() => {
+      queryclient.invalidateQueries({ queryKey: ['mySeriesDetail'] })
+      onCloseModal()
+    })
   }
 
   return (
     <RecordModalBodyContainer>
       <BookWrapper>
-        <Image
-          unoptimized
-          className="book_thumbnail"
-          src={series.thumbnail}
-          width={50}
-          height={50}
-          alt=""
-        />
+        {recordSeries.series && (
+          <Image
+            unoptimized
+            className="book_thumbnail"
+            src={recordSeries.series.thumbnail}
+            width={50}
+            height={50}
+            alt=""
+          />
+        )}
+
         <div className="book_info">
           <div className="title">
-            {series.title}
-            {/* <span className="sub">
-              {book.author} · {book.genre}
-            </span> */}
+            {recordSeries.series && recordSeries.series.title}
+            <span className="sub">{authorGenreText}</span>
           </div>
           <div className="description">
-            <Image
+            {/* <Image
               unoptimized
-              src="/images/naver.png"
+              src={`/images/${recordSeries.series.}.png`}
               width={16}
               height={16}
               alt=""
-            />
+            /> */}
             네이버시리즈에서 {recordSeries.recordEpisodeCount}화까지 읽었어요!
           </div>
         </div>
@@ -128,13 +156,15 @@ function RecordModalBody(props: RecordModalBodyProps) {
         </Checkbox>
 
         <Selector
-          value={isEmpty(platform) ? '선택' : platform.label}
+          value={isEmpty(provider) ? '선택' : provider.label}
           options={PROVIDER_TAB_LIST}
-          onClickOption={(option) => handleChangePlatform(option)}
+          onClickOption={(option) => handleChangeProvider(option)}
         />
         <RecordEpisodes isMulti={isMulti} setEpisodes={setEpisodes} />
       </RecordWrapper>
-      <Button onClick={handleRecord}>저장</Button>
+      <Button disabled={isEmpty(provider)} onClick={handleRecord}>
+        저장
+      </Button>
     </RecordModalBodyContainer>
   )
 }

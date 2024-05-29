@@ -34,8 +34,8 @@ export const color = {
     dim: '#1e1e1e99',
     error: '#ef4853',
     success: '#00d78f',
-    naver: '#00E54F',
-    kakao: '#FEBC00',
+    series: '#00E54F',
+    'kakao-page': '#FEBC00',
     ridi: '#1E9EFF',
   },
 }

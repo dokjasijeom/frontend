@@ -11,6 +11,13 @@ interface LoginParams {
   password: string
 }
 
+interface RecordSeriesEpisodeParams {
+  userRecordSeriesId: number
+  providerName: string
+  from: number
+  to: number
+}
+
 export const setUser = (params: SetUserParams) => {
   return axiosInstance.post('/users', params)
 }
@@ -25,4 +32,8 @@ export const getUser = () => {
 
 export const getMySeries = (id: string) => {
   return axiosInstance.get(`/user/series/${id}`)
+}
+
+export const recordSeriesEpisode = (params: RecordSeriesEpisodeParams) => {
+  return axiosInstance.post('/user/series/record', params)
 }

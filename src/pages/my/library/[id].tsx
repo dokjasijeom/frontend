@@ -156,8 +156,7 @@ function LibraryDetail({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const theme = useTheme()
-  const { showModal } = useModal()
-  // const { id } = router.query
+  const { showModal, closeModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedEpisodes, setSelectedEpisodes] = useState<RecordEpisode[]>([])
@@ -178,7 +177,9 @@ function LibraryDetail({
       showModal({
         type: 'self',
         title: '기록하기',
-        body: <RecordModalBody recordSeries={mySeries} />,
+        body: (
+          <RecordModalBody recordSeries={mySeries} onCloseModal={closeModal} />
+        ),
       })
     }
   }

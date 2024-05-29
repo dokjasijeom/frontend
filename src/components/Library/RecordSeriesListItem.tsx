@@ -145,7 +145,6 @@ interface RecordSeriesListItemProps {
 function RecordSeriesListItem(props: RecordSeriesListItemProps) {
   const { recordSeries, isEdit = false, onEdit, onRecord } = props
   const theme = useTheme()
-  const { series } = recordSeries
   const router = useRouter()
   const progressValue = (total: number, current: number) => {
     if (!total || !current) {
@@ -162,11 +161,11 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
         }}
       >
         <SeriesItemWrapper>
-          {!isEmpty(series.thumbnail) && (
+          {!isEmpty(recordSeries.series) && (
             <Image
               unoptimized
               className="series_thumbnail_image"
-              src={series.thumbnail}
+              src={recordSeries.series.thumbnail}
               width={50}
               height={50}
               alt=""
@@ -175,7 +174,9 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
           <div className="series_info_wrapper">
             <div className="series_info">
               <div className="series_title">
-                {series.title}
+                {!isEmpty(recordSeries.series)
+                  ? recordSeries.series.title
+                  : recordSeries.title}
                 {/* <span>
                   {book.author}
                   {book.genre ? ` · ${book.genre}` : ''}

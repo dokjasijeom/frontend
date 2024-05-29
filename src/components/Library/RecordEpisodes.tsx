@@ -32,8 +32,8 @@ const CountInputWrapper = styled.div`
   }
 `
 export interface Episodes {
-  start: string
-  end: string
+  from: string
+  to: string
 }
 
 interface RecordEpisodesProps {
@@ -44,8 +44,8 @@ interface RecordEpisodesProps {
 function RecordEpisodes(props: RecordEpisodesProps) {
   const { isMulti, setEpisodes } = props
   const theme = useTheme()
-  const [start, setStart] = useState('')
-  const [end, setEnd] = useState('')
+  const [from, setFrom] = useState('')
+  const [to, setTo] = useState('')
   const [isBackSpace, setIsBackSpace] = useState(false)
 
   const addComma = (number: string) => {
@@ -55,7 +55,7 @@ function RecordEpisodes(props: RecordEpisodesProps) {
     return returnString
   }
 
-  const handleChangeStart = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     const onlyNumber = value.replace(/[^0-9]/g, '')
     const str = onlyNumber.replaceAll(',', '')
@@ -64,16 +64,16 @@ function RecordEpisodes(props: RecordEpisodesProps) {
       const temp = value.replace('화', '').slice(0, -1)
 
       if (isEmpty(temp)) {
-        setStart(temp)
+        setFrom(temp)
       } else {
-        setStart(`${temp}화`)
+        setFrom(`${temp}화`)
       }
     } else {
-      setStart(`${str}화`)
+      setFrom(`${str}화`)
     }
   }
 
-  const handleChangeEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     const onlyNumber = value.replace(/[^0-9]/g, '')
     const str = onlyNumber.replaceAll(',', '')
@@ -82,12 +82,12 @@ function RecordEpisodes(props: RecordEpisodesProps) {
       const temp = value.replace('화', '').slice(0, -1)
 
       if (isEmpty(temp)) {
-        setEnd(temp)
+        setTo(temp)
       } else {
-        setEnd(`${temp}화`)
+        setTo(`${temp}화`)
       }
     } else {
-      setEnd(`${str}화`)
+      setTo(`${str}화`)
     }
   }
 
@@ -100,20 +100,20 @@ function RecordEpisodes(props: RecordEpisodesProps) {
   }
 
   useEffect(() => {
-    setEpisodes({ start: start.replace('화', ''), end: end.replace('화', '') })
-  }, [start, end, setEpisodes])
+    setEpisodes({ from: from.replace('화', ''), to: to.replace('화', '') })
+  }, [from, to, setEpisodes])
 
   const handleMinus = () => {
-    const temp = end.replace('화', '')
+    const temp = to.replace('화', '')
     const countNumber = Number(temp)
     if (countNumber === 0) return
-    setEnd(`${(countNumber - 1).toString()}화`)
+    setTo(`${(countNumber - 1).toString()}화`)
   }
 
   const handlePlus = () => {
-    const temp = end.replace('화', '')
+    const temp = to.replace('화', '')
     const countNumber = Number(temp)
-    setEnd(`${(countNumber + 1).toString()}화`)
+    setTo(`${(countNumber + 1).toString()}화`)
   }
   return (
     <RecordEpisodesContainer>
@@ -121,18 +121,18 @@ function RecordEpisodes(props: RecordEpisodesProps) {
         <RecordEpisodeWrapper>
           <CountInputWrapper>
             <Input
-              value={`${addComma(start)}`}
+              value={`${addComma(from)}`}
               placeholder="직접 입력 가능(숫자만)"
-              onChange={(e) => handleChangeStart(e)}
+              onChange={(e) => handleChangeFrom(e)}
               onKeyDown={handleKeyDown}
             />
           </CountInputWrapper>
           부터
           <CountInputWrapper>
             <Input
-              value={`${addComma(end)}`}
+              value={`${addComma(to)}`}
               placeholder="직접 입력 가능(숫자만)"
-              onChange={(e) => handleChangeEnd(e)}
+              onChange={(e) => handleChangeTo(e)}
               onKeyDown={handleKeyDown}
             />
           </CountInputWrapper>
@@ -144,9 +144,9 @@ function RecordEpisodes(props: RecordEpisodesProps) {
           </Button>
           <CountInputWrapper>
             <Input
-              value={`${addComma(end)}`}
+              value={`${addComma(to)}`}
               placeholder="직접 입력 가능(숫자만)"
-              onChange={(e) => handleChangeEnd(e)}
+              onChange={(e) => handleChangeTo(e)}
               onKeyDown={handleKeyDown}
             />
           </CountInputWrapper>

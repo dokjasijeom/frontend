@@ -36,7 +36,7 @@ export interface ColorType {
     dim: string
     error: string
     success: string
-    naver: string
+    series: string
     'kakao-page': string
     ridi: string
     [key: string]: string
