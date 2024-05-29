@@ -2,7 +2,7 @@ import { IParams } from '@/@types/interface'
 import { Platform } from '@/@types/platform'
 import { RecordEpisode, RecordSeries } from '@/@types/user'
 import { getMySeries } from '@/api/user'
-import AddSeriesForm from '@/components/Library/AddSeriesForm'
+// import AddSeriesForm from '@/components/Library/AddSeriesForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
 import Button from '@/components/common/Button/Button'
@@ -41,21 +41,21 @@ const BookInfoWrapper = styled.div`
   }
 `
 
-const RecordBanner = styled.div`
-  margin: 0 20px;
-  width: calc(100% - 40px);
-  padding: 8px 0px;
-  text-align: center;
-  gap: 10px;
-  border-radius: 40px;
-  border: 1px solid ${({ theme }) => theme.color.sub[200]};
-  background: ${({ theme }) => theme.color.sub[50]};
-  ${({ theme }) => theme.typography.head3};
-  color: ${({ theme }) => theme.color.gray[800]};
-  .bold {
-    font-weight: bold;
-  }
-`
+// const RecordBanner = styled.div`
+//   margin: 0 20px;
+//   width: calc(100% - 40px);
+//   padding: 8px 0px;
+//   text-align: center;
+//   gap: 10px;
+//   border-radius: 40px;
+//   border: 1px solid ${({ theme }) => theme.color.sub[200]};
+//   background: ${({ theme }) => theme.color.sub[50]};
+//   ${({ theme }) => theme.typography.head3};
+//   color: ${({ theme }) => theme.color.gray[800]};
+//   .bold {
+//     font-weight: bold;
+//   }
+// `
 
 const RecordDetailWrapper = styled.div`
   margin-top: 32px;
@@ -197,16 +197,16 @@ function LibraryDetail({
     })
   }
 
-  const handleAddSeries = () => {}
+  // const handleAddSeries = () => {}
 
-  const handleEditModal = () => {
-    showModal({
-      title: '편집',
-      body: <AddSeriesForm title="" />,
-      positiveText: '추가',
-      onPositiveClick: handleAddSeries,
-    })
-  }
+  // const handleEditModal = () => {
+  //   showModal({
+  //     title: '편집',
+  //     body: <AddSeriesForm title="" />,
+  //     positiveText: '추가',
+  //     onPositiveClick: handleAddSeries,
+  //   })
+  // }
 
   const handleChangeSearch = (value: string) => {
     setSearch(value)
@@ -278,7 +278,14 @@ function LibraryDetail({
       {mySeries && mySeries.series && (
         <>
           <BookInfoWrapper>
-            <SeriesPosterItem series={mySeries.series} />
+            <SeriesPosterItem
+              series={mySeries.series}
+              onClick={() => {
+                if (!isEmpty(mySeries.series)) {
+                  router.push(`/series/${mySeries.series.hashId}`)
+                }
+              }}
+            />
             <div className="book_info">
               {/* {series.isDirect && (
                 <Button
