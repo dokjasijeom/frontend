@@ -108,10 +108,7 @@ function AddSeriesModalBody() {
   const handleChangeSearch = (value: string) => {
     setKeyword(value)
     setTitle(value)
-
-    if (!isEmpty(keyword)) {
-      setShowSearchBox(true)
-    }
+    setShowSearchBox(true)
   }
   const handleAddSeriesDirect = () => {
     setIsDirect(true)
@@ -200,7 +197,7 @@ function AddSeriesModalBody() {
           }
           onChange={(e) => handleChangeSearch(e.target.value)}
         />
-        {!isEmpty(autoCompleteList) && !isEmpty(keyword) && showSearchBox && (
+        {!isEmpty(keyword) && showSearchBox && (
           <SearchBox>
             {autoCompleteList.map((autoComplete) => (
               <SearchBoxItem
