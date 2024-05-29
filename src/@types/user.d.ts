@@ -27,10 +27,10 @@ export interface RecordSeries {
   series?: Series
   totalEpisode: number
   recordEpisodeCount: number
-  recordEpisodes: RecordEmpisode[]
+  recordEpisodes: RecordEpisode[]
 }
 
-export interface RecordEmpisode {
+export interface RecordEpisode {
   id: number
   episodeNumber: number
   watched: boolean

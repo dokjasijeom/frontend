@@ -22,3 +22,7 @@ export const login = (params: LoginParams) => {
 export const getUser = () => {
   return axiosInstance.get('/user')
 }
+
+export const getMySeries = (id: string) => {
+  return axiosInstance.get(`/user/series/${id}`)
+}

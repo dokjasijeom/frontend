@@ -37,7 +37,7 @@ export interface ColorType {
     error: string
     success: string
     naver: string
-    kakao: string
+    'kakao-page': string
     ridi: string
     [key: string]: string
   }

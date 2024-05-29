@@ -1,5 +1,7 @@
-import { Episode } from '@/@types/book'
+import { IParams } from '@/@types/interface'
 import { Platform } from '@/@types/platform'
+import { RecordEpisode, RecordSeries } from '@/@types/user'
+import { getMySeries } from '@/api/user'
 import AddSeriesForm from '@/components/Library/AddSeriesForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
@@ -7,15 +9,16 @@ import Button from '@/components/common/Button/Button'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
-// import SeriesPosterItem from '@/components/common/SeriesPosterItem/SeriesPosterItem'
+import SeriesPosterItem from '@/components/common/SeriesPosterItem/SeriesPosterItem'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { MockMyBook } from '@/constants/MockData'
 import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import useDebounce from '@/hooks/useDebounce'
 import useModal from '@/hooks/useModal'
+import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
@@ -101,12 +104,12 @@ const RecordDetail = styled.div`
     }
   }
 `
-const EpisodeBox = styled.div<{ platform: string }>`
+const EpisodeBox = styled.div<{ provider: string }>`
   cursor: pointer;
   ${({ theme }) => theme.typography.body4};
   width: 30px;
   height: 30px;
-  background: ${({ theme, platform }) => theme.color.system[platform]};
+  background: ${({ theme, provider }) => theme.color.system[provider]};
   color: ${({ theme }) => theme.color.system.w};
   border-radius: 4px;
   display: flex;
@@ -148,26 +151,34 @@ const DeleteBox = styled.div`
   }
 `
 
-function LibraryDetail() {
+function LibraryDetail({
+  id,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const theme = useTheme()
   const { showModal } = useModal()
-  const { id } = router.query
+  // const { id } = router.query
   const [isEdit, setIsEdit] = useState(false)
   const [search, setSearch] = useState('')
-  const [selectedEpisodes, setSelectedEpisodes] = useState<Episode[]>([])
+  const [selectedEpisodes, setSelectedEpisodes] = useState<RecordEpisode[]>([])
   const [selectedProvider, setSelectedProvider] = useState<Platform[]>([])
 
   const debounceSearch = useDebounce(search, 200)
 
-  const book = MockMyBook.webNovel.find((item) => item.id === id)
+  const { data: mySeries } = useQuery<RecordSeries>({
+    queryKey: ['mySeriesDetail'],
+    queryFn: async () => {
+      const res = await getMySeries(id)
+      return res.data.data
+    },
+  })
 
   const handleRecordModal = () => {
-    if (book) {
+    if (mySeries) {
       showModal({
         type: 'self',
         title: '기록하기',
-        body: <RecordModalBody book={book} />,
+        body: <RecordModalBody recordSeries={mySeries} />,
       })
     }
   }
@@ -205,36 +216,36 @@ function LibraryDetail() {
   }
 
   const filteredEpisodes = useMemo(() => {
-    if (isEmpty(book) || isEmpty(book.episodes)) return []
+    if (isEmpty(mySeries) || isEmpty(mySeries.recordEpisodes)) return []
 
-    const { episodes } = book
+    const { recordEpisodes } = mySeries
 
     if (!isEmpty(debounceSearch)) {
-      const filter = episodes.filter((episode) =>
-        episode.ep.toString().includes(debounceSearch),
+      const filter = recordEpisodes.filter((episode) =>
+        episode.episodeNumber.toString().includes(debounceSearch),
       )
 
       return filter
     }
 
     if (!isEmpty(selectedProvider)) {
-      const filter = episodes.filter((episode) =>
+      const filter = recordEpisodes.filter((episode) =>
         selectedProvider.find(
-          (platform) => platform.value === episode.platform.value,
+          (provider) => provider.value === episode.providerName,
         ),
       )
 
       return filter
     }
 
-    return episodes
-  }, [book, debounceSearch, selectedProvider])
+    return recordEpisodes
+  }, [mySeries, debounceSearch, selectedProvider])
 
-  const handleClickEpisode = (episode: Episode) => {
-    const findEpisodes = selectedEpisodes.find((item) => item.ep === episode.ep)
+  const handleClickEpisode = (episode: RecordEpisode) => {
+    const findEpisodes = selectedEpisodes.find((item) => item.id === episode.id)
     if (findEpisodes) {
       const filterEpisodes = selectedEpisodes.filter(
-        (item) => item.ep !== episode.ep,
+        (item) => item.id !== episode.id,
       )
       setSelectedEpisodes(filterEpisodes)
     } else {
@@ -263,13 +274,12 @@ function LibraryDetail() {
   return (
     <LibraryDetailContainer>
       <TitleHeader title="읽고 있는 작품" onClickBack={() => router.back()} />
-      {book && (
+      {mySeries && mySeries.series && (
         <>
           <BookInfoWrapper>
-            {/* 데이터 연결 후 주석 제거
-            <SeriesPosterItem series={book} />  */}
+            <SeriesPosterItem series={mySeries.series} />
             <div className="book_info">
-              {book.isDirect && (
+              {/* {series.isDirect && (
                 <Button
                   type="text"
                   width="auto"
@@ -278,7 +288,7 @@ function LibraryDetail() {
                 >
                   편집
                 </Button>
-              )}
+              )} */}
               <Button
                 type="text"
                 width="auto"
@@ -293,19 +303,19 @@ function LibraryDetail() {
               style={{
                 position: 'absolute',
                 bottom: '40px',
-                left: book.image ? '198px' : '40px',
+                left: mySeries.series.thumbnail ? '198px' : '40px',
               }}
               onClick={handleRecordModal}
             >
               기록하기
             </Button>
           </BookInfoWrapper>
-          {book.total > 0 && (
+          {/* {book.total > 0 && (
             <RecordBanner>
               <span className="bold">네이버시리즈</span>에서{' '}
               <span className="bold">{book.current}화</span>까지 읽었어요!
             </RecordBanner>
-          )}
+          )} */}
           <RecordDetailWrapper>
             <TabTitleHeader
               iconName="Content"
@@ -319,7 +329,7 @@ function LibraryDetail() {
             />
             <RecordDetail>
               <div className="record_filter_wrapper">
-                <div className="total_text">전체 {book.total}</div>
+                {/* <div className="total_text">전체 {book.total}</div> */}
                 <div className="platform_wrapper">
                   {PROVIDER_TAB_LIST.map((provider) => (
                     <Checkbox
@@ -386,21 +396,21 @@ function LibraryDetail() {
                     </button>
                   </DeleteBox>
                 )}
-                {isEmpty(filteredEpisodes) && book.total === 0 && (
+                {/* {isEmpty(filteredEpisodes) && book.total === 0 && (
                   <div className="empty_episodes">기록된 회차가 없어요.</div>
-                )}
+                )} */}
                 {filteredEpisodes.map((episode) => (
                   <EpisodeBox
                     className={
-                      selectedEpisodes.find((item) => item.ep === episode.ep)
+                      selectedEpisodes.find((item) => item.id === episode.id)
                         ? 'active'
                         : ''
                     }
-                    platform={episode.platform.value}
-                    key={episode.ep}
+                    provider={episode.providerName}
+                    key={episode.id}
                     onClick={() => handleClickEpisode(episode)}
                   >
-                    {episode.ep}
+                    {episode.episodeNumber}
                   </EpisodeBox>
                 ))}
               </div>
@@ -414,6 +424,18 @@ function LibraryDetail() {
 
 LibraryDetail.getLayout = function getLayout(page: ReactElement) {
   return <OnlyFooterLayout>{page}</OnlyFooterLayout>
+}
+
+export const getServerSideProps: GetServerSideProps<{
+  id: string
+}> = async (context) => {
+  const { id } = context.params as IParams
+
+  return {
+    props: {
+      id,
+    },
+  }
 }
 
 export default LibraryDetail
