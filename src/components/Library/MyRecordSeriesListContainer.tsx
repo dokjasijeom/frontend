@@ -44,7 +44,7 @@ interface MyRecordSeriesListContainerProps {
 function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
   const { recordSeriesList } = props
   const queryClient = useQueryClient()
-  const { showModal } = useModal()
+  const { showModal, closeModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
   const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
     SERIES_TYPE_TAB_LIST[0],
@@ -78,7 +78,7 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
     showModal({
       type: 'self',
       title: '기록하기',
-      body: <RecordModalBody recordSeries={series} />,
+      body: <RecordModalBody recordSeries={series} onCloseModal={closeModal} />,
     })
   }
   return (

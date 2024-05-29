@@ -108,6 +108,7 @@ function RecordModalBody(props: RecordModalBodyProps) {
     }
     await recordSeriesEpisode(param).then(() => {
       queryclient.invalidateQueries({ queryKey: ['mySeriesDetail'] })
+      queryclient.invalidateQueries({ queryKey: ['user'] })
       onCloseModal()
     })
   }
