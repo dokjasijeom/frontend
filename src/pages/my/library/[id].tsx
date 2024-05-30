@@ -41,21 +41,21 @@ const MySeriesInfoWrapper = styled.div`
   }
 `
 
-// const RecordBanner = styled.div`
-//   margin: 0 20px;
-//   width: calc(100% - 40px);
-//   padding: 8px 0px;
-//   text-align: center;
-//   gap: 10px;
-//   border-radius: 40px;
-//   border: 1px solid ${({ theme }) => theme.color.sub[200]};
-//   background: ${({ theme }) => theme.color.sub[50]};
-//   ${({ theme }) => theme.typography.head3};
-//   color: ${({ theme }) => theme.color.gray[800]};
-//   .bold {
-//     font-weight: bold;
-//   }
-// `
+const RecordBanner = styled.div`
+  margin: 0 20px;
+  width: calc(100% - 40px);
+  padding: 8px 0px;
+  text-align: center;
+  gap: 10px;
+  border-radius: 40px;
+  border: 1px solid ${({ theme }) => theme.color.sub[200]};
+  background: ${({ theme }) => theme.color.sub[50]};
+  ${({ theme }) => theme.typography.head3};
+  color: ${({ theme }) => theme.color.gray[800]};
+  .bold {
+    font-weight: bold;
+  }
+`
 
 const RecordDetailWrapper = styled.div`
   margin-top: 32px;
@@ -210,6 +210,16 @@ function LibraryDetail({
       return res.data.data
     },
   })
+
+  const lastRecordEpisode = useMemo(() => {
+    if (isEmpty(mySeries)) return null
+
+    const { recordEpisodes } = mySeries
+
+    return recordEpisodes[recordEpisodes.length - 1]
+  }, [mySeries])
+
+  console.log(lastRecordEpisode)
 
   const isNonExistSeries = useMemo(() => {
     if (!isEmpty(mySeries) && !isEmpty(mySeries.series)) {
@@ -391,12 +401,21 @@ function LibraryDetail({
             기록하기
           </Button>
         </MySeriesInfoWrapper>
-        {/* {book.total > 0 && (
-            <RecordBanner>
-              <span className="bold">네이버시리즈</span>에서{' '}
-              <span className="bold">{book.current}화</span>까지 읽었어요!
-            </RecordBanner>
-          )} */}
+        {!isEmpty(lastRecordEpisode) && (
+          <RecordBanner>
+            <span className="bold">
+              {
+                PROVIDER_TAB_LIST.find(
+                  (provider) =>
+                    provider.value === lastRecordEpisode.providerName,
+                )?.label
+              }
+            </span>
+            에서{' '}
+            <span className="bold">{lastRecordEpisode.episodeNumber}화</span>
+            까지 읽었어요!
+          </RecordBanner>
+        )}
         <RecordDetailWrapper>
           <TabTitleHeader
             iconName="Content"

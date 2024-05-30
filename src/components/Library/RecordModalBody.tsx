@@ -113,6 +113,14 @@ function RecordModalBody(props: RecordModalBodyProps) {
     })
   }
 
+  const lastRecordEpisode = useMemo(() => {
+    if (isEmpty(recordSeries)) return null
+
+    const { recordEpisodes } = recordSeries
+
+    return recordEpisodes[recordEpisodes.length - 1]
+  }, [recordSeries])
+
   return (
     <RecordModalBodyContainer>
       <BookWrapper>
@@ -132,16 +140,23 @@ function RecordModalBody(props: RecordModalBodyProps) {
             {recordSeries.series && recordSeries.series.title}
             <span className="sub">{authorGenreText}</span>
           </div>
-          <div className="description">
-            {/* <Image
-              unoptimized
-              src={`/images/${recordSeries.series.}.png`}
-              width={16}
-              height={16}
-              alt=""
-            /> */}
-            네이버시리즈에서 {recordSeries.recordEpisodeCount}화까지 읽었어요!
-          </div>
+          {!isEmpty(lastRecordEpisode) && (
+            <div className="description">
+              <Image
+                unoptimized
+                src={`/images/${lastRecordEpisode.providerName}.png`}
+                width={16}
+                height={16}
+                alt=""
+              />
+              {
+                PROVIDER_TAB_LIST.find(
+                  (item) => item.value === lastRecordEpisode.providerName,
+                )?.label
+              }
+              에서 {lastRecordEpisode.episodeNumber}화까지 읽었어요!
+            </div>
+          )}
         </div>
       </BookWrapper>
       <RecordWrapper>
