@@ -48,3 +48,9 @@ export const deleteRecordSeries = (hashId: string) => {
 export const nonExistRecordSeries = (params: NonExistRecordSeriesParams) => {
   return axiosInstance.post(`/series/non-exist/record`, params)
 }
+
+export const deleteNonExistRecordSeries = (id: number) => {
+  return axiosInstance.delete(`/series/non-exist/record`, {
+    data: { id },
+  })
+}

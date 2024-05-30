@@ -1,6 +1,7 @@
 import { IParams } from '@/@types/interface'
 import { Platform } from '@/@types/platform'
 import { RecordEpisode, RecordSeries } from '@/@types/user'
+import { deleteNonExistRecordSeries, deleteRecordSeries } from '@/api/series'
 import { getMySeries } from '@/api/user'
 import AddSeriesForm from '@/components/Library/AddSeriesForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
@@ -27,11 +28,11 @@ const LibraryDetailContainer = styled.div`
   padding-top: 56px;
 `
 
-const BookInfoWrapper = styled.div`
+const MySeriesInfoWrapper = styled.div`
   display: flex;
   position: relative;
 
-  .book_info {
+  .series_edit_wrapper {
   }
   .record_button {
     position: absolute;
@@ -239,6 +240,19 @@ function LibraryDetail({
         </>
       ),
       positiveText: '삭제',
+      onPositiveClick: async () => {
+        if (!isEmpty(mySeries)) {
+          if (!isEmpty(mySeries.series)) {
+            await deleteRecordSeries(mySeries.series.hashId).then(async () => {
+              router.push('/my/library')
+            })
+          } else {
+            await deleteNonExistRecordSeries(mySeries.id).then(async () => {
+              router.push('/my/library')
+            })
+          }
+        }
+      },
     })
   }
 
@@ -318,7 +332,7 @@ function LibraryDetail({
     <LibraryDetailContainer>
       <TitleHeader title="읽고 있는 작품" onClickBack={() => router.back()} />
       <>
-        <BookInfoWrapper>
+        <MySeriesInfoWrapper>
           {!isEmpty(mySeries) && !isEmpty(mySeries.series) && (
             <SeriesPosterItem
               series={mySeries.series}
@@ -345,7 +359,7 @@ function LibraryDetail({
                 </div>
               </NonExistSeriesInfoWrapper>
             )}
-          <div className="book_info">
+          <div className="series_edit_wrapper">
             {isNonExistSeries && (
               <Button
                 type="text"
@@ -376,7 +390,7 @@ function LibraryDetail({
           >
             기록하기
           </Button>
-        </BookInfoWrapper>
+        </MySeriesInfoWrapper>
         {/* {book.total > 0 && (
             <RecordBanner>
               <span className="bold">네이버시리즈</span>에서{' '}

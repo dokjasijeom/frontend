@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
 import { RecordSeries } from '@/@types/user'
 import { isEmpty } from 'lodash'
-import { deleteRecordSeries } from '@/api/series'
+import { deleteNonExistRecordSeries, deleteRecordSeries } from '@/api/series'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
@@ -69,6 +69,11 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
               setIsEdit(false)
             },
           )
+        } else {
+          await deleteNonExistRecordSeries(recordSeries.id).then(async () => {
+            await queryClient.invalidateQueries({ queryKey: ['user'] })
+            setIsEdit(false)
+          })
         }
       },
     })
