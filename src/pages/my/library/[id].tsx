@@ -2,7 +2,7 @@ import { IParams } from '@/@types/interface'
 import { Platform } from '@/@types/platform'
 import { RecordEpisode, RecordSeries } from '@/@types/user'
 import { getMySeries } from '@/api/user'
-// import AddSeriesForm from '@/components/Library/AddSeriesForm'
+import AddSeriesForm from '@/components/Library/AddSeriesForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
 import Button from '@/components/common/Button/Button'
@@ -28,7 +28,6 @@ const LibraryDetailContainer = styled.div`
 `
 
 const BookInfoWrapper = styled.div`
-  padding: 20px;
   display: flex;
   position: relative;
 
@@ -151,6 +150,45 @@ const DeleteBox = styled.div`
   }
 `
 
+const NonExistSeriesInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 200px;
+  padding: 20px;
+
+  .series_info {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .episode_wrapper {
+      ${({ theme }) => theme.typography.body4};
+      color: ${({ theme }) => theme.color.gray[950]};
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .title {
+      ${({ theme }) => theme.typography.head1};
+      color: ${({ theme }) => theme.color.gray[950]};
+    }
+    .sub {
+      ${({ theme }) => theme.typography.body2};
+      color: ${({ theme }) => theme.color.gray[800]};
+    }
+    .score {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      ${({ theme }) => theme.typography.body2};
+      color: ${({ theme }) => theme.color.main[600]};
+    }
+  }
+`
+
 function LibraryDetail({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -171,6 +209,13 @@ function LibraryDetail({
       return res.data.data
     },
   })
+
+  const isNonExistSeries = useMemo(() => {
+    if (!isEmpty(mySeries) && !isEmpty(mySeries.series)) {
+      return false
+    }
+    return true
+  }, [mySeries])
 
   const handleRecordModal = () => {
     if (mySeries) {
@@ -197,16 +242,13 @@ function LibraryDetail({
     })
   }
 
-  // const handleAddSeries = () => {}
-
-  // const handleEditModal = () => {
-  //   showModal({
-  //     title: '편집',
-  //     body: <AddSeriesForm title="" />,
-  //     positiveText: '추가',
-  //     onPositiveClick: handleAddSeries,
-  //   })
-  // }
+  const handleEditModal = () => {
+    showModal({
+      title: '편집',
+      type: 'self',
+      body: <AddSeriesForm keyword="" onCloseModal={closeModal} />,
+    })
+  }
 
   const handleChangeSearch = (value: string) => {
     setSearch(value)
@@ -275,9 +317,9 @@ function LibraryDetail({
   return (
     <LibraryDetailContainer>
       <TitleHeader title="읽고 있는 작품" onClickBack={() => router.back()} />
-      {mySeries && mySeries.series && (
-        <>
-          <BookInfoWrapper>
+      <>
+        <BookInfoWrapper>
+          {!isEmpty(mySeries) && !isEmpty(mySeries.series) && (
             <SeriesPosterItem
               series={mySeries.series}
               onClick={() => {
@@ -286,146 +328,163 @@ function LibraryDetail({
                 }
               }}
             />
-            <div className="book_info">
-              {/* {series.isDirect && (
-                <Button
-                  type="text"
-                  width="auto"
-                  style={{ position: 'absolute', right: '60px' }}
-                  onClick={handleEditModal}
-                >
-                  편집
-                </Button>
-              )} */}
+          )}
+          {!isEmpty(mySeries) &&
+            mySeries.title &&
+            mySeries.author &&
+            mySeries.genre && (
+              <NonExistSeriesInfoWrapper>
+                <div className="series_info">
+                  <div className="episode_wrapper">
+                    <div>총 {mySeries.totalEpisode}화</div>
+                  </div>
+                  <div className="title">{mySeries.title}</div>
+                  <div className="sub">
+                    {mySeries.author.concat(' · ', mySeries.genre)}
+                  </div>
+                </div>
+              </NonExistSeriesInfoWrapper>
+            )}
+          <div className="book_info">
+            {isNonExistSeries && (
               <Button
                 type="text"
                 width="auto"
-                style={{ position: 'absolute', right: '20px' }}
-                onClick={handleDeleteModal}
+                style={{ position: 'absolute', right: '60px' }}
+                onClick={handleEditModal}
               >
-                삭제
+                편집
               </Button>
-            </div>
+            )}
             <Button
-              width="95px"
-              style={{
-                position: 'absolute',
-                bottom: '40px',
-                left: mySeries.series.thumbnail ? '198px' : '40px',
-              }}
-              onClick={handleRecordModal}
+              type="text"
+              width="auto"
+              style={{ position: 'absolute', right: '20px' }}
+              onClick={handleDeleteModal}
             >
-              기록하기
+              삭제
             </Button>
-          </BookInfoWrapper>
-          {/* {book.total > 0 && (
+          </div>
+          <Button
+            width="95px"
+            style={{
+              position: 'absolute',
+              bottom: '20px',
+              left: !isNonExistSeries ? '178px' : '20px',
+            }}
+            onClick={handleRecordModal}
+          >
+            기록하기
+          </Button>
+        </BookInfoWrapper>
+        {/* {book.total > 0 && (
             <RecordBanner>
               <span className="bold">네이버시리즈</span>에서{' '}
               <span className="bold">{book.current}화</span>까지 읽었어요!
             </RecordBanner>
           )} */}
-          <RecordDetailWrapper>
-            <TabTitleHeader
-              iconName="Content"
-              title="기록장"
-              moreButton={
-                <Button type="text" width="auto">
-                  {isEdit ? '' : '편집'}
-                </Button>
-              }
-              onClickMore={handleEditEpisodes}
-            />
-            <RecordDetail>
-              <div className="record_filter_wrapper">
-                {/* <div className="total_text">전체 {book.total}</div> */}
-                <div className="platform_wrapper">
-                  {PROVIDER_TAB_LIST.map((provider) => (
-                    <Checkbox
-                      key={provider.value}
-                      style={{ gap: '4px' }}
-                      checked={Boolean(
-                        selectedProvider.find(
-                          (item) => item.value === provider.value,
-                        ),
-                      )}
-                      onChange={() => {
-                        handleselectedProvider(provider)
-                      }}
-                      checkColor={theme.color.main[600]}
-                    >
-                      <div className="checkbox_label">{provider.label}</div>
-                    </Checkbox>
-                  ))}
-                </div>
-              </div>
-              <div className="episodes_search_wrapper">
-                <Input
-                  value={search}
-                  placeholder="회차 검색하기"
-                  suffix={
-                    !isEmpty(search) ? (
-                      <Icons
-                        name="CloseCircle"
-                        width="22px"
-                        height="22px"
-                        onClick={handleClearSearch}
-                      />
-                    ) : (
-                      <Icons name="Search" width="22px" height="22px" />
-                    )
-                  }
-                  onChange={(e) => handleChangeSearch(e.target.value)}
-                />
-              </div>
-              <div className="episodes_wrapper">
-                {(!isEmpty(selectedEpisodes) || isEdit) && (
-                  <DeleteBox>
-                    <div className="selected_info">
-                      선택한{' '}
-                      <Badge
-                        color={theme.color.system.error}
-                        value={`${selectedEpisodes.length}개`}
-                        className="badge"
-                      />{' '}
-                      기록을 삭제합니다.
-                    </div>
-                    <button
-                      type="button"
-                      className="delete_button"
-                      onClick={() => {
-                        if (!isEmpty(selectedEpisodes)) {
-                          handleDeleteModal()
-                        } else {
-                          setIsEdit(false)
-                        }
-                      }}
-                    >
-                      {!isEmpty(selectedEpisodes) ? '삭제' : '취소'}
-                    </button>
-                  </DeleteBox>
-                )}
-                {/* {isEmpty(filteredEpisodes) && book.total === 0 && (
-                  <div className="empty_episodes">기록된 회차가 없어요.</div>
-                )} */}
-                {filteredEpisodes.map((episode) => (
-                  <EpisodeBox
-                    className={
-                      selectedEpisodes.find((item) => item.id === episode.id)
-                        ? 'active'
-                        : ''
-                    }
-                    provider={episode.providerName}
-                    key={episode.id}
-                    onClick={() => handleClickEpisode(episode)}
+        <RecordDetailWrapper>
+          <TabTitleHeader
+            iconName="Content"
+            title="기록장"
+            moreButton={
+              <Button type="text" width="auto">
+                {isEdit ? '' : '편집'}
+              </Button>
+            }
+            onClickMore={handleEditEpisodes}
+          />
+          <RecordDetail>
+            <div className="record_filter_wrapper">
+              {/* <div className="total_text">전체 {book.total}</div> */}
+              <div className="platform_wrapper">
+                {PROVIDER_TAB_LIST.map((provider) => (
+                  <Checkbox
+                    key={provider.value}
+                    style={{ gap: '4px' }}
+                    checked={Boolean(
+                      selectedProvider.find(
+                        (item) => item.value === provider.value,
+                      ),
+                    )}
+                    onChange={() => {
+                      handleselectedProvider(provider)
+                    }}
+                    checkColor={theme.color.main[600]}
                   >
-                    {episode.episodeNumber}
-                  </EpisodeBox>
+                    <div className="checkbox_label">{provider.label}</div>
+                  </Checkbox>
                 ))}
               </div>
-            </RecordDetail>
-          </RecordDetailWrapper>
-        </>
-      )}
+            </div>
+            <div className="episodes_search_wrapper">
+              <Input
+                value={search}
+                placeholder="회차 검색하기"
+                suffix={
+                  !isEmpty(search) ? (
+                    <Icons
+                      name="CloseCircle"
+                      width="22px"
+                      height="22px"
+                      onClick={handleClearSearch}
+                    />
+                  ) : (
+                    <Icons name="Search" width="22px" height="22px" />
+                  )
+                }
+                onChange={(e) => handleChangeSearch(e.target.value)}
+              />
+            </div>
+            <div className="episodes_wrapper">
+              {(!isEmpty(selectedEpisodes) || isEdit) && (
+                <DeleteBox>
+                  <div className="selected_info">
+                    선택한{' '}
+                    <Badge
+                      color={theme.color.system.error}
+                      value={`${selectedEpisodes.length}개`}
+                      className="badge"
+                    />{' '}
+                    기록을 삭제합니다.
+                  </div>
+                  <button
+                    type="button"
+                    className="delete_button"
+                    onClick={() => {
+                      if (!isEmpty(selectedEpisodes)) {
+                        handleDeleteModal()
+                      } else {
+                        setIsEdit(false)
+                      }
+                    }}
+                  >
+                    {!isEmpty(selectedEpisodes) ? '삭제' : '취소'}
+                  </button>
+                </DeleteBox>
+              )}
+              {isEmpty(filteredEpisodes) &&
+                mySeries?.recordEpisodeCount === 0 && (
+                  <div className="empty_episodes">기록된 회차가 없어요.</div>
+                )}
+              {filteredEpisodes.map((episode) => (
+                <EpisodeBox
+                  className={
+                    selectedEpisodes.find((item) => item.id === episode.id)
+                      ? 'active'
+                      : ''
+                  }
+                  provider={episode.providerName}
+                  key={episode.id}
+                  onClick={() => handleClickEpisode(episode)}
+                >
+                  {episode.episodeNumber}
+                </EpisodeBox>
+              ))}
+            </div>
+          </RecordDetail>
+        </RecordDetailWrapper>
+      </>
     </LibraryDetailContainer>
   )
 }
