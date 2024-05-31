@@ -17,7 +17,6 @@ import Button from '../common/Button/Button'
 
 const AddSeriesModalBodyWrapper = styled.div`
   width: 100%;
-  min-height: 364px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -60,16 +59,37 @@ const SearchResultWrapper = styled.div`
   flex-direction: column;
 `
 
-const SeriesInfoWrapper = styled.div`
+const ThumbnailWrapper = styled.div`
+  width: 100%;
+  max-width: 142px;
   display: flex;
-  gap: 18px;
-  .thumbnail {
+  min-width: 69px;
+  img {
+    width: 100%;
+    min-width: 70px;
+    height: auto !important;
+    position: relative !important;
+    object-fit: cover;
     border-radius: 12px;
   }
+`
+
+const SeriesInfoWrapper = styled.div`
+  display: grid;
+  width: 100%;
+  gap: 18px;
+  grid-template-columns: 0.6fr 1fr;
+
+  @media (max-width: 400px) {
+    grid-template-columns: 0.4fr 1fr;
+    gap: 12px;
+  }
+
   .book_info_wrapper {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    overflow: hidden;
 
     .episode_info {
       display: flex;
@@ -79,6 +99,10 @@ const SeriesInfoWrapper = styled.div`
       gap: 8px;
     }
     .title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      word-break: break-all;
       ${({ theme }) => theme.typography.head1};
       color: ${({ theme }) => theme.color.gray[950]};
     }
@@ -186,7 +210,9 @@ function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
   }
 
   return (
-    <AddSeriesModalBodyWrapper>
+    <AddSeriesModalBodyWrapper
+      style={{ minHeight: !showSearchResult ? '366px' : '100%' }}
+    >
       <SearchWrapper>
         <Input
           value={keyword}
@@ -232,13 +258,14 @@ function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
         !isEmpty(selectedSeries) && (
           <SearchResultWrapper>
             <SeriesInfoWrapper>
-              <Image
-                className="thumbnail"
-                src={selectedSeries.thumbnail}
-                width={142}
-                height={200}
-                alt=""
-              />
+              <ThumbnailWrapper>
+                <Image
+                  className="thumbnail"
+                  src={selectedSeries.thumbnail}
+                  fill
+                  alt=""
+                />
+              </ThumbnailWrapper>
               <div className="book_info_wrapper">
                 <div className="episode_info">
                   {selectedSeries.isComplete && <Badge value="완결" />}총{' '}
