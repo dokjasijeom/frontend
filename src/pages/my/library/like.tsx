@@ -12,10 +12,11 @@ import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import SeriesItem from '@/components/common/SeriesItem/SeriesItem'
 import { Series } from '@/@types/series'
+import { LikeSeries, User } from '@/@types/user'
 
 const LikeContainer = styled.div``
 
@@ -49,13 +50,14 @@ const LikeBookWrapper = styled.div`
     gap: 4px;
   }
 `
+
 function Like() {
   const router = useRouter()
   const [selectedTab, setSelectedTab] = useState(SERIES_TYPE_TAB_LIST[0])
   const theme = useTheme()
   const { showToast } = useToast()
 
-  const { data: user } = useQuery({
+  const { data: user } = useQuery<User>({
     queryKey: ['user'],
     queryFn: async () => {
       const res = await getUser()
@@ -66,6 +68,17 @@ function Like() {
   const handleAddMyLibrary = () => {
     showToast({ message: '기록장에 추가했어요!' })
   }
+
+  const filterLikeSeriesList = useMemo(() => {
+    if (!isEmpty(user) && !isEmpty(user.likeSeries)) {
+      return user.likeSeries.filter(
+        (list: LikeSeries) => list.seriesType === selectedTab.value,
+      )
+    }
+
+    return []
+  }, [selectedTab.value, user])
+
   return (
     <LikeContainer>
       <TitleHeader title="찜한 작품" onClickBack={() => router.back()} />
@@ -88,9 +101,8 @@ function Like() {
               찜한 작품이 없어요.
             </EmptyBook>
           )}
-          {!isEmpty(user) &&
-            !isEmpty(user.likeSeries) &&
-            user.likeSeries.map((series: Series) => (
+          {!isEmpty(filterLikeSeriesList) &&
+            filterLikeSeriesList.map((series: Series) => (
               <>
                 <LikeBookWrapper key={series.hashId}>
                   <SeriesItem series={series} />
