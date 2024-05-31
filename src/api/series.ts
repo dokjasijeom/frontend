@@ -1,3 +1,4 @@
+import { SeriesType } from '../@types/series.d'
 import axiosInstance from './axiosInstance'
 
 interface GetSeriesParams {
@@ -15,6 +16,7 @@ interface NonExistRecordSeriesParams {
   author: string
   genre: string
   totalEpisode: number
+  seriesType: SeriesType
 }
 
 export const getSeriesList = (params?: GetSeriesParams) => {

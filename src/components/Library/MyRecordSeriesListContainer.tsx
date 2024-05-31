@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import styled from 'styled-components'
 import useModal from '@/hooks/useModal'
@@ -46,9 +46,15 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
   const queryClient = useQueryClient()
   const { showModal, closeModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
-  const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
+  const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] = useState(
     SERIES_TYPE_TAB_LIST[0],
   )
+
+  const filterRecordSeriesList = useMemo(() => {
+    return recordSeriesList.filter(
+      (list) => list.seriesType === selectedSeriesTypeTab.value,
+    )
+  }, [recordSeriesList, selectedSeriesTypeTab.value])
 
   const handleDeleteRecordSeries = (recordSeries: RecordSeries) => {
     showModal({
@@ -102,13 +108,13 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
           )
         }
         onClickMore={() => setIsEdit(!isEdit)}
-        selectedTab={selectedBookTypeTab}
-        onChangeTab={(tab: TabItem) => setSelectedBookTypeTab(tab)}
+        selectedTab={selectedSeriesTypeTab}
+        onChangeTab={(tab: TabItem) => setSelectedSeriesTypeTab(tab)}
       />
 
       <ListWrapper>
         {!isEmpty(recordSeriesList) ? (
-          recordSeriesList.map((recordSeries) => (
+          filterRecordSeriesList.map((recordSeries) => (
             <RecordSeriesListItem
               recordSeries={recordSeries}
               key={recordSeries.id}

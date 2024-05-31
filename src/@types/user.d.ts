@@ -28,6 +28,7 @@ export interface RecordSeries {
   totalEpisode: number
   recordEpisodeCount: number
   recordEpisodes: RecordEpisode[]
+  seriesType: SeriesType
 }
 
 export interface RecordEpisode {

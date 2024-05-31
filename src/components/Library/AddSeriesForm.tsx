@@ -102,11 +102,11 @@ function AddSeriesForm(props: AddSeriesFormProps) {
 
   const handleAddNonExistSeries = async () => {
     const params = {
-      seriesType: watchSeriesType?.value,
       title: watchTitle,
       author: watchAuthor,
       genre: watchGenre,
       totalEpisode: Number(watchTotalEpisode),
+      seriesType: watchSeriesType?.value,
     }
 
     await nonExistRecordSeries(params).then(() => {
