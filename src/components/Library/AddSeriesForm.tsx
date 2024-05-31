@@ -3,8 +3,11 @@ import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import { nonExistRecordSeries } from '@/api/series'
 import { useQueryClient } from '@tanstack/react-query'
+import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
+import { isEmpty } from 'lodash'
 import Input from '../common/Input/Input'
 import Button from '../common/Button/Button'
+import Selector, { OptionItem } from '../common/Selector/Selector'
 
 const AddSeriesFormWrapper = styled.div`
   width: 100%;
@@ -30,11 +33,20 @@ interface AddSeriesFormProps {
   onCloseModal: () => void
 }
 
+interface FormValues {
+  seriesType: OptionItem | null
+  title: string
+  author: string
+  genre: string
+  totalEpisode: string
+}
+
 function AddSeriesForm(props: AddSeriesFormProps) {
   const { keyword, onCloseModal } = props
   const queryClient = useQueryClient()
-  const { register, setValue, formState, watch } = useForm({
+  const { register, setValue, formState, watch } = useForm<FormValues>({
     defaultValues: {
+      seriesType: null,
       title: keyword,
       author: '',
       genre: '',
@@ -42,6 +54,7 @@ function AddSeriesForm(props: AddSeriesFormProps) {
     },
   })
 
+  const watchSeriesType = watch('seriesType')
   const watchTitle = watch('title')
   const watchAuthor = watch('author')
   const watchGenre = watch('genre')
@@ -55,6 +68,12 @@ function AddSeriesForm(props: AddSeriesFormProps) {
   }
 
   useEffect(() => {
+    register('seriesType', {
+      required: {
+        value: true,
+        message: '시리즈 타입을 선택해주세요.',
+      },
+    })
     register('title', {
       required: {
         value: true,
@@ -80,13 +99,16 @@ function AddSeriesForm(props: AddSeriesFormProps) {
       },
     })
   }, [register])
+
   const handleAddNonExistSeries = async () => {
     const params = {
+      seriesType: watchSeriesType?.value,
       title: watchTitle,
       author: watchAuthor,
       genre: watchGenre,
       totalEpisode: Number(watchTotalEpisode),
     }
+
     await nonExistRecordSeries(params).then(() => {
       queryClient.invalidateQueries({ queryKey: ['user'] })
       onCloseModal()
@@ -96,6 +118,14 @@ function AddSeriesForm(props: AddSeriesFormProps) {
   return (
     <AddSeriesFormWrapper>
       <form className="add_book_form_wrapper">
+        <Selector
+          {...register('seriesType')}
+          value={isEmpty(watchSeriesType) ? '선택' : watchSeriesType.label}
+          options={SERIES_TYPE_TAB_LIST}
+          onClickOption={(option: OptionItem) => {
+            setValue('seriesType', option, { shouldValidate: true })
+          }}
+        />
         <div className="form_item">
           <div className="label">제목</div>
           <Input
