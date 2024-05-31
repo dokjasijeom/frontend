@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { isEmpty } from 'lodash'
 import { RecordSeries } from '@/@types/user'
+import { Provider } from '@/@types/series'
 import Icons from '../common/Icons/Icons'
 import Button from '../common/Button/Button'
 
@@ -153,6 +154,28 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
     return (current / total) * 100
   }
 
+  const authorGenreText = useMemo(() => {
+    let authorText = ''
+    let genreText = ''
+
+    if (!isEmpty(recordSeries) && !isEmpty(recordSeries.series)) {
+      authorText = recordSeries.series.authors
+        ? recordSeries.series.authors.map((value) => value.name).join('/')
+        : ''
+      genreText = recordSeries.series.genres
+        ? recordSeries.series.genres.map((value) => value.name).join('/')
+        : ''
+    }
+
+    if (!isEmpty(recordSeries) && recordSeries.author && recordSeries.genre) {
+      authorText = recordSeries.author
+      genreText = recordSeries.genre
+    }
+
+    const result = authorText.concat(' · ', genreText)
+    return result
+  }, [recordSeries])
+
   return (
     <RecordSeriesListItemWrapper>
       <ReadingItem
@@ -177,21 +200,19 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
                 {!isEmpty(recordSeries.series)
                   ? recordSeries.series.title
                   : recordSeries.title}
-                {/* <span>
-                  {book.author}
-                  {book.genre ? ` · ${book.genre}` : ''}
-                </span> */}
+                <span>{authorGenreText}</span>
               </div>
               <div className="platform_wrapper">
-                {/* {book.platforms.map((platform: any) => (
-                  <Image
-                    key={platform.value}
-                    src={`/images/${platform.value}.png`}
-                    alt={platform.value}
-                    width={20}
-                    height={20}
-                  />
-                ))} */}
+                {!isEmpty(recordSeries.series) &&
+                  recordSeries.series.providers.map((provider: Provider) => (
+                    <Image
+                      key={provider.hashId}
+                      src={`/images/${provider.name}.png`}
+                      alt={provider.name}
+                      width={20}
+                      height={20}
+                    />
+                  ))}
               </div>
             </div>
             <div className="series_count_wrapper">
