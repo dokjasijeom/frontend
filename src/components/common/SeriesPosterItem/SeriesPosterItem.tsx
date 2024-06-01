@@ -8,17 +8,35 @@ import Badge from '../Badge/Badge'
 import Icons from '../Icons/Icons'
 
 const SeriesPosterItemWrapper = styled.div`
+  width: 100%;
   padding: 20px;
   display: flex;
   flex-direction: row;
   gap: 18px;
+
+  @media (max-width: 400px) {
+    gap: 12px;
+  }
   .thumbnail_wrapper {
+    display: flex;
     flex-shrink: 0;
     width: 140px;
     height: 200px;
     border-radius: 12px;
     overflow: hidden;
     position: relative;
+    img {
+      width: 100%;
+      height: auto !important;
+      position: relative !important;
+      object-fit: cover;
+    }
+
+    @media (max-width: 400px) {
+      width: 117px;
+      height: 166px;
+    }
+
     .type_badge {
       position: absolute;
       top: 12px;
@@ -27,13 +45,14 @@ const SeriesPosterItemWrapper = styled.div`
     }
   }
   .series_info_wrapper {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
-    height: 200px;
+    overflow: hidden;
 
     .series_info {
+      width: 100%;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -47,6 +66,11 @@ const SeriesPosterItemWrapper = styled.div`
         gap: 8px;
       }
       .title {
+        width: calc(100% - 12 px);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
         ${({ theme }) => theme.typography.head1};
         color: ${({ theme }) => theme.color.gray[950]};
       }
@@ -105,7 +129,7 @@ function SeriesPosterItem(props: SeriesPosterItemProps) {
             }
             color={theme.color.gray[950]}
           />
-          <Image src={series.thumbnail} width={140} height={200} alt="" />
+          <Image src={series.thumbnail} fill alt="" />
         </div>
       )}
       <div className="series_info_wrapper">

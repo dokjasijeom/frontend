@@ -31,13 +31,17 @@ const LibraryDetailContainer = styled.div`
 const MySeriesInfoWrapper = styled.div`
   display: flex;
   position: relative;
+  width: 100%;
 
   .series_edit_wrapper {
   }
   .record_button {
     position: absolute;
-    bottom: 40px;
-    left: 198px;
+    bottom: 20px;
+
+    @media (max-width: 400px) {
+      left: 149px !important;
+    }
   }
 `
 
@@ -92,6 +96,10 @@ const RecordDetail = styled.div`
     display: flex;
     gap: 4px;
     flex-wrap: wrap;
+
+    @media (max-width: 400px) {
+      padding: 9px;
+    }
 
     .empty_episodes {
       height: 234px;
@@ -374,7 +382,7 @@ function LibraryDetail({
               <Button
                 type="text"
                 width="auto"
-                style={{ position: 'absolute', right: '60px' }}
+                style={{ position: 'absolute', top: '20px', right: '60px' }}
                 onClick={handleEditModal}
               >
                 편집
@@ -383,17 +391,16 @@ function LibraryDetail({
             <Button
               type="text"
               width="auto"
-              style={{ position: 'absolute', right: '20px' }}
+              style={{ position: 'absolute', top: '20px', right: '20px' }}
               onClick={handleDeleteModal}
             >
               삭제
             </Button>
           </div>
           <Button
+            className="record_button"
             width="95px"
             style={{
-              position: 'absolute',
-              bottom: '20px',
               left: !isNonExistSeries ? '178px' : '20px',
             }}
             onClick={handleRecordModal}

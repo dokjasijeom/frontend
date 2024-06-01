@@ -73,6 +73,7 @@ interface ButtonProps {
   width?: string
   height?: string
   style?: CSSProperties
+  className?: string
 }
 
 function Button(props: ButtonProps) {
@@ -84,12 +85,13 @@ function Button(props: ButtonProps) {
     width = '100%',
     height = 'auto',
     style,
+    className,
   } = props
 
   return (
     <ButtonContainer
       type="button"
-      className={type}
+      className={`${className} ${type}`}
       onClick={onClick}
       disabled={disabled}
       width={width}
