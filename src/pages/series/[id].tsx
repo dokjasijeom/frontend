@@ -1,12 +1,19 @@
 import { IParams } from '@/@types/interface'
 import { Provider, Series } from '@/@types/series'
 import { User } from '@/@types/user'
-import { deleteLikeSeries, getSeries, setLikeSeries } from '@/api/series'
+import {
+  deleteLikeSeries,
+  deleteRecordSeries,
+  getSeries,
+  recordSeries,
+  setLikeSeries,
+} from '@/api/series'
 import { getUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
+import useToast from '@/hooks/useToast'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
@@ -25,6 +32,9 @@ const SeriesInfoWrapper = styled.div`
   position: relative;
   padding: 20px;
   display: flex;
+  @media (max-width: 400px) {
+    padding: 20px 20px 78px;
+  }
   .series_image {
     border-radius: 12px;
     margin-right: 20px;
@@ -82,8 +92,16 @@ const SeriesInfoWrapper = styled.div`
     }
 
     .action_button_wrapper {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto 1fr;
       gap: 8px;
+
+      @media (max-width: 400px) {
+        width: calc(100% - 40px);
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+      }
       .button_body {
         display: flex;
         flex-shrink: 0;
@@ -92,14 +110,6 @@ const SeriesInfoWrapper = styled.div`
       }
     }
   }
-`
-
-const RequestButton = styled.button`
-  position: absolute;
-  right: 20px;
-  ${({ theme }) => theme.typography.body4};
-  color: ${({ theme }) => theme.color.gray[600]};
-  text-decoration: underline;
 `
 
 const SeriesDetailBodyWrapper = styled.div``
@@ -146,6 +156,7 @@ function SeriesDetail({
   const theme = useTheme()
 
   const queryClient = useQueryClient()
+  const { showToast } = useToast()
 
   const { data: series } = useQuery<Series>({
     queryKey: ['seriesDetail'],
@@ -183,6 +194,33 @@ function SeriesDetail({
 
   const handleLikeSeries = async () => {
     seriesLikeMutation.mutate()
+  }
+
+  const isUserRecordSeries = useMemo(() => {
+    if (!isEmpty(user) && !isEmpty(series)) {
+      return user?.recordSeries.find(
+        (item) => item.series?.hashId === series.hashId,
+      )
+    }
+    return false
+  }, [series, user])
+
+  const handleAddMyLibrary = async () => {
+    if (!isEmpty(series)) {
+      if (isUserRecordSeries) {
+        await deleteRecordSeries(series.hashId).then(() => {
+          showToast({ message: '기록장에서 삭제했어요.' })
+          queryClient.invalidateQueries({ queryKey: ['seriesDetail'] })
+          queryClient.invalidateQueries({ queryKey: ['user'] })
+        })
+      } else {
+        await recordSeries(series.hashId).then(() => {
+          showToast({ message: '기록장에 추가했어요!' })
+          queryClient.invalidateQueries({ queryKey: ['seriesDetail'] })
+          queryClient.invalidateQueries({ queryKey: ['user'] })
+        })
+      }
+    }
   }
 
   return (
@@ -247,20 +285,29 @@ function SeriesDetail({
                     {series.likeCount ? series.likeCount.toLocaleString() : 0}
                   </div>
                 </Button>
-                <Button type="secondary" width="auto">
+                <Button
+                  width="auto"
+                  type={isUserRecordSeries ? 'primary' : 'secondary'}
+                  onClick={handleAddMyLibrary}
+                >
                   <div className="button_body">
                     <Icons
-                      name="Plus"
                       width="20px"
                       height="20px"
-                      color={theme.color.main[600]}
+                      name={isUserRecordSeries ? 'OpenedBook' : 'Plus'}
+                      color={
+                        isUserRecordSeries
+                          ? theme.color.system.w
+                          : theme.color.main[600]
+                      }
                     />
-                    내 서재에 추가하기
+                    {isUserRecordSeries
+                      ? '읽고 있는 작품'
+                      : '내 서재에 추가하기'}
                   </div>
                 </Button>
               </div>
             </div>
-            <RequestButton>정보 수정 요청</RequestButton>
           </SeriesInfoWrapper>
           <SeriesDetailBodyWrapper>
             <SectionTitle>줄거리</SectionTitle>

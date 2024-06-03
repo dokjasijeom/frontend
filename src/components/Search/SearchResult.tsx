@@ -22,7 +22,7 @@ const SearchResultWrapper = styled.div`
   margin-top: 20px;
 `
 
-const BookItemWrapper = styled.div`
+const SeriesItemWrapper = styled.div`
   background: ${({ theme }) => theme.color.gray[50]};
   border-radius: 12px;
 `
@@ -51,12 +51,13 @@ function SearchResult(props: SearchResultProps) {
       <SectionTitle>{`‘${keyword}’ 검색 결과`}</SectionTitle>
       <SearchResultWrapper>
         {searchList.map((series) => (
-          <BookItemWrapper key={series.hashId}>
+          <SeriesItemWrapper key={series.hashId}>
             <SeriesPosterItem
+              typeBadge
               series={series}
               onClick={() => router.push(`/series/${series.hashId}`)}
             />
-          </BookItemWrapper>
+          </SeriesItemWrapper>
         ))}
       </SearchResultWrapper>
     </SearchResultContainer>

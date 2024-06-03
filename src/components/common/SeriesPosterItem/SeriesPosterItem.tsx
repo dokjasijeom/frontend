@@ -38,6 +38,7 @@ const SeriesPosterItemWrapper = styled.div`
     }
 
     .type_badge {
+      z-index: 1;
       position: absolute;
       top: 12px;
       left: 12px;
@@ -92,10 +93,11 @@ const SeriesPosterItemWrapper = styled.div`
 interface SeriesPosterItemProps {
   series: Series
   onClick?: () => void
+  typeBadge?: boolean
 }
 
 function SeriesPosterItem(props: SeriesPosterItemProps) {
-  const { series, onClick } = props
+  const { series, onClick, typeBadge = false } = props
   const theme = useTheme()
 
   const authorGenreText = useMemo(() => {
@@ -122,13 +124,15 @@ function SeriesPosterItem(props: SeriesPosterItemProps) {
     >
       {!isEmpty(series.thumbnail) && (
         <div className="thumbnail_wrapper">
-          <Badge
-            className="type_badge"
-            value={
-              series.seriesType === WEBNOVEL ? WEBNOVEL_TEXT : WEBTOON_TEXT
-            }
-            color={theme.color.gray[950]}
-          />
+          {typeBadge && (
+            <Badge
+              className="type_badge"
+              value={
+                series.seriesType === WEBNOVEL ? WEBNOVEL_TEXT : WEBTOON_TEXT
+              }
+              color={theme.color.gray[950]}
+            />
+          )}
           <Image src={series.thumbnail} fill alt="" />
         </div>
       )}
