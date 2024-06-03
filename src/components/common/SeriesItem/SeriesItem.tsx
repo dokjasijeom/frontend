@@ -1,6 +1,7 @@
 import { Series } from '@/@types/series'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -55,6 +56,7 @@ interface SeriesItemProps {
 
 function SeriesItem(props: SeriesItemProps) {
   const { series } = props
+  const router = useRouter()
 
   const authorGenreText = useMemo(() => {
     const authorText = series.authors
@@ -69,7 +71,7 @@ function SeriesItem(props: SeriesItemProps) {
   }, [series])
 
   return (
-    <SeriesItemWrapper>
+    <SeriesItemWrapper onClick={() => router.push(`/series/${series.hashId}`)}>
       {!isEmpty(series?.thumbnail) && (
         <Image
           unoptimized

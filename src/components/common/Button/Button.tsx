@@ -10,6 +10,7 @@ const ButtonContainer = styled.button<{ width: string; height: string }>`
   justify-content: center;
   ${({ theme }) => theme.typography.head2};
   border-radius: 12px;
+  box-sizing: border-box;
   &.primary {
     background: ${({ theme }) => theme.color.main[600]};
     color: ${({ theme }) => theme.color.system.w};

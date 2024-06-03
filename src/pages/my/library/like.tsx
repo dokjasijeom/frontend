@@ -8,7 +8,7 @@ import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { MockMyBook } from '@/constants/MockData'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import useToast from '@/hooks/useToast'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -17,6 +17,7 @@ import styled, { useTheme } from 'styled-components'
 import SeriesItem from '@/components/common/SeriesItem/SeriesItem'
 import { Series } from '@/@types/series'
 import { LikeSeries, User } from '@/@types/user'
+import { recordSeries } from '@/api/series'
 
 const LikeContainer = styled.div``
 
@@ -67,6 +68,7 @@ function Like() {
   const [selectedTab, setSelectedTab] = useState(SERIES_TYPE_TAB_LIST[0])
   const theme = useTheme()
   const { showToast } = useToast()
+  const queryClient = useQueryClient()
 
   const { data: user } = useQuery<User>({
     queryKey: ['user'],
@@ -76,8 +78,11 @@ function Like() {
     },
   })
 
-  const handleAddMyLibrary = () => {
-    showToast({ message: '기록장에 추가했어요!' })
+  const handleAddMyLibrary = async (series: Series) => {
+    await recordSeries(series.hashId).then(() => {
+      showToast({ message: '기록장에 추가했어요!' })
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+    })
   }
 
   const filterLikeSeriesList = useMemo(() => {
@@ -113,32 +118,45 @@ function Like() {
             </EmptyBook>
           )}
           {!isEmpty(filterLikeSeriesList) &&
-            filterLikeSeriesList.map((series: Series) => (
-              <>
-                <LikeBookWrapper key={series.hashId}>
-                  <SeriesItem series={series} />
-                  <Button
-                    width="auto"
-                    type="secondary"
-                    onClick={handleAddMyLibrary}
-                  >
-                    <div className="add_button_body">
-                      <Icons
-                        width="20px"
-                        height="20px"
-                        name="Plus"
-                        color={theme.color.main[600]}
-                      />
-                      내 서재에 추가하기
-                    </div>
-                  </Button>
-                </LikeBookWrapper>
-                <Divider
-                  color={theme.color.gray[100]}
-                  style={{ margin: '8px 0' }}
-                />
-              </>
-            ))}
+            filterLikeSeriesList.map((series: Series) => {
+              const isUserRecordSeries = user?.recordSeries.find(
+                (item) => item.series?.hashId === series.hashId,
+              )
+
+              return (
+                <>
+                  <LikeBookWrapper key={series.hashId}>
+                    <SeriesItem series={series} />
+                    <Button
+                      style={{ minWidth: '180px' }}
+                      width="auto"
+                      type={isUserRecordSeries ? 'primary' : 'secondary'}
+                      onClick={() => handleAddMyLibrary(series)}
+                    >
+                      <div className="add_button_body">
+                        <Icons
+                          width="20px"
+                          height="20px"
+                          name={isUserRecordSeries ? 'OpenedBook' : 'Plus'}
+                          color={
+                            isUserRecordSeries
+                              ? theme.color.system.w
+                              : theme.color.main[600]
+                          }
+                        />
+                        {isUserRecordSeries
+                          ? '읽고 있는 작품'
+                          : '내 서재에 추가하기'}
+                      </div>
+                    </Button>
+                  </LikeBookWrapper>
+                  <Divider
+                    color={theme.color.gray[100]}
+                    style={{ margin: '8px 0' }}
+                  />
+                </>
+              )
+            })}
         </LikeBookListWrapper>
       </LikeWrapper>
     </LikeContainer>
