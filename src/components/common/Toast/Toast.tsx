@@ -3,7 +3,7 @@ import styled, { useTheme } from 'styled-components'
 import Icons from '../Icons/Icons'
 
 const ToastWrapper = styled.div`
-  z-index: 11;
+  z-index: 102;
   width: max-content;
   border-radius: 20px;
   padding: 8px 20px;
@@ -59,6 +59,7 @@ interface ToastProps {
 
 function Toast(props: ToastProps) {
   const { type = 'success', message } = props
+
   const theme = useTheme()
   return (
     <ToastWrapper className={type}>

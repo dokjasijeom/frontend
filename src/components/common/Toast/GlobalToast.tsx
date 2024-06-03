@@ -30,7 +30,7 @@ function GlobalToast() {
   const renderComponent = () => {
     if (!toast.message || !showToast) return null
 
-    return <Toast message={toast.message} />
+    return <Toast message={toast.message} type={toast.type} />
   }
   return <>{renderComponent()}</>
 }

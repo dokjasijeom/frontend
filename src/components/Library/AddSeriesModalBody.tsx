@@ -8,7 +8,7 @@ import { getSearchAutoComplete } from '@/api/search'
 import { getSeries, recordSeries } from '@/api/series'
 import { Series } from '@/@types/series'
 import { useQueryClient } from '@tanstack/react-query'
-import useModal from '@/hooks/useModal'
+import useToast from '@/hooks/useToast'
 import Input from '../common/Input/Input'
 import Icons from '../common/Icons/Icons'
 import Badge from '../common/Badge/Badge'
@@ -136,7 +136,7 @@ function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
 
   const debounceSearch = useDebounce(keyword, 200)
   const queryClient = useQueryClient()
-  const { showModal } = useModal()
+  const { showToast } = useToast()
 
   const handleChangeSearch = (value: string) => {
     setKeyword(value)
@@ -191,19 +191,13 @@ function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
     if (!isEmpty(selectedSeries)) {
       await recordSeries(selectedSeries?.hashId)
         .then(() => {
-          showModal({
-            title: '읽고 있는 작품 추가 완료',
-            body: `${selectedSeries.title} 작품이 추가 완료되었습니다.`,
-          })
+          showToast({ message: '기록장에 추가했어요!' })
 
           queryClient.invalidateQueries({ queryKey: ['user'] })
         })
         .catch((error) => {
           if (error.response.status === 400) {
-            showModal({
-              title: '오류',
-              body: `이미 추가 완료된 작품입니다.`,
-            })
+            showToast({ message: '이미 추가된 작품입니다', type: 'error' })
           }
         })
     }
