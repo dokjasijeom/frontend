@@ -137,9 +137,24 @@ const DeleteBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: row;
+  @media (max-width: 400px) {
+    flex-direction: column;
+
+    .selected_info {
+      width: 100%;
+    }
+
+    .delete_button {
+      width: 100%;
+      margin-top: 8px;
+    }
+  }
+
   .selected_info {
     display: flex;
     align-items: center;
+    text-align: left;
     gap: 8px;
     ${({ theme }) => theme.typography.head2};
     color: ${({ theme }) => theme.color.system.w};
