@@ -21,7 +21,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useMemo, useState } from 'react'
+import React, { ReactElement, useEffect, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const LibraryDetailContainer = styled.div`
@@ -227,13 +227,20 @@ function LibraryDetail({
   const debounceSearch = useDebounce(search, 200)
   const queryClient = useQueryClient()
 
-  const { data: mySeries } = useQuery<RecordSeries>({
+  const { data: mySeries, isError } = useQuery<RecordSeries>({
     queryKey: ['mySeriesDetail'],
     queryFn: async () => {
       const res = await getMySeries(id)
       return res.data.data
     },
+    retry: 0,
   })
+
+  useEffect(() => {
+    if (isError) {
+      router.push('/my/library')
+    }
+  }, [isError, mySeries, router])
 
   const lastRecordEpisode = useMemo(() => {
     if (isEmpty(mySeries)) return null

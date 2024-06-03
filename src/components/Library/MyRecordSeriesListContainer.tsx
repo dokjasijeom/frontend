@@ -113,7 +113,7 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
       />
 
       <ListWrapper>
-        {!isEmpty(recordSeriesList) ? (
+        {!isEmpty(filterRecordSeriesList) ? (
           filterRecordSeriesList.map((recordSeries) => (
             <RecordSeriesListItem
               recordSeries={recordSeries}
