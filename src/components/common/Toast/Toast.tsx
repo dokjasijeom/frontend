@@ -4,6 +4,7 @@ import Icons from '../Icons/Icons'
 
 const ToastWrapper = styled.div`
   z-index: 11;
+  width: max-content;
   border-radius: 20px;
   padding: 8px 20px;
   display: flex;

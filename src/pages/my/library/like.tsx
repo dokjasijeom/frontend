@@ -39,7 +39,10 @@ const EmptyBook = styled.div`
 `
 
 const LikeBookWrapper = styled.div`
-  display: flex;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
   padding: 12px;
   justify-content: space-between;
   align-items: center;
@@ -48,6 +51,14 @@ const LikeBookWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 4px;
+  }
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    width: 100%;
+    button {
+      width: 100%;
+    }
   }
 `
 
