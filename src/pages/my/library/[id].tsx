@@ -2,7 +2,7 @@ import { IParams } from '@/@types/interface'
 import { Platform } from '@/@types/platform'
 import { RecordEpisode, RecordSeries } from '@/@types/user'
 import { deleteNonExistRecordSeries, deleteRecordSeries } from '@/api/series'
-import { getMySeries } from '@/api/user'
+import { deleteRecordEpisode, getMySeries } from '@/api/user'
 import AddSeriesForm from '@/components/Library/AddSeriesForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
@@ -17,7 +17,7 @@ import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import useDebounce from '@/hooks/useDebounce'
 import useModal from '@/hooks/useModal'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
@@ -225,6 +225,7 @@ function LibraryDetail({
   const [selectedProvider, setSelectedProvider] = useState<Platform[]>([])
 
   const debounceSearch = useDebounce(search, 200)
+  const queryClient = useQueryClient()
 
   const { data: mySeries } = useQuery<RecordSeries>({
     queryKey: ['mySeriesDetail'],
@@ -241,8 +242,6 @@ function LibraryDetail({
 
     return recordEpisodes[recordEpisodes.length - 1]
   }, [mySeries])
-
-  console.log(lastRecordEpisode)
 
   const isNonExistSeries = useMemo(() => {
     if (!isEmpty(mySeries) && !isEmpty(mySeries.series)) {
@@ -294,6 +293,35 @@ function LibraryDetail({
       title: '편집',
       type: 'self',
       body: <AddSeriesForm keyword="" onCloseModal={closeModal} />,
+    })
+  }
+
+  const handleDeleteEpisodeModal = () => {
+    showModal({
+      title: '기록 삭제',
+      body: (
+        <>
+          삭제한 기록은 되돌릴 수 없어요. <br />
+          정말 삭제할까요?
+        </>
+      ),
+      positiveText: '삭제',
+      onPositiveClick: async () => {
+        if (!isEmpty(mySeries)) {
+          const recordIds = selectedEpisodes.map(
+            (ep: RecordEpisode) => ep.id,
+          ) as number[]
+
+          const params = {
+            userRecordSeriesId: mySeries.id,
+            recordIds,
+          }
+          await deleteRecordEpisode(params).then(() => {
+            queryClient.invalidateQueries({ queryKey: ['mySeriesDetail'] })
+            setSelectedEpisodes([])
+          })
+        }
+      },
     })
   }
 
@@ -508,7 +536,7 @@ function LibraryDetail({
                     className="delete_button"
                     onClick={() => {
                       if (!isEmpty(selectedEpisodes)) {
-                        handleDeleteModal()
+                        handleDeleteEpisodeModal()
                       } else {
                         setIsEdit(false)
                       }

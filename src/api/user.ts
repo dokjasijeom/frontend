@@ -17,6 +17,10 @@ interface RecordSeriesEpisodeParams {
   from: number
   to: number
 }
+interface DeleteRecordEpisodeParams {
+  userRecordSeriesId: number
+  recordIds: number[]
+}
 
 export const setUser = (params: SetUserParams) => {
   return axiosInstance.post('/users', params)
@@ -36,4 +40,10 @@ export const getMySeries = (id: string) => {
 
 export const recordSeriesEpisode = (params: RecordSeriesEpisodeParams) => {
   return axiosInstance.post('/user/series/record', params)
+}
+
+export const deleteRecordEpisode = (params: DeleteRecordEpisodeParams) => {
+  return axiosInstance.delete('/user/series/record', {
+    data: params,
+  })
 }
