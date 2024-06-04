@@ -277,7 +277,9 @@ function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
                     height="16px"
                     color={theme.color.main[600]}
                   />
-                  {selectedSeries.likeCount}
+                  {selectedSeries.likeCount
+                    ? selectedSeries.likeCount.toLocaleString()
+                    : 0}
                 </div>
               </div>
             </SeriesInfoWrapper>
