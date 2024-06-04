@@ -89,29 +89,6 @@ const RecordDetail = styled.div`
   .episodes_search_wrapper {
     padding: 12px 0;
   }
-  .episodes_wrapper {
-    padding: 10px;
-    background: ${({ theme }) => theme.color.gray[50]};
-    border-radius: 12px;
-    gap: 4px;
-
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
-
-    @media (max-width: 400px) {
-      padding: 9px;
-    }
-
-    .empty_episodes {
-      height: 234px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      ${({ theme }) => theme.typography.body2};
-      color: ${({ theme }) => theme.color.gray[800]};
-    }
-  }
 `
 const EpisodeBox = styled.div<{ provider: string }>`
   cursor: pointer;
@@ -132,6 +109,7 @@ const EpisodeBox = styled.div<{ provider: string }>`
 `
 
 const DeleteBox = styled.div`
+  margin-bottom: 4px;
   padding: 12px;
   background: ${({ theme }) => theme.color.gray[950]};
   border-radius: 4px;
@@ -211,6 +189,31 @@ const NonExistSeriesInfoWrapper = styled.div`
       gap: 4px;
       ${({ theme }) => theme.typography.body2};
       color: ${({ theme }) => theme.color.main[600]};
+    }
+  }
+`
+
+const RecordEpisodesWrapper = styled.div`
+  padding: 10px;
+  background: ${({ theme }) => theme.color.gray[50]};
+  border-radius: 12px;
+  @media (max-width: 400px) {
+    padding: 9px;
+  }
+
+  .episodes_wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+    gap: 4px;
+
+    .empty_episodes {
+      height: 234px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      ${({ theme }) => theme.typography.body2};
+      color: ${({ theme }) => theme.color.gray[800]};
     }
   }
 `
@@ -528,7 +531,7 @@ function LibraryDetail({
                 onChange={(e) => handleChangeSearch(e.target.value)}
               />
             </div>
-            <div className="episodes_wrapper">
+            <RecordEpisodesWrapper>
               {(!isEmpty(selectedEpisodes) || isEdit) && (
                 <DeleteBox>
                   <div className="selected_info">
@@ -555,25 +558,27 @@ function LibraryDetail({
                   </button>
                 </DeleteBox>
               )}
-              {isEmpty(filteredEpisodes) &&
-                mySeries?.recordEpisodeCount === 0 && (
-                  <div className="empty_episodes">기록된 회차가 없어요.</div>
-                )}
-              {filteredEpisodes.map((episode) => (
-                <EpisodeBox
-                  className={
-                    selectedEpisodes.find((item) => item.id === episode.id)
-                      ? 'active'
-                      : ''
-                  }
-                  provider={episode.providerName}
-                  key={episode.id}
-                  onClick={() => handleClickEpisode(episode)}
-                >
-                  {episode.episodeNumber}
-                </EpisodeBox>
-              ))}
-            </div>
+              <div className="episodes_wrapper">
+                {isEmpty(filteredEpisodes) &&
+                  mySeries?.recordEpisodeCount === 0 && (
+                    <div className="empty_episodes">기록된 회차가 없어요.</div>
+                  )}
+                {filteredEpisodes.map((episode) => (
+                  <EpisodeBox
+                    className={
+                      selectedEpisodes.find((item) => item.id === episode.id)
+                        ? 'active'
+                        : ''
+                    }
+                    provider={episode.providerName}
+                    key={episode.id}
+                    onClick={() => handleClickEpisode(episode)}
+                  >
+                    {episode.episodeNumber}
+                  </EpisodeBox>
+                ))}
+              </div>
+            </RecordEpisodesWrapper>
           </RecordDetail>
         </RecordDetailWrapper>
       </>
