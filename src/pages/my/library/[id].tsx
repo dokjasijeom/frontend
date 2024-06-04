@@ -93,9 +93,10 @@ const RecordDetail = styled.div`
     padding: 10px;
     background: ${({ theme }) => theme.color.gray[50]};
     border-radius: 12px;
-    display: flex;
     gap: 4px;
-    flex-wrap: wrap;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
 
     @media (max-width: 400px) {
       padding: 9px;
@@ -115,8 +116,9 @@ const RecordDetail = styled.div`
 const EpisodeBox = styled.div<{ provider: string }>`
   cursor: pointer;
   ${({ theme }) => theme.typography.body4};
-  width: 30px;
-  height: 30px;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
   background: ${({ theme, provider }) => theme.color.system[provider]};
   color: ${({ theme }) => theme.color.system.w};
   border-radius: 4px;
