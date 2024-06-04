@@ -53,7 +53,13 @@ const CategoryFilterWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row;
 
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
   .platform_wrapper {
     display: flex;
     gap: 12px;
