@@ -11,6 +11,7 @@ import Checkbox from '@/components/common/Checkbox/Checkbox'
 import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
 import SeriesPosterItem from '@/components/common/SeriesPosterItem/SeriesPosterItem'
+import Skeleton from '@/components/common/Skeleton/Skeleton'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
@@ -26,6 +27,16 @@ import styled, { useTheme } from 'styled-components'
 
 const LibraryDetailContainer = styled.div`
   padding-top: 56px;
+`
+
+const SkeletonWrapper = styled.div`
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  .skeleton_item_wrapper {
+    width: 100%;
+  }
 `
 
 const MySeriesInfoWrapper = styled.div`
@@ -405,6 +416,22 @@ function LibraryDetail({
     <LibraryDetailContainer>
       <TitleHeader title="읽고 있는 작품" onClickBack={() => router.back()} />
       <>
+        {isEmpty(mySeries) && (
+          <SkeletonWrapper>
+            <Skeleton width="140px" height="200px" style={{ flexShrink: 0 }} />
+            <div className="skeleton_item_wrapper">
+              <Skeleton width="120px" height="24px" />
+              <Skeleton
+                width="100px"
+                height="14px"
+                style={{ marginTop: '10px' }}
+              />
+              <Skeleton width="80px" height="14px" />
+              <Skeleton width="50px" height="14px" />
+              <Skeleton width="70px" height="14px" />
+            </div>
+          </SkeletonWrapper>
+        )}
         <MySeriesInfoWrapper>
           {!isEmpty(mySeries) && !isEmpty(mySeries.series) && (
             <SeriesPosterItem

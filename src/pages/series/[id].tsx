@@ -11,6 +11,7 @@ import {
 import { getUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Icons from '@/components/common/Icons/Icons'
+import Skeleton from '@/components/common/Skeleton/Skeleton'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import useToast from '@/hooks/useToast'
@@ -26,6 +27,15 @@ const SeriesDetailContainer = styled.div`
   padding-top: 56px;
 `
 
+const SkeletonWrapper = styled.div`
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+  .skeleton_item_wrapper {
+    width: 100%;
+  }
+`
 const SeriesDetailWrapper = styled.div``
 
 const SeriesInfoWrapper = styled.div`
@@ -226,7 +236,7 @@ function SeriesDetail({
   return (
     <SeriesDetailContainer>
       <TitleHeader title="" onClickBack={() => router.back()} isSearch />
-      {series && (
+      {series ? (
         <SeriesDetailWrapper>
           <SeriesInfoWrapper>
             {!isEmpty(series.thumbnail) && (
@@ -333,6 +343,21 @@ function SeriesDetail({
             </PlarformWrapper>
           </SeriesDetailBodyWrapper>
         </SeriesDetailWrapper>
+      ) : (
+        <SkeletonWrapper>
+          <Skeleton width="140px" height="200px" style={{ flexShrink: 0 }} />
+          <div className="skeleton_item_wrapper">
+            <Skeleton width="120px" height="24px" />
+            <Skeleton
+              width="100px"
+              height="14px"
+              style={{ marginTop: '10px' }}
+            />
+            <Skeleton width="80px" height="14px" />
+            <Skeleton width="50px" height="14px" />
+            <Skeleton width="70px" height="14px" />
+          </div>
+        </SkeletonWrapper>
       )}
     </SeriesDetailContainer>
   )

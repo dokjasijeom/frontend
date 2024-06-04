@@ -51,6 +51,12 @@ const SkeletonWrapper = styled.div`
     gap: 8px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 114px;
+
+    @media (max-width: 490px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: 68px 68px 68px;
+    }
   }
 `
 
@@ -78,7 +84,6 @@ function Library() {
   return (
     <LibraryContainer>
       <TitleHeader title="내 서재" onClickBack={() => router.back()} />
-
       {!isEmpty(user) ? (
         <MyInfoContainer user={user} />
       ) : (
@@ -87,9 +92,9 @@ function Library() {
           <Skeleton width="120px" style={{ marginTop: '20px' }} />
           <Skeleton width="110px" style={{ marginTop: '8px' }} />
           <div className="skeleton_item_wrapper">
-            <Skeleton width="100%" height="114px" />
-            <Skeleton width="100%" height="114px" style={{ marginTop: 0 }} />
-            <Skeleton width="100%" height="114px" style={{ marginTop: 0 }} />
+            <Skeleton width="100%" height="100%" />
+            <Skeleton width="100%" height="100%" style={{ marginTop: 0 }} />
+            <Skeleton width="100%" height="100%" style={{ marginTop: 0 }} />
           </div>
         </SkeletonWrapper>
       )}
