@@ -158,7 +158,11 @@ function MyInfoContainer(props: MyInfoContainerProps) {
         </div>
       </ProfileWrppaer>
       <MyContentsWrapper>
-        <Box>
+        <Box
+          onClick={() => {
+            router.push('/my/library/like')
+          }}
+        >
           <div className="title">
             <Icons
               name="HeartActive"
@@ -169,18 +173,16 @@ function MyInfoContainer(props: MyInfoContainerProps) {
             찜한 작품
           </div>
           <div className="box_content_wrapper">
-            <button
-              type="button"
-              className="count"
-              onClick={() => {
-                router.push('/my/library/like')
-              }}
-            >
+            <button type="button" className="count">
               {user.likeSeriesCount}
             </button>
           </div>
         </Box>
-        <Box>
+        <Box
+          onClick={() => {
+            router.push('/my/library/complete')
+          }}
+        >
           <div className="title">
             <Icons
               name="Book"
@@ -191,18 +193,12 @@ function MyInfoContainer(props: MyInfoContainerProps) {
             완독한 작품
           </div>
           <div className="box_content_wrapper">
-            <button
-              type="button"
-              className="count"
-              onClick={() => {
-                router.push('/my/library/complete')
-              }}
-            >
+            <button type="button" className="count">
               67
             </button>
           </div>
         </Box>
-        <Box>
+        <Box onClick={handleEditSubscribe}>
           <div className="title">
             <Icons
               name="Subscription"
@@ -214,7 +210,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
           </div>
           <div className="box_content_wrapper">
             {isEmpty(mySubscribtion) && (
-              <PlusButton onClick={handleEditSubscribe}>
+              <PlusButton>
                 <Icons name="Plus" width="20px" height="20px" />
               </PlusButton>
             )}
