@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 import Checkbox from '../common/Checkbox/Checkbox'
 import Divider from '../common/Divider/Divider'
 import Button from '../common/Button/Button'
@@ -37,6 +38,7 @@ const CheckboxLabelWrapper = styled.div`
   }
   .link {
     display: inline-block;
+    ${({ theme }) => theme.typography.head3};
     color: ${({ theme }) => theme.color.main[600]};
     cursor: pointer;
   }
@@ -46,9 +48,10 @@ interface TermOfUseProps {
   onNextStep: () => void
 }
 
-function TermOfUseContainer(props: TermOfUseProps) {
+function TermsOfUseContainer(props: TermOfUseProps) {
   const { onNextStep } = props
   const theme = useTheme()
+  const router = useRouter()
 
   const { register, setValue, watch } = useForm({
     defaultValues: {
@@ -111,7 +114,15 @@ function TermOfUseContainer(props: TermOfUseProps) {
                 setValue('reason1', !watchReason1)
               }}
             >
-              [필수] <div className="link">이용약관</div>에 동의합니다.
+              [필수]
+              <button
+                type="button"
+                className="link"
+                onClick={() => router.push('/support/termsOfUse')}
+              >
+                이용약관
+              </button>
+              에 동의합니다.
             </Checkbox>
             {/* <div className="show_detail">보기</div> */}
           </CheckboxLabelWrapper>
@@ -148,4 +159,4 @@ function TermOfUseContainer(props: TermOfUseProps) {
   )
 }
 
-export default TermOfUseContainer
+export default TermsOfUseContainer

@@ -1,4 +1,4 @@
-import TermOfUseContainer from '@/components/Join/TermOfUseContainer'
+import TermsOfUseContainer from '@/components/Join/TermsOfUseContainer'
 import EmailJoinFormContainer from '@/components/Join/EmailJoinFormContainer'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
@@ -34,7 +34,7 @@ function Join() {
           }
         }}
       />
-      {step === 0 && <TermOfUseContainer onNextStep={handleNextStep} />}
+      {step === 0 && <TermsOfUseContainer onNextStep={handleNextStep} />}
       {step === 1 && <EmailJoinFormContainer />}
     </JoinContainer>
   )
