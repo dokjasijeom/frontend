@@ -53,10 +53,12 @@ const LikeBookWrapper = styled.div`
     align-items: center;
     gap: 4px;
   }
-  @media (max-width: 400px) {
+
+  @media (max-width: 490px) {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
     width: 100%;
+    padding: 12px 0;
     button {
       width: 100%;
     }

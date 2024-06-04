@@ -19,6 +19,11 @@ const SeriesItemWrapper = styled.div`
     object-fit: cover;
     border-radius: 4px;
     flex-shrink: 0;
+
+    @media (max-width: 490px) {
+      width: 60px;
+      height: 60px;
+    }
   }
 
   .series_info_wrapper {
@@ -31,6 +36,7 @@ const SeriesItemWrapper = styled.div`
       display: flex;
       flex-direction: column;
       gap: 5px;
+
       .series_title {
         align-items: center;
         ${({ theme }) => theme.typography.body1};
@@ -40,6 +46,13 @@ const SeriesItemWrapper = styled.div`
           margin-left: 12px;
           ${({ theme }) => theme.typography.body5};
           color: ${({ theme }) => theme.color.gray[800]};
+        }
+
+        @media (max-width: 490px) {
+          span {
+            margin: 0;
+            display: block;
+          }
         }
       }
       .platform_wrapper {

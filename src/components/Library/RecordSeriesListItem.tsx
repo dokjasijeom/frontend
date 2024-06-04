@@ -25,6 +25,10 @@ const ReadingItem = styled.div`
   position: relative;
   cursor: pointer;
   height: 74px;
+
+  @media (max-width: 490px) {
+    padding: 12px;
+  }
 `
 
 const SeriesItemWrapper = styled.div`
