@@ -197,7 +197,10 @@ function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
         })
         .catch((error) => {
           if (error.response.status === 400) {
-            showToast({ message: '이미 추가된 작품입니다', type: 'error' })
+            showToast({
+              message: '이미 추가한 작품이에요.',
+              type: 'error',
+            })
           }
         })
     }
