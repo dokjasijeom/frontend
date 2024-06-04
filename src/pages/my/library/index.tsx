@@ -14,6 +14,7 @@ import styled, { useTheme } from 'styled-components'
 import MyRecordSeriesListContainer from '@/components/Library/MyRecordSeriesListContainer'
 import AddSeriesModalBody from '@/components/Library/AddSeriesModalBody'
 import { User } from '@/@types/user'
+import Skeleton from '@/components/common/Skeleton/Skeleton'
 
 const LibraryContainer = styled.div`
   padding-top: 56px;
@@ -36,6 +37,21 @@ const AddPlusButtonWrapper = styled.div`
 
 const AddPlusButton = styled.button`
   font-size: 0;
+`
+
+const SkeletonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  .skeleton_item_wrapper {
+    width: 100%;
+    margin-top: 32px;
+    gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 `
 
 function Library() {
@@ -62,7 +78,21 @@ function Library() {
   return (
     <LibraryContainer>
       <TitleHeader title="내 서재" onClickBack={() => router.back()} />
-      {!isEmpty(user) && <MyInfoContainer user={user} />}
+
+      {!isEmpty(user) ? (
+        <MyInfoContainer user={user} />
+      ) : (
+        <SkeletonWrapper>
+          <Skeleton width="104px" height="104px" isCircle />
+          <Skeleton width="120px" style={{ marginTop: '20px' }} />
+          <Skeleton width="110px" style={{ marginTop: '8px' }} />
+          <div className="skeleton_item_wrapper">
+            <Skeleton width="100%" height="114px" />
+            <Skeleton width="100%" height="114px" style={{ marginTop: 0 }} />
+            <Skeleton width="100%" height="114px" style={{ marginTop: 0 }} />
+          </div>
+        </SkeletonWrapper>
+      )}
       <Divider
         size="xlarge"
         color={theme.color.gray[50]}
