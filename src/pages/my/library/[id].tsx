@@ -34,6 +34,18 @@ const SkeletonWrapper = styled.div`
   padding: 20px;
   display: flex;
   gap: 20px;
+  @media (max-width: 400px) {
+    gap: 12px;
+  }
+  .skeleton_thumbnail_wrapper {
+    width: 140px;
+    height: 200px;
+    flex-shrink: 0;
+    @media (max-width: 400px) {
+      width: 116px;
+      height: 166px;
+    }
+  }
   .skeleton_item_wrapper {
     width: 100%;
   }
@@ -49,9 +61,18 @@ const MySeriesInfoWrapper = styled.div`
   .record_button {
     position: absolute;
     bottom: 20px;
+    left: 178px;
 
     @media (max-width: 400px) {
       left: 149px !important;
+    }
+
+    &.non_exist_series {
+      left: 20px;
+
+      @media (max-width: 400px) {
+        left: 20px !important;
+      }
     }
   }
 `
@@ -418,7 +439,9 @@ function LibraryDetail({
       <>
         {isEmpty(mySeries) && (
           <SkeletonWrapper>
-            <Skeleton width="140px" height="200px" style={{ flexShrink: 0 }} />
+            <div className="skeleton_thumbnail_wrapper">
+              <Skeleton width="100%" height="100%" style={{ flexShrink: 0 }} />
+            </div>
             <div className="skeleton_item_wrapper">
               <Skeleton width="120px" height="24px" />
               <Skeleton
@@ -432,21 +455,19 @@ function LibraryDetail({
             </div>
           </SkeletonWrapper>
         )}
-        <MySeriesInfoWrapper>
-          {!isEmpty(mySeries) && !isEmpty(mySeries.series) && (
-            <SeriesPosterItem
-              series={mySeries.series}
-              onClick={() => {
-                if (!isEmpty(mySeries.series)) {
-                  router.push(`/series/${mySeries.series.hashId}`)
-                }
-              }}
-            />
-          )}
-          {!isEmpty(mySeries) &&
-            mySeries.title &&
-            mySeries.author &&
-            mySeries.genre && (
+        {!isEmpty(mySeries) && (
+          <MySeriesInfoWrapper>
+            {!isEmpty(mySeries.series) && (
+              <SeriesPosterItem
+                series={mySeries.series}
+                onClick={() => {
+                  if (!isEmpty(mySeries.series)) {
+                    router.push(`/series/${mySeries.series.hashId}`)
+                  }
+                }}
+              />
+            )}
+            {mySeries.title && mySeries.author && mySeries.genre && (
               <NonExistSeriesInfoWrapper>
                 <div className="series_info">
                   <div className="episode_wrapper">
@@ -459,37 +480,37 @@ function LibraryDetail({
                 </div>
               </NonExistSeriesInfoWrapper>
             )}
-          <div className="series_edit_wrapper">
-            {isNonExistSeries && (
+            <div className="series_edit_wrapper">
+              {isNonExistSeries && (
+                <Button
+                  type="text"
+                  width="auto"
+                  style={{ position: 'absolute', top: '20px', right: '60px' }}
+                  onClick={handleEditModal}
+                >
+                  편집
+                </Button>
+              )}
               <Button
                 type="text"
                 width="auto"
-                style={{ position: 'absolute', top: '20px', right: '60px' }}
-                onClick={handleEditModal}
+                style={{ position: 'absolute', top: '20px', right: '20px' }}
+                onClick={handleDeleteModal}
               >
-                편집
+                삭제
               </Button>
-            )}
+            </div>
             <Button
-              type="text"
-              width="auto"
-              style={{ position: 'absolute', top: '20px', right: '20px' }}
-              onClick={handleDeleteModal}
+              className={`record_button ${
+                isNonExistSeries ? 'non_exist_series' : ''
+              }`}
+              width="95px"
+              onClick={handleRecordModal}
             >
-              삭제
+              기록하기
             </Button>
-          </div>
-          <Button
-            className="record_button"
-            width="95px"
-            style={{
-              left: !isNonExistSeries ? '178px' : '20px',
-            }}
-            onClick={handleRecordModal}
-          >
-            기록하기
-          </Button>
-        </MySeriesInfoWrapper>
+          </MySeriesInfoWrapper>
+        )}
         {!isEmpty(lastRecordEpisode) && (
           <RecordBanner>
             <span className="bold">

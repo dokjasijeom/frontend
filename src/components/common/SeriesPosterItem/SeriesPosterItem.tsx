@@ -33,7 +33,7 @@ const SeriesPosterItemWrapper = styled.div`
     }
 
     @media (max-width: 400px) {
-      width: 117px;
+      width: 116px;
       height: 166px;
     }
 

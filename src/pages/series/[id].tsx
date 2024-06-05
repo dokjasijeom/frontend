@@ -32,6 +32,17 @@ const SkeletonWrapper = styled.div`
   padding: 20px;
   display: flex;
   gap: 20px;
+  flex-shrink: 0;
+  .skeleton_thumbnail_wrapper {
+    width: 140px;
+    height: 200px;
+    flex-shrink: 0;
+
+    @media (max-width: 400px) {
+      width: 116px;
+      height: 166px;
+    }
+  }
   .skeleton_item_wrapper {
     width: 100%;
   }
@@ -42,19 +53,39 @@ const SeriesInfoWrapper = styled.div`
   position: relative;
   padding: 20px;
   display: flex;
+  gap: 18px;
   @media (max-width: 400px) {
     padding: 20px 20px 78px;
+    gap: 12px;
   }
-  .series_image {
+
+  .thumbnail_wrapper {
+    display: flex;
+    flex-shrink: 0;
+    width: 140px;
+    height: 200px;
     border-radius: 12px;
-    margin-right: 20px;
+    overflow: hidden;
+    position: relative;
+    img {
+      border-radius: 12px;
+      width: 100%;
+      height: auto !important;
+      position: relative !important;
+      object-fit: cover;
+    }
+
+    @media (max-width: 400px) {
+      width: 116px;
+      height: 166px;
+    }
   }
+
   .series_info_wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    height: 200px;
 
     .series_info {
       position: relative;
@@ -240,14 +271,9 @@ function SeriesDetail({
         <SeriesDetailWrapper>
           <SeriesInfoWrapper>
             {!isEmpty(series.thumbnail) && (
-              <Image
-                unoptimized
-                className="series_image"
-                src={series.thumbnail}
-                width={140}
-                height={200}
-                alt=""
-              />
+              <div className="thumbnail_wrapper">
+                <Image unoptimized src={series.thumbnail} fill alt="" />
+              </div>
             )}
             <div className="series_info_wrapper">
               <div className="series_info">
@@ -345,7 +371,9 @@ function SeriesDetail({
         </SeriesDetailWrapper>
       ) : (
         <SkeletonWrapper>
-          <Skeleton width="140px" height="200px" style={{ flexShrink: 0 }} />
+          <div className="skeleton_thumbnail_wrapper">
+            <Skeleton width="100%" height="100%" style={{ flexShrink: 0 }} />
+          </div>
           <div className="skeleton_item_wrapper">
             <Skeleton width="120px" height="24px" />
             <Skeleton
