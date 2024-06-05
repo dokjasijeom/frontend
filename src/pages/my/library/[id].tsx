@@ -235,7 +235,7 @@ const RecordEpisodesWrapper = styled.div`
 
   .episodes_wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
     gap: 4px;
 
     .empty_episodes {
