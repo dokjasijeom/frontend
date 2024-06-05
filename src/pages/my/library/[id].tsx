@@ -233,20 +233,20 @@ const RecordEpisodesWrapper = styled.div`
     padding: 9px;
   }
 
+  .empty_episodes {
+    height: 234px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    ${({ theme }) => theme.typography.body2};
+    color: ${({ theme }) => theme.color.gray[800]};
+  }
+
   .episodes_wrapper {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
     gap: 4px;
-
-    .empty_episodes {
-      height: 234px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      ${({ theme }) => theme.typography.body2};
-      color: ${({ theme }) => theme.color.gray[800]};
-    }
   }
 `
 
@@ -539,7 +539,9 @@ function LibraryDetail({
           />
           <RecordDetail>
             <div className="record_filter_wrapper">
-              {/* <div className="total_text">전체 {book.total}</div> */}
+              <div className="total_text">
+                전체 {mySeries?.recordEpisodeCount.toLocaleString()}
+              </div>
               <div className="platform_wrapper">
                 {PROVIDER_TAB_LIST.map((provider) => (
                   <Checkbox
@@ -580,6 +582,9 @@ function LibraryDetail({
               />
             </div>
             <RecordEpisodesWrapper>
+              {isEmpty(filteredEpisodes) && (
+                <div className="empty_episodes">기록된 회차가 없어요.</div>
+              )}
               {(!isEmpty(selectedEpisodes) || isEdit) && (
                 <DeleteBox>
                   <div className="selected_info">
@@ -607,10 +612,6 @@ function LibraryDetail({
                 </DeleteBox>
               )}
               <div className="episodes_wrapper">
-                {isEmpty(filteredEpisodes) &&
-                  mySeries?.recordEpisodeCount === 0 && (
-                    <div className="empty_episodes">기록된 회차가 없어요.</div>
-                  )}
                 {filteredEpisodes.map((episode) => (
                   <EpisodeBox
                     className={
