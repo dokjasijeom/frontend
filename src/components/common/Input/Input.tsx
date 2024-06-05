@@ -49,6 +49,9 @@ const InputStyled = styled.input`
   ${({ theme }) => theme.typography.body2};
   outline: none;
   background: ${({ theme }) => theme.color.system.w};
+  transform: scale(0.875);
+  transform-origin: left top;
+  font-size: 16px;
 
   &::placeholder {
     color: ${({ theme }) => theme.color.gray[600]};
