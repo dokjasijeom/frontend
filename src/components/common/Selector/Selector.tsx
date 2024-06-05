@@ -31,6 +31,7 @@ const OptionsListWrapper = styled.div`
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.color.gray[200]};
   overflow: hidden;
+  z-index: 1;
 `
 
 const OptionItemWrapper = styled.div`
