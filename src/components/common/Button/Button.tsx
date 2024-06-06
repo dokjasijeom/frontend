@@ -84,7 +84,7 @@ function Button(props: ButtonProps) {
     disabled = false,
     onClick,
     width = '100%',
-    height = 'auto',
+    height = '46px',
     style,
     className,
   } = props
