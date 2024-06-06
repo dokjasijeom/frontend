@@ -16,8 +16,8 @@ import React, { ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import SeriesItem from '@/components/common/SeriesItem/SeriesItem'
 import { Series } from '@/@types/series'
-import { LikeSeries, User } from '@/@types/user'
-import { deleteRecordSeries, recordSeries } from '@/api/series'
+import { LikeSeries, RecordSeries, User } from '@/@types/user'
+import { recordSeries } from '@/api/series'
 
 const LikeContainer = styled.div``
 
@@ -82,13 +82,10 @@ function Like() {
 
   const handleAddMyLibrary = async (
     series: Series,
-    isUserRecordSeries: boolean,
+    isUserRecordSeries: RecordSeries,
   ) => {
     if (isUserRecordSeries) {
-      await deleteRecordSeries(series.hashId).then(() => {
-        showToast({ message: '기록장에서 삭제했어요.' })
-        queryClient.invalidateQueries({ queryKey: ['user'] })
-      })
+      router.push(`/my/library/${isUserRecordSeries.id}`)
     } else {
       await recordSeries(series.hashId).then(() => {
         showToast({ message: '기록장에 추가했어요!' })
@@ -131,10 +128,8 @@ function Like() {
           )}
           {!isEmpty(filterLikeSeriesList) &&
             filterLikeSeriesList.map((series: Series) => {
-              const isUserRecordSeries = !isEmpty(
-                user?.recordSeries.find(
-                  (item) => item.series?.hashId === series.hashId,
-                ),
+              const isUserRecordSeries = user?.recordSeries.find(
+                (item) => item.series?.hashId === series.hashId,
               )
 
               return (
@@ -145,9 +140,11 @@ function Like() {
                       style={{ minWidth: '180px' }}
                       width="auto"
                       type={isUserRecordSeries ? 'primary' : 'secondary'}
-                      onClick={() =>
-                        handleAddMyLibrary(series, isUserRecordSeries)
-                      }
+                      onClick={() => {
+                        if (isUserRecordSeries) {
+                          handleAddMyLibrary(series, isUserRecordSeries)
+                        }
+                      }}
                     >
                       <div className="add_button_body">
                         <Icons

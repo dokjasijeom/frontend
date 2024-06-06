@@ -3,7 +3,6 @@ import { Provider, Series } from '@/@types/series'
 import { User } from '@/@types/user'
 import {
   deleteLikeSeries,
-  deleteRecordSeries,
   getSeries,
   recordSeries,
   setLikeSeries,
@@ -249,11 +248,7 @@ function SeriesDetail({
   const handleAddMyLibrary = async () => {
     if (!isEmpty(series)) {
       if (isUserRecordSeries) {
-        await deleteRecordSeries(series.hashId).then(() => {
-          showToast({ message: '기록장에서 삭제했어요.' })
-          queryClient.invalidateQueries({ queryKey: ['seriesDetail'] })
-          queryClient.invalidateQueries({ queryKey: ['user'] })
-        })
+        router.push(`/my/library/${isUserRecordSeries.id}`)
       } else {
         await recordSeries(series.hashId).then(() => {
           showToast({ message: '기록장에 추가했어요!' })
