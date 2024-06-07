@@ -22,10 +22,10 @@ const ModalBackground = styled.div`
   height: 100%;
 `
 
-const ModalWrapper = styled.div`
+const ModalWrapper = styled.div<{ width: string }>`
   z-index: 11;
   background: ${({ theme }) => theme.color.system.w};
-  width: 100%;
+  width: ${({ width }) => width};
   max-width: 460px;
   min-width: 320px;
   box-shadow: 5px 3px 20px 0px rgba(154, 153, 159, 0.1);
@@ -65,6 +65,7 @@ const ModalButtonGroup = styled.div`
 `
 
 interface ModalProps {
+  width?: string
   type?: 'alert' | 'confirm' | 'self'
   title: string
   children: ReactNode | undefined
@@ -77,6 +78,7 @@ interface ModalProps {
 
 function Modal(props: ModalProps) {
   const {
+    width = '100%',
     type = 'alert',
     title,
     children,
@@ -135,7 +137,7 @@ function Modal(props: ModalProps) {
 
   return (
     <ModalContainer>
-      <ModalWrapper>
+      <ModalWrapper width={width}>
         <ModalContents>
           <ModalHeader>
             {title}

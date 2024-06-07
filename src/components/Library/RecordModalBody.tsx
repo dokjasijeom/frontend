@@ -2,14 +2,16 @@ import Image from 'next/image'
 import React, { useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { PROVIDER_TAB_LIST } from '@/constants/Tab'
-import { isEmpty } from 'lodash'
+import { isEmpty, range } from 'lodash'
 import { RecordSeries } from '@/@types/user'
 import { recordSeriesEpisode } from '@/api/user'
 import { useQueryClient } from '@tanstack/react-query'
+import useToast from '@/hooks/useToast'
 import Checkbox from '../common/Checkbox/Checkbox'
 import Selector, { OptionItem } from '../common/Selector/Selector'
 import RecordEpisodes, { Episodes } from './RecordEpisodes'
 import Button from '../common/Button/Button'
+import Modal from '../common/Modal/Modal'
 
 const RecordModalBodyContainer = styled.div`
   padding-top: 20px;
@@ -78,7 +80,9 @@ function RecordModalBody(props: RecordModalBodyProps) {
   const [isMulti, setIsMulti] = useState(false)
   const [provider, setProvider] = useState<OptionItem | null>(null)
   const [episodes, setEpisodes] = useState<Episodes>({ from: '0', to: '0' })
+  const [isOverWriteEpisodeModal, setIsOverWriteEpisodeModal] = useState(false)
   const queryclient = useQueryClient()
+  const { showToast } = useToast()
 
   const handleChangeProvider = (option: OptionItem) => {
     setProvider(option)
@@ -99,18 +103,46 @@ function RecordModalBody(props: RecordModalBodyProps) {
     return result
   }, [recordSeries])
 
-  const handleRecord = async () => {
+  const fetchRecordSeriesEpisode = async () => {
+    const from = Number(episodes.from)
+    const to = Number(episodes.to)
     const params = {
       userRecordSeriesId: recordSeries.id,
       providerName: provider?.value ?? PROVIDER_TAB_LIST[0].value,
-      from: isMulti ? Number(episodes.from) : Number(episodes.to),
-      to: Number(episodes.to),
+      from: isMulti ? from : to,
+      to,
     }
-    await recordSeriesEpisode(params).then(() => {
-      queryclient.invalidateQueries({ queryKey: ['mySeriesDetail'] })
-      queryclient.invalidateQueries({ queryKey: ['user'] })
-      onCloseModal()
-    })
+    await recordSeriesEpisode(params)
+      .then(() => {
+        queryclient.invalidateQueries({ queryKey: ['mySeriesDetail'] })
+        queryclient.invalidateQueries({ queryKey: ['user'] })
+        onCloseModal()
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          showToast({
+            type: 'error',
+            message: '최대 회차를 초과하여 기록할 수 없어요.',
+          })
+        }
+      })
+  }
+
+  const handleRecord = async () => {
+    const from = Number(episodes.from)
+    const to = Number(episodes.to)
+
+    const fromToEpisodeArr = isMulti ? range(from, to + 1) : [to]
+
+    const duplicationEpisodes = recordSeries.recordEpisodes.filter((v) =>
+      fromToEpisodeArr.includes(v.episodeNumber),
+    )
+
+    if (!isEmpty(duplicationEpisodes)) {
+      setIsOverWriteEpisodeModal(true)
+    } else {
+      fetchRecordSeriesEpisode()
+    }
   }
 
   const lastRecordEpisode = useMemo(() => {
@@ -123,6 +155,25 @@ function RecordModalBody(props: RecordModalBodyProps) {
 
   return (
     <RecordModalBodyContainer>
+      {isOverWriteEpisodeModal && (
+        <Modal
+          width="320px"
+          type="confirm"
+          title="잠깐!"
+          positiveText="덮어쓰기"
+          negativeText="취소"
+          onPositiveClick={fetchRecordSeriesEpisode}
+          onClose={() => {
+            setIsOverWriteEpisodeModal(false)
+          }}
+        >
+          <>
+            이미 기록한 회차가 포함되어 있어요!
+            <br />
+            등록된 기록에 새로 덮어쓸까요?
+          </>
+        </Modal>
+      )}
       <BookWrapper>
         {recordSeries.series && (
           <Image
