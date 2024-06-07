@@ -42,16 +42,13 @@ const InputPrefixWrapper = styled.div`
 `
 
 const InputStyled = styled.input`
-  border: 0;
   width: 100%;
+  border: 0;
   flex: 1;
   color: ${({ theme }) => theme.color.gray[950]};
   ${({ theme }) => theme.typography.body2};
   outline: none;
   background: ${({ theme }) => theme.color.system.w};
-  transform: scale(0.875);
-  transform-origin: left top;
-  font-size: 16px;
 
   &::placeholder {
     color: ${({ theme }) => theme.color.gray[600]};
