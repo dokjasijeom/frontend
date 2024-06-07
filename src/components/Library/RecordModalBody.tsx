@@ -21,41 +21,87 @@ const RecordModalBodyContainer = styled.div`
   gap: 32px;
 `
 
-const BookWrapper = styled.div`
+const SeriesWrapper = styled.div`
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.color.sub[300]};
   background: ${({ theme }) => theme.color.sub[50]};
   padding: 12px;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  .book_thumbnail {
-    border-radius: 4.38px;
-    object-fit: cover;
-  }
+  position: relative;
 
-  .book_info {
-    padding: 4px 0;
+  .series_info_wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    .title {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      ${({ theme }) => theme.typography.body1};
-      color: ${({ theme }) => theme.color.gray[950]};
-      .sub {
-        ${({ theme }) => theme.typography.body5};
-        color: ${({ theme }) => theme.color.gray[800]};
+    flex-direction: row;
+    gap: 12px;
+    .series_thumbnail {
+      border-radius: 4px;
+      object-fit: cover;
+      flex-shrink: 0;
+
+      @media (max-width: 490px) {
+        width: 50px;
+        height: 50px;
       }
     }
-    .description {
+
+    .series_info {
+      width: 100%;
+      padding: 4px 0;
       display: flex;
-      gap: 4px;
-      align-items: center;
-      ${({ theme }) => theme.typography.body4};
-      color: ${({ theme }) => theme.color.main[600]};
+      flex-direction: column;
+      gap: 5px;
+      overflow: hidden;
+      @media (max-width: 490px) {
+        justify-content: center;
+      }
+      .title_wrapper {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: 12px;
+        overflow: hidden;
+
+        .title {
+          display: flex;
+          flex-direction: row;
+          gap: 12px;
+          align-items: center;
+          ${({ theme }) => theme.typography.body1};
+          color: ${({ theme }) => theme.color.gray[950]};
+
+          @media (max-width: 490px) {
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            word-break: break-all;
+          }
+        }
+
+        .sub {
+          ${({ theme }) => theme.typography.body5};
+          color: ${({ theme }) => theme.color.gray[800]};
+        }
+        @media (max-width: 490px) {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+        }
+      }
+    }
+  }
+  .description {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    ${({ theme }) => theme.typography.body4};
+    color: ${({ theme }) => theme.color.main[600]};
+    position: absolute;
+    bottom: 16px;
+    left: 74px;
+    @media (max-width: 490px) {
+      margin-top: 12px;
+      position: unset;
     }
   }
 `
@@ -174,42 +220,47 @@ function RecordModalBody(props: RecordModalBodyProps) {
           </>
         </Modal>
       )}
-      <BookWrapper>
-        {recordSeries.series && (
-          <Image
-            unoptimized
-            className="book_thumbnail"
-            src={recordSeries.series.thumbnail}
-            width={50}
-            height={50}
-            alt=""
-          />
-        )}
-
-        <div className="book_info">
-          <div className="title">
-            {recordSeries.series && recordSeries.series.title}
-            <span className="sub">{authorGenreText}</span>
-          </div>
-          {!isEmpty(lastRecordEpisode) && (
-            <div className="description">
-              <Image
-                unoptimized
-                src={`/images/${lastRecordEpisode.providerName}.png`}
-                width={16}
-                height={16}
-                alt=""
-              />
-              {
-                PROVIDER_TAB_LIST.find(
-                  (item) => item.value === lastRecordEpisode.providerName,
-                )?.label
-              }
-              에서 {lastRecordEpisode.episodeNumber}화까지 읽었어요!
-            </div>
+      <SeriesWrapper>
+        <div className="series_info_wrapper">
+          {recordSeries.series && (
+            <Image
+              unoptimized
+              className="series_thumbnail"
+              src={recordSeries.series.thumbnail}
+              width={50}
+              height={50}
+              alt=""
+            />
           )}
+
+          <div className="series_info">
+            <div className="title_wrapper">
+              <span className="title">
+                {recordSeries.series && recordSeries.series.title}
+              </span>
+              <span className="sub">{authorGenreText}</span>
+            </div>
+          </div>
         </div>
-      </BookWrapper>
+        {!isEmpty(lastRecordEpisode) && (
+          <div className="description">
+            <Image
+              unoptimized
+              src={`/images/${lastRecordEpisode.providerName}.png`}
+              width={16}
+              height={16}
+              alt=""
+            />
+            {
+              PROVIDER_TAB_LIST.find(
+                (item) => item.value === lastRecordEpisode.providerName,
+              )?.label
+            }
+            에서 {lastRecordEpisode.episodeNumber}화까지 읽었어요!
+          </div>
+        )}
+      </SeriesWrapper>
+
       <RecordWrapper>
         <Checkbox
           style={{ gap: '4px' }}
