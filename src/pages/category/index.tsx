@@ -111,7 +111,11 @@ function Category() {
     CATEGORY[selectedSeriesTypeTab.value][0],
   )
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
-  const [selectedProvider, setSelectedProvider] = useState<Platform[]>([])
+  const [selectedProvider, setSelectedProvider] = useState<Platform[]>([
+    { label: '네이버시리즈', value: 'series' },
+    { label: '카카오페이지', value: 'kakao-page' },
+    { label: '리디북스', value: 'ridi' },
+  ])
   const [page, setPage] = useState(1)
 
   const handleChangePage = (currentPage: number) => {

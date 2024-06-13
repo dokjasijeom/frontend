@@ -137,7 +137,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
   }
 
   const mySubscribtion = [
-    { label: '네이버시리즈', value: 'naver' },
+    { label: '네이버시리즈', value: 'series' },
   ] as Platform[]
 
   return (

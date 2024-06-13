@@ -259,7 +259,11 @@ function LibraryDetail({
   const [isEdit, setIsEdit] = useState(false)
   const [search, setSearch] = useState('')
   const [selectedEpisodes, setSelectedEpisodes] = useState<RecordEpisode[]>([])
-  const [selectedProvider, setSelectedProvider] = useState<Platform[]>([])
+  const [selectedProvider, setSelectedProvider] = useState<Platform[]>([
+    { label: '네이버시리즈', value: 'series' },
+    { label: '카카오페이지', value: 'kakao-page' },
+    { label: '리디북스', value: 'ridi' },
+  ])
 
   const debounceSearch = useDebounce(search, 200)
   const queryClient = useQueryClient()

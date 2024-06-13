@@ -47,7 +47,7 @@ function Subscribtion() {
   const router = useRouter()
 
   const [subscribtion, setSubscribtion] = useState<Platform[]>([
-    { label: '네이버 시리즈', value: 'naver' },
+    { label: '네이버시리즈', value: 'series' },
   ])
 
   const handleChangeSubscribtion = (platform: any) => {
