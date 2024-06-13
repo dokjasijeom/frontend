@@ -532,7 +532,7 @@ function LibraryDetail({
             title="기록장"
             moreButton={
               <Button type="text" width="auto">
-                {isEdit ? '' : '편집'}
+                {isEdit || isEmpty(filteredEpisodes) ? '' : '편집'}
               </Button>
             }
             onClickMore={handleEditEpisodes}
