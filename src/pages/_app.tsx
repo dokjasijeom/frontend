@@ -30,6 +30,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         <ThemeProvider theme={theme}>
           <Head>
             <title>독자시점</title>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover, user-scalable=0"
+            />
           </Head>
           <GlobalStyle />
           <GlobalModal />
