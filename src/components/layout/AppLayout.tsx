@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import styled from 'styled-components'
+import { Metadata, Viewport } from 'next'
 import Header from '../common/Header/Header'
 import BottomBar from '../common/NavigationBar/BottomBar'
 
@@ -16,6 +17,17 @@ const FixedWidth = styled.div`
 `
 interface AppLayoutProps {
   children: ReactNode | undefined
+}
+
+export const medadata: Metadata = {
+  title: '독자시점',
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 function AppLayout(props: AppLayoutProps) {
