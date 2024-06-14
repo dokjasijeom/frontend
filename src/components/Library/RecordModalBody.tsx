@@ -12,6 +12,7 @@ import Selector, { OptionItem } from '../common/Selector/Selector'
 import RecordEpisodes, { Episodes } from './RecordEpisodes'
 import Button from '../common/Button/Button'
 import Modal from '../common/Modal/Modal'
+import Icons from '../common/Icons/Icons'
 
 const RecordModalBodyContainer = styled.div`
   padding-top: 20px;
@@ -102,6 +103,9 @@ const SeriesWrapper = styled.div`
     @media (max-width: 490px) {
       margin-top: 12px;
       position: unset;
+    }
+    &.empty {
+      color: ${({ theme }) => theme.color.gray[600]};
     }
   }
 `
@@ -242,7 +246,7 @@ function RecordModalBody(props: RecordModalBodyProps) {
             </div>
           </div>
         </div>
-        {!isEmpty(lastRecordEpisode) && (
+        {!isEmpty(lastRecordEpisode) ? (
           <div className="description">
             <Image
               unoptimized
@@ -257,6 +261,11 @@ function RecordModalBody(props: RecordModalBodyProps) {
               )?.label
             }
             에서 {lastRecordEpisode.episodeNumber}화까지 읽었어요!
+          </div>
+        ) : (
+          <div className="description empty">
+            <Icons name="Content" width="16px" height="16px" />
+            최근에 기록한 회차가 없어요!
           </div>
         )}
       </SeriesWrapper>
