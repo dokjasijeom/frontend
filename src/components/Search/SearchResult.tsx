@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { getSearchList } from '@/api/search'
 import { Series } from '@/@types/series'
+import { isEmpty } from 'lodash'
+import Image from 'next/image'
 import SeriesPosterItem from '../common/SeriesPosterItem/SeriesPosterItem'
 
 const SearchResultContainer = styled.div`
@@ -27,6 +29,19 @@ const SeriesItemWrapper = styled.div`
   border-radius: 12px;
 `
 
+const EmptyWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  ${({ theme }) => theme.typography.body2};
+  color: ${({ theme }) => theme.color.gray[800]};
+  text-align: center;
+  gap: 20px;
+  margin-top: 80px;
+`
+
 interface SearchResultProps {
   keyword: string
 }
@@ -48,18 +63,32 @@ function SearchResult(props: SearchResultProps) {
 
   return (
     <SearchResultContainer>
-      <SectionTitle>{`‘${keyword}’ 검색 결과`}</SectionTitle>
-      <SearchResultWrapper>
-        {searchList.map((series) => (
-          <SeriesItemWrapper key={series.hashId}>
-            <SeriesPosterItem
-              typeBadge
-              series={series}
-              onClick={() => router.push(`/series/${series.hashId}`)}
-            />
-          </SeriesItemWrapper>
-        ))}
-      </SearchResultWrapper>
+      {!isEmpty(searchList) ? (
+        <>
+          <SectionTitle>{`‘${keyword}’ 검색 결과`}</SectionTitle>
+          <SearchResultWrapper>
+            {searchList.map((series) => (
+              <SeriesItemWrapper key={series.hashId}>
+                <SeriesPosterItem
+                  typeBadge
+                  series={series}
+                  onClick={() => router.push(`/series/${series.hashId}`)}
+                />
+              </SeriesItemWrapper>
+            ))}
+          </SearchResultWrapper>
+        </>
+      ) : (
+        <EmptyWrapper>
+          <Image
+            src="/images/empty_search.png"
+            width={120}
+            height={120}
+            alt="empty"
+          />
+          검색 결과가 없습니다.
+        </EmptyWrapper>
+      )}
     </SearchResultContainer>
   )
 }
