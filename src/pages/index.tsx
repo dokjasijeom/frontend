@@ -77,7 +77,9 @@ export default function Home() {
         seriesType: selectedBookTypeTab.value,
         publishDay: selectedWeek.value,
       })
-      setWeekSeries(res.data.data)
+
+      const { series } = res.data.data
+      setWeekSeries(series)
     }
     fetchWeekSeries()
   }, [selectedBookTypeTab.value, selectedWeek.value])
@@ -88,7 +90,9 @@ export default function Home() {
         seriesType: WEBNOVEL,
         provider: selectedWebNovelProviderTab.value,
       })
-      setNewWebNovelSeries(res.data.data)
+
+      const { series } = res.data.data
+      setNewWebNovelSeries(series)
     }
     fetchNewWebNovelSeries()
   }, [selectedWebNovelProviderTab.value])
@@ -99,7 +103,8 @@ export default function Home() {
         seriesType: WEBTOON,
         provider: selectedWebToonProviderTab.value,
       })
-      setNewWebToonSeries(res.data.data)
+      const { series } = res.data.data
+      setNewWebToonSeries(series)
     }
     fetchNewWebToonSeries()
   }, [selectedWebToonProviderTab.value])
