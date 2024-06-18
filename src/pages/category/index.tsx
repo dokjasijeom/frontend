@@ -1,23 +1,19 @@
 import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import {
-  SERIES_TYPE_TAB_LIST,
-  SORT_TAB_LIST,
-  PROVIDER_TAB_LIST,
-} from '@/constants/Tab'
+import { SERIES_TYPE_TAB_LIST, SORT_TAB_LIST } from '@/constants/Tab'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { isEmpty } from 'lodash'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
-import { Platform } from '@/@types/platform'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import Pagination from '@/components/common/Pagination/Pagination'
 import { GetCategoriesParams, getCategories } from '@/api/categories'
 import { Categories } from '@/@types/categories'
 import { getGenres } from '@/api/genres'
-import { Genre } from '@/@types/series'
+import { Genre, ProviderItem } from '@/@types/series'
+import { getProviders } from '@/api/providers'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -111,38 +107,42 @@ function Category() {
   )
 
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
-  const [selectedProvider, setSelectedProvider] = useState<Platform[]>([
-    { label: '네이버시리즈', value: 'series' },
-    { label: '카카오페이지', value: 'kakao-page' },
-    { label: '리디북스', value: 'ridi' },
-  ])
-  const [page, setPage] = useState(1)
 
+  const [page, setPage] = useState(1)
   const [selectedGenre, setSeletedGenre] = useState<Genre>({
     hashId: 'all',
     name: '전체',
     genreType: 'common',
   })
-
   const [genres, setGenres] = useState<Genre[]>()
+  const [providers, setProviders] = useState<ProviderItem[]>([])
   const [categories, setCategories] = useState<Categories>()
+  const [selectedProvider, setSelectedProvider] = useState<ProviderItem[]>()
 
   useEffect(() => {
     async function fetchCategories() {
+      const providerArr = selectedProvider?.map((provider) => provider.hashId)
       const params = {
         seriesType: selectedSeriesTypeTab.value,
         page,
         pageSize: 20,
+        providers: providerArr,
       } as GetCategoriesParams
 
       if (selectedGenre.hashId !== 'all') {
         params.genre = selectedGenre.hashId
       }
+
       const res = await getCategories(params)
       setCategories(res.data.data)
     }
     fetchCategories()
-  }, [page, selectedGenre.hashId, selectedSeriesTypeTab.value])
+  }, [
+    page,
+    selectedGenre.hashId,
+    selectedProvider,
+    selectedSeriesTypeTab.value,
+  ])
 
   useEffect(() => {
     async function fetchGenres() {
@@ -161,6 +161,15 @@ function Category() {
     fetchGenres()
   }, [selectedSeriesTypeTab.value])
 
+  useEffect(() => {
+    async function fetchProviders() {
+      const res = await getProviders()
+      setProviders(res.data.data)
+      setSelectedProvider(res.data.data)
+    }
+    fetchProviders()
+  }, [])
+
   const handleChangePage = (currentPage: number) => {
     setPage(currentPage)
   }
@@ -169,17 +178,19 @@ function Category() {
     setSeletedGenre(genre)
   }
 
-  const handleselectedProvider = (platform: any) => {
-    const findPlatform = selectedProvider.find(
-      (item) => item.value === platform.value,
-    )
-    if (findPlatform) {
-      const filterPlarform = selectedProvider.filter(
-        (item) => item.value !== platform.value,
+  const handleselectedProvider = (provider: ProviderItem) => {
+    if (selectedProvider) {
+      const findProvider = selectedProvider.find(
+        (item) => item.hashId === provider.hashId,
       )
-      setSelectedProvider(filterPlarform)
-    } else {
-      setSelectedProvider([...selectedProvider, platform])
+      if (findProvider) {
+        const filterProvider = selectedProvider.filter(
+          (item) => item.hashId !== provider.hashId,
+        )
+        setSelectedProvider(filterProvider)
+      } else {
+        setSelectedProvider([...selectedProvider, provider])
+      }
     }
   }
   return (
@@ -228,23 +239,28 @@ function Category() {
             }}
           />
           <div className="platform_wrapper">
-            {PROVIDER_TAB_LIST.map((provider) => (
-              <Checkbox
-                key={provider.value}
-                style={{ gap: '4px' }}
-                checked={Boolean(
-                  selectedProvider.find(
-                    (item) => item.value === provider.value,
-                  ),
-                )}
-                onChange={() => {
-                  handleselectedProvider(provider)
-                }}
-                checkColor={theme.color.main[600]}
-              >
-                <div className="checkbox_label">{provider.label}</div>
-              </Checkbox>
-            ))}
+            {!isEmpty(providers) &&
+              providers.map((provider) => (
+                <Checkbox
+                  key={provider.hashId}
+                  style={{ gap: '4px' }}
+                  checked={
+                    selectedProvider
+                      ? Boolean(
+                          selectedProvider.find(
+                            (item) => item.hashId === provider.hashId,
+                          ),
+                        )
+                      : false
+                  }
+                  onChange={() => {
+                    handleselectedProvider(provider)
+                  }}
+                  checkColor={theme.color.main[600]}
+                >
+                  <div className="checkbox_label">{provider.displayName}</div>
+                </Checkbox>
+              ))}
           </div>
         </CategoryFilterWrapper>
         <CategoryListWrapper>

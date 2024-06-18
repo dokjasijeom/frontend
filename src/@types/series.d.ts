@@ -75,3 +75,9 @@ export interface Provider {
   link: string
   name: ProviderNameType
 }
+
+export interface ProviderItem {
+  hashId: string
+  displayName: string
+  name: ProviderNameType
+}
