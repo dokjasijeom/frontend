@@ -7,6 +7,12 @@ export interface User {
   likeSeries: Series[]
   likeSeriesCount: number
   recordSeries: RecordSeries[]
+  profile: Profile
+}
+
+export interface Profile {
+  username: string
+  avatar: File
 }
 
 export interface LikeSeries {

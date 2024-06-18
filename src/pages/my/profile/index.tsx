@@ -1,3 +1,4 @@
+import { UpdateUserFormParams, updateUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Divider from '@/components/common/Divider/Divider'
 import Input from '@/components/common/Input/Input'
@@ -5,9 +6,11 @@ import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import useModal from '@/hooks/useModal'
 import { deleteCookie } from 'cookies-next'
+import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 const ProfileContainer = styled.div`
@@ -95,13 +98,65 @@ const ListButton = styled.button`
 function Profile() {
   const router = useRouter()
   const { showModal } = useModal()
+  const { setValue, register, formState, watch, clearErrors } =
+    useForm<UpdateUserFormParams>({
+      defaultValues: {
+        username: '',
+        password: '',
+        passwordConfirm: '',
+      },
+    })
+
+  const watchUsername = watch('username')
+  const watchPassword = watch('password')
+  const watchPasswordConfirm = watch('passwordConfirm')
+
+  useEffect(() => {
+    if (watchPassword === watchPasswordConfirm) {
+      clearErrors('passwordConfirm')
+    }
+  }, [clearErrors, watchPasswordConfirm, watchPassword, watchUsername])
+
+  useEffect(() => {
+    register('password', {
+      pattern: {
+        value:
+          /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,16}$/,
+        message: '영문, 숫자를 포함하여 8자리 이상 입력해주세요.',
+      },
+    })
+    register('passwordConfirm', {
+      pattern: {
+        value:
+          /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,16}$/,
+        message: '영문, 숫자를 포함하여 8자리 이상 입력해주세요.',
+      },
+      validate: (value) =>
+        value !== watchPassword ? '비밀번호가 일치하지 않습니다.' : true,
+    })
+  }, [register, watchPassword])
 
   const handleEditProfileImage = () => {
     // TODO: 프로필 수정
   }
 
-  const handleEditUserInfo = () => {
-    // TODO: 회원 정보 수정
+  const handleEditUserInfo = async () => {
+    const form = {} as UpdateUserFormParams
+
+    if (!isEmpty(watchUsername)) {
+      form.username = watchUsername
+    }
+
+    if (!isEmpty(watchPassword)) {
+      form.password = watchPassword
+    }
+    if (!isEmpty(watchPasswordConfirm)) {
+      form.passwordConfirm = watchPasswordConfirm
+    }
+
+    await updateUser(form).then(() => {
+      showModal({ title: '프로필 수정', body: '프로필 수정이 완료되었습니다.' })
+    })
   }
 
   const handleLogout = () => {
@@ -162,29 +217,52 @@ function Profile() {
           <div className="form_item">
             <div className="label">닉네임</div>
             <Input
-              value=""
+              value={watchUsername ?? ''}
               placeholder="닉네임을 입력해주세요."
-              onChange={() => {}}
+              onChange={(e) => {
+                setValue('username', e.target.value, { shouldValidate: true })
+              }}
             />
           </div>
           <div className="form_item">
             <div className="label">비밀번호</div>
             <Input
-              value=""
+              type="password"
+              value={watchPassword ?? ''}
               placeholder="영문, 숫자를 포함하여 8자리 이상 입력해주세요."
-              onChange={() => {}}
+              {...register('password')}
+              error={!!formState.errors.password}
+              errorMessage={formState.errors.password?.message}
+              onChange={(e) =>
+                setValue('password', e.target.value, { shouldValidate: true })
+              }
             />
           </div>
           <div className="form_item">
             <div className="label">비밀번호 확인</div>
             <Input
-              value=""
+              type="password"
+              value={watchPasswordConfirm ?? ''}
               placeholder="비밀번호를 재입력해주세요."
-              onChange={() => {}}
+              {...register('passwordConfirm')}
+              error={!!formState.errors.passwordConfirm}
+              errorMessage={formState.errors.passwordConfirm?.message}
+              onChange={(e) =>
+                setValue('passwordConfirm', e.target.value, {
+                  shouldValidate: true,
+                })
+              }
             />
           </div>
           <div className="button_wrapper">
-            <Button type="primary" onClick={handleEditUserInfo}>
+            <Button
+              type="primary"
+              onClick={handleEditUserInfo}
+              disabled={
+                !formState.isValid ||
+                (!watchUsername && !watchPassword && !watchPasswordConfirm)
+              }
+            >
               저장
             </Button>
           </div>

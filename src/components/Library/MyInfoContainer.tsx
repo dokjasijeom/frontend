@@ -153,7 +153,11 @@ function MyInfoContainer(props: MyInfoContainerProps) {
           alt="profile"
         />
         <div className="account_wrapper">
-          <div className="nickname">{user.email}</div>
+          <div className="nickname">
+            {!isEmpty(user.profile.username)
+              ? user.profile.username
+              : user.email}
+          </div>
           <div className="email">{user.email}</div>
         </div>
       </ProfileWrppaer>

@@ -22,6 +22,13 @@ interface DeleteRecordEpisodeParams {
   recordIds: number[]
 }
 
+export interface UpdateUserFormParams {
+  image?: File
+  username?: string
+  password?: string
+  passwordConfirm?: string
+}
+
 export const setUser = (params: SetUserParams) => {
   return axiosInstance.post('/users', params)
 }
@@ -45,5 +52,12 @@ export const recordSeriesEpisode = (params: RecordSeriesEpisodeParams) => {
 export const deleteRecordEpisode = (params: DeleteRecordEpisodeParams) => {
   return axiosInstance.delete('/user/series/record', {
     data: params,
+  })
+}
+
+export const updateUser = (params: UpdateUserFormParams) => {
+  console.log(222, params)
+  return axiosInstance.patch('/user', params, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   })
 }
