@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { isEmpty } from 'lodash'
 import { RecordSeries } from '@/@types/user'
-import { Provider } from '@/@types/series'
+import { PlatformType } from '@/@types/platform'
 import Icons from '../common/Icons/Icons'
 import Button from '../common/Button/Button'
 
@@ -208,11 +208,12 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
               </div>
               <div className="platform_wrapper">
                 {!isEmpty(recordSeries.series) &&
-                  recordSeries.series.providers.map((provider: Provider) => (
+                  !isEmpty(recordSeries.recordProviders) &&
+                  recordSeries.recordProviders.map((provider: PlatformType) => (
                     <Image
-                      key={provider.hashId}
-                      src={`/images/${provider.name}.png`}
-                      alt={provider.name}
+                      key={provider}
+                      src={`/images/${provider}.png`}
+                      alt={provider}
                       width={20}
                       height={20}
                     />
