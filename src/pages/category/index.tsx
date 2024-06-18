@@ -7,15 +7,17 @@ import {
   PROVIDER_TAB_LIST,
 } from '@/constants/Tab'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
-import { CATEGORY, CategoryItem } from '@/constants/Category'
 import { isEmpty } from 'lodash'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import { Platform } from '@/@types/platform'
-import { MockSeries } from '@/constants/MockData'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import Pagination from '@/components/common/Pagination/Pagination'
+import { GetCategoriesParams, getCategories } from '@/api/categories'
+import { Categories } from '@/@types/categories'
+import { getGenres } from '@/api/genres'
+import { Genre } from '@/@types/series'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -107,9 +109,7 @@ function Category() {
   const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] = useState(
     SERIES_TYPE_TAB_LIST[0],
   )
-  const [selectedCategory, setSelectedCategory] = useState(
-    CATEGORY[selectedSeriesTypeTab.value][0],
-  )
+
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
   const [selectedProvider, setSelectedProvider] = useState<Platform[]>([
     { label: '네이버시리즈', value: 'series' },
@@ -118,11 +118,55 @@ function Category() {
   ])
   const [page, setPage] = useState(1)
 
+  const [selectedGenre, setSeletedGenre] = useState<Genre>({
+    hashId: 'all',
+    name: '전체',
+    genreType: 'common',
+  })
+
+  const [genres, setGenres] = useState<Genre[]>()
+  const [categories, setCategories] = useState<Categories>()
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const params = {
+        seriesType: selectedSeriesTypeTab.value,
+        page,
+        pageSize: 20,
+      } as GetCategoriesParams
+
+      if (selectedGenre.hashId !== 'all') {
+        params.genre = selectedGenre.hashId
+      }
+      const res = await getCategories(params)
+      setCategories(res.data.data)
+    }
+    fetchCategories()
+  }, [page, selectedGenre.hashId, selectedSeriesTypeTab.value])
+
+  useEffect(() => {
+    async function fetchGenres() {
+      const res = await getGenres({
+        seriesType: selectedSeriesTypeTab.value,
+      })
+      setGenres([
+        {
+          hashId: 'all',
+          name: '전체',
+          genreType: 'common',
+        },
+        ...res.data.data,
+      ])
+    }
+    fetchGenres()
+  }, [selectedSeriesTypeTab.value])
+
   const handleChangePage = (currentPage: number) => {
     setPage(currentPage)
   }
-  const handleSelectedCategory = (category: CategoryItem) => {
-    setSelectedCategory(category)
+
+  const handleSelectedGenre = (genre: Genre) => {
+    setSeletedGenre(genre)
   }
 
   const handleselectedProvider = (platform: any) => {
@@ -153,18 +197,24 @@ function Category() {
           selectedTab={selectedSeriesTypeTab}
           onChange={(tab) => {
             setSelectedSeriesTypeTab(tab)
-            setSelectedCategory(CATEGORY[tab.value][0])
+            setSeletedGenre({
+              hashId: 'all',
+              name: '전체',
+              genreType: 'common',
+            })
           }}
         />
         <CategoryTabWrapper>
-          {!isEmpty(selectedSeriesTypeTab) &&
-            CATEGORY[selectedSeriesTypeTab.value].map((category) => (
+          {!isEmpty(genres) &&
+            genres?.map((genre) => (
               <SubscribtionItem
-                key={category.id}
-                onClick={() => handleSelectedCategory(category)}
-                className={selectedCategory.id === category.id ? 'active' : ''}
+                key={genre.hashId}
+                onClick={() => handleSelectedGenre(genre)}
+                className={
+                  selectedGenre.hashId === genre.hashId ? 'active' : ''
+                }
               >
-                {category.label}
+                {genre.name}
               </SubscribtionItem>
             ))}
         </CategoryTabWrapper>
@@ -200,12 +250,9 @@ function Category() {
         <CategoryListWrapper>
           <div className="total_count">전체 21,234</div>
           <div className="series_list">
-            {MockSeries.map((series) => (
+            {categories?.series.map((series) => (
               <Thumbnail key={series.hashId} series={series} />
             ))}
-            {/* {MockBook[selectedBookTypeTab.value].map((book) => (
-              <Thumbnail key={book.id} book={book} />
-            ))} */}
           </div>
           <div className="pagination_wrapper">
             <Pagination
