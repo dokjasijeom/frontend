@@ -264,7 +264,9 @@ function Category() {
           </div>
         </CategoryFilterWrapper>
         <CategoryListWrapper>
-          <div className="total_count">전체 21,234</div>
+          <div className="total_count">
+            전체 {categories?.pagination.totalCount.toLocaleString()}
+          </div>
           <div className="series_list">
             {categories?.series.map((series) => (
               <Thumbnail key={series.hashId} series={series} />
@@ -272,7 +274,7 @@ function Category() {
           </div>
           <div className="pagination_wrapper">
             <Pagination
-              pageCount={10}
+              pageCount={categories?.pagination.totalPage ?? 1}
               currentPage={page}
               onChangePage={handleChangePage}
             />
