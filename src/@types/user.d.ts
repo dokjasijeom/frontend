@@ -12,7 +12,7 @@ export interface User {
 
 export interface Profile {
   username: string
-  avatar: File
+  avatar: string
 }
 
 export interface LikeSeries {

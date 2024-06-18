@@ -23,6 +23,11 @@ const ProfileWrppaer = styled.div`
   align-items: center;
   gap: 20px;
 
+  img {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
   .account_wrapper {
     display: flex;
     flex-direction: column;
@@ -147,10 +152,11 @@ function MyInfoContainer(props: MyInfoContainerProps) {
           <Icons name="Setting" onClick={handleEditMyInfo} />
         </SettingButton>
         <Image
-          src="/images/profile.png"
+          src={user.profile.avatar || '/image/profile.png'}
           width={104}
           height={104}
           alt="profile"
+          objectFit="cover"
         />
         <div className="account_wrapper">
           <div className="nickname">

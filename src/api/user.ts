@@ -1,3 +1,4 @@
+// import { getFormData } from '@/utils/dataFormatting'
 import axiosInstance from './axiosInstance'
 
 interface SetUserParams {
@@ -20,13 +21,6 @@ interface RecordSeriesEpisodeParams {
 interface DeleteRecordEpisodeParams {
   userRecordSeriesId: number
   recordIds: number[]
-}
-
-export interface UpdateUserFormParams {
-  image?: File
-  username?: string
-  password?: string
-  passwordConfirm?: string
 }
 
 export const setUser = (params: SetUserParams) => {
@@ -55,8 +49,7 @@ export const deleteRecordEpisode = (params: DeleteRecordEpisodeParams) => {
   })
 }
 
-export const updateUser = (params: UpdateUserFormParams) => {
-  console.log(222, params)
+export const updateUser = (params: FormData) => {
   return axiosInstance.patch('/user', params, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })

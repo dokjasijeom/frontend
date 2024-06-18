@@ -1,15 +1,18 @@
-import { UpdateUserFormParams, updateUser } from '@/api/user'
+import { User } from '@/@types/user'
+import { UpdateUserFormParams, getUser, updateUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Divider from '@/components/common/Divider/Divider'
 import Input from '@/components/common/Input/Input'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import useModal from '@/hooks/useModal'
+import { getImageUrl } from '@/utils/dataFormatting'
+import { useQuery } from '@tanstack/react-query'
 import { deleteCookie } from 'cookies-next'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -32,8 +35,18 @@ const ImageWrapper = styled.div`
   position: relative;
   cursor: pointer;
 
+  img {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .hidden {
+    display: none;
+  }
+
   &:hover {
     .overlay {
+      cursor: pointer;
       top: 0;
       left: 0;
       width: 100%;
@@ -98,10 +111,19 @@ const ListButton = styled.button`
 function Profile() {
   const router = useRouter()
   const { showModal } = useModal()
+
+  const { data: user } = useQuery<User>({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await getUser()
+      return res.data.data
+    },
+  })
+
   const { setValue, register, formState, watch, clearErrors } =
     useForm<UpdateUserFormParams>({
       defaultValues: {
-        username: '',
+        username: !isEmpty(user) ? user.profile.username : '',
         password: '',
         passwordConfirm: '',
       },
@@ -110,6 +132,24 @@ function Profile() {
   const watchUsername = watch('username')
   const watchPassword = watch('password')
   const watchPasswordConfirm = watch('passwordConfirm')
+  const [uploadedImage, setUploadedImage] = useState<any>(null)
+
+  const profileImage = useMemo(() => {
+    if (uploadedImage) {
+      return getImageUrl(uploadedImage)
+    }
+    if (!isEmpty(user) && !isEmpty(user.profile.avatar)) {
+      return user.profile.avatar
+    }
+
+    return '/images/profile.png'
+  }, [uploadedImage, user])
+
+  useEffect(() => {
+    if (!isEmpty(user)) {
+      setValue('username', user.profile.username, { shouldValidate: true })
+    }
+  }, [setValue, user])
 
   useEffect(() => {
     if (watchPassword === watchPasswordConfirm) {
@@ -136,31 +176,37 @@ function Profile() {
     })
   }, [register, watchPassword])
 
-  const handleEditProfileImage = () => {
-    // TODO: 프로필 수정
+  const handleEditProfileImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.currentTarget
+    const files = (target.files as FileList)[0]
+
+    setUploadedImage(files)
   }
 
   const handleEditUserInfo = async () => {
-    const form = {} as UpdateUserFormParams
+    const formData = new FormData()
 
     if (!isEmpty(watchUsername)) {
-      form.username = watchUsername
+      formData.append('username', watchUsername as string)
     }
 
     if (!isEmpty(watchPassword)) {
-      form.password = watchPassword
+      formData.append('password', watchPassword as string)
     }
     if (!isEmpty(watchPasswordConfirm)) {
-      form.passwordConfirm = watchPasswordConfirm
+      formData.append('passwordConfirm', watchPasswordConfirm as string)
     }
 
-    await updateUser(form).then(() => {
+    if (uploadedImage) {
+      formData.append('image', uploadedImage)
+    }
+
+    await updateUser(formData).then(() => {
       showModal({ title: '프로필 수정', body: '프로필 수정이 완료되었습니다.' })
     })
   }
 
   const handleLogout = () => {
-    // TODO: 로그아웃
     deleteCookie('DS_AUT')
     deleteCookie('DS_USER')
     router.push('/')
@@ -190,15 +236,25 @@ function Profile() {
     <ProfileContainer>
       <TitleHeader title="프로필 수정" onClickBack={() => router.back()} />
       <ProfileImageWrapper>
-        <ImageWrapper onClick={handleEditProfileImage}>
-          <Image
-            src="/images/profile.png"
-            width={104}
-            height={104}
-            alt="profile"
+        <ImageWrapper>
+          <label htmlFor="upload">
+            <Image
+              src={profileImage}
+              width={104}
+              height={104}
+              alt="profile"
+              objectFit="cover"
+            />
+            <div className="overlay" />
+          </label>
+          <input
+            id="upload"
+            className="hidden"
+            type="file"
+            onChange={(e) => handleEditProfileImage(e)}
           />
-          <div className="overlay" />
         </ImageWrapper>
+
         <Button type="text" width="auto" style={{ marginTop: '8px' }}>
           사진 삭제
         </Button>
@@ -260,7 +316,10 @@ function Profile() {
               onClick={handleEditUserInfo}
               disabled={
                 !formState.isValid ||
-                (!watchUsername && !watchPassword && !watchPasswordConfirm)
+                (!watchUsername &&
+                  !watchPassword &&
+                  !watchPasswordConfirm &&
+                  !uploadedImage)
               }
             >
               저장
