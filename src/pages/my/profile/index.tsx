@@ -1,5 +1,5 @@
 import { User } from '@/@types/user'
-import { UpdateUserFormParams, getUser, updateUser } from '@/api/user'
+import { getUser, updateUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Divider from '@/components/common/Divider/Divider'
 import Input from '@/components/common/Input/Input'
@@ -120,14 +120,13 @@ function Profile() {
     },
   })
 
-  const { setValue, register, formState, watch, clearErrors } =
-    useForm<UpdateUserFormParams>({
-      defaultValues: {
-        username: !isEmpty(user) ? user.profile.username : '',
-        password: '',
-        passwordConfirm: '',
-      },
-    })
+  const { setValue, register, formState, watch, clearErrors } = useForm({
+    defaultValues: {
+      username: !isEmpty(user) ? user.profile.username : '',
+      password: '',
+      passwordConfirm: '',
+    },
+  })
 
   const watchUsername = watch('username')
   const watchPassword = watch('password')
