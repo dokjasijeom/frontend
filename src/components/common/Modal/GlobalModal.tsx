@@ -12,13 +12,11 @@ function GlobalModal() {
   useEffect(() => {
     if (!isEmpty(modal)) {
       setShowModal(true)
-      console.log(111)
     }
   }, [modal])
 
   const handleModalClose = () => {
     setShowModal(false)
-    console.log(222)
     setModal({})
   }
 
