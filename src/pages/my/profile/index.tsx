@@ -201,7 +201,13 @@ function Profile() {
     }
 
     await updateUser(formData).then(() => {
-      showModal({ title: '프로필 수정', body: '프로필 수정이 완료되었습니다.' })
+      showModal({
+        title: '프로필 수정',
+        body: '프로필 수정이 완료되었습니다.',
+        onPositiveClick: () => {
+          router.push('/my/library')
+        },
+      })
     })
   }
 
