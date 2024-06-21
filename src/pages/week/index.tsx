@@ -56,29 +56,32 @@ function Week() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
-    const firstEntry = entries[0]
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const firstEntry = entries[0]
 
-    if (firstEntry.isIntersecting && !isLoading) {
-      setIsLoading(true)
-      setPage(page + 1)
-    }
-  }, [])
+      if (firstEntry.isIntersecting && !isLoading) {
+        setIsLoading(true)
+        setPage((prev) => prev + 1)
+      }
+    },
+    [isLoading],
+  )
 
   useEffect(() => {
-    if (!targetRef.current) return
+    if (!targetRef.current) return undefined
     const options = {
       threshold: 0.1,
     }
     const observer = new IntersectionObserver(handleObserver, options)
-    targetRef.current && observer.observe(targetRef.current)
+    observer.observe(targetRef.current)
 
     if (totalPage <= page) {
       observer.unobserve(targetRef.current)
     }
 
     return () => observer && observer.disconnect()
-  }, [totalPage, page])
+  }, [totalPage, page, handleObserver])
 
   useEffect(() => {
     async function fetchWeekSeries() {
@@ -92,7 +95,7 @@ function Week() {
       const { series, pagination } = res.data.data
 
       setTotalPage(pagination.totalPage)
-      setWeekSeries([...weekSeries, ...series])
+      setWeekSeries((prev) => [...prev, ...series])
     }
 
     fetchWeekSeries()
