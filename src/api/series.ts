@@ -4,6 +4,8 @@ import axiosInstance from './axiosInstance'
 interface GetSeriesParams {
   publishDay?: string
   seriesType?: string
+  page?: number
+  pageSize?: number
 }
 
 interface GetNewSeriesParams {

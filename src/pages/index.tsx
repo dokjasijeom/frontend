@@ -15,6 +15,7 @@ import { Series } from '@/@types/series'
 import { WEBNOVEL, WEBTOON } from '@/constants/Series'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
 import { isEmpty, range } from 'lodash'
+import { useRouter } from 'next/router'
 
 const HomeContainer = styled.div``
 
@@ -57,7 +58,7 @@ const SwiperBookListWrapper = styled.div`
 `
 
 export default function Home() {
-  const [selectedBookTypeTab, setSelectedBookTypeTab] = useState(
+  const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] = useState(
     SERIES_TYPE_TAB_LIST[0],
   )
   const [selectedWeek, setSelectedWeek] = useState(WEEK_TAB_LIST[0])
@@ -71,10 +72,12 @@ export default function Home() {
   const [newWebNovelSeries, setNewWebNovelSeries] = useState<Series[]>([])
   const [newWebToonSeries, setNewWebToonSeries] = useState<Series[]>([])
 
+  const router = useRouter()
+
   useEffect(() => {
     async function fetchWeekSeries() {
       const res = await getSeriesList({
-        seriesType: selectedBookTypeTab.value,
+        seriesType: selectedSeriesTypeTab.value,
         publishDay: selectedWeek.value,
       })
 
@@ -82,7 +85,7 @@ export default function Home() {
       setWeekSeries(series)
     }
     fetchWeekSeries()
-  }, [selectedBookTypeTab.value, selectedWeek.value])
+  }, [selectedSeriesTypeTab.value, selectedWeek.value])
 
   useEffect(() => {
     async function fetchNewWebNovelSeries() {
@@ -118,12 +121,14 @@ export default function Home() {
         <TabTitleHeader
           iconName="Calendar"
           title="요일별 연재 작품"
-          selectedTab={selectedBookTypeTab}
+          selectedTab={selectedSeriesTypeTab}
           tabList={SERIES_TYPE_TAB_LIST}
           onChangeTab={(tab) => {
-            setSelectedBookTypeTab(tab)
+            setSelectedSeriesTypeTab(tab)
           }}
-          onClickMore={() => {}}
+          onClickMore={() => {
+            router.push('/week')
+          }}
         />
         <WeekTabWrapper>
           <Tab

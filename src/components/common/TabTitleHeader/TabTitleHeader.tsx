@@ -46,7 +46,11 @@ const TabTitleHeaderContainer = styled.div`
   }
 `
 
-const MoreButton = styled.div``
+const MoreButton = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`
 
 interface TabTitleHeaderProps {
   iconName: IconNameType
