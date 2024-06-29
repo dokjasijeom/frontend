@@ -114,7 +114,7 @@ function TermsOfUseContainer(props: TermOfUseProps) {
                 setValue('reason1', !watchReason1)
               }}
             >
-              [필수]
+              [필수]{' '}
               <button
                 type="button"
                 className="link"
@@ -124,7 +124,6 @@ function TermsOfUseContainer(props: TermOfUseProps) {
               </button>
               에 동의합니다.
             </Checkbox>
-            {/* <div className="show_detail">보기</div> */}
           </CheckboxLabelWrapper>
           <CheckboxLabelWrapper>
             <Checkbox
@@ -135,10 +134,16 @@ function TermsOfUseContainer(props: TermOfUseProps) {
                 setValue('reason2', !watchReason2)
               }}
             >
-              [필수] <div className="link">개인정보 수집 및 이용</div>에
-              동의합니다.
+              [필수]{' '}
+              <button
+                type="button"
+                className="link"
+                onClick={() => router.push('/support/privacyPolicy')}
+              >
+                개인정보 수집 및 이용
+              </button>
+              에 동의합니다.
             </Checkbox>
-            {/* <div className="show_detail">보기</div> */}
           </CheckboxLabelWrapper>
           <Checkbox
             checkColor={theme.color.main[600]}
