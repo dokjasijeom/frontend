@@ -62,3 +62,7 @@ export const updateUser = (params: FormData) => {
 export const updateUserProvider = (params: UpdateUserProviderParams) => {
   return axiosInstance.patch('/user/provider', params)
 }
+
+export const deleteUserAvatar = () => {
+  return axiosInstance.delete('/user/avatar')
+}

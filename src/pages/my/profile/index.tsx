@@ -1,5 +1,5 @@
 import { User } from '@/@types/user'
-import { getUser, updateUser } from '@/api/user'
+import { deleteUserAvatar, getUser, updateUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Divider from '@/components/common/Divider/Divider'
 import Input from '@/components/common/Input/Input'
@@ -7,7 +7,7 @@ import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import useModal from '@/hooks/useModal'
 import { getImageUrl } from '@/utils/dataFormatting'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteCookie } from 'cookies-next'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
@@ -111,6 +111,7 @@ const ListButton = styled.button`
 function Profile() {
   const router = useRouter()
   const { showModal } = useModal()
+  const queryClient = useQueryClient()
 
   const { data: user } = useQuery<User>({
     queryKey: ['user'],
@@ -211,6 +212,12 @@ function Profile() {
     })
   }
 
+  const handleDeleteAvatar = async () => {
+    await deleteUserAvatar().then(() => {
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+    })
+  }
+
   const handleLogout = () => {
     deleteCookie('DS_AUT')
     deleteCookie('DS_USER')
@@ -260,7 +267,12 @@ function Profile() {
           />
         </ImageWrapper>
 
-        <Button type="text" width="auto" style={{ marginTop: '8px' }}>
+        <Button
+          type="text"
+          width="auto"
+          style={{ marginTop: '8px' }}
+          onClick={handleDeleteAvatar}
+        >
           사진 삭제
         </Button>
       </ProfileImageWrapper>
