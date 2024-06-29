@@ -23,6 +23,10 @@ interface DeleteRecordEpisodeParams {
   recordIds: number[]
 }
 
+interface UpdateUserProviderParams {
+  providers: string[]
+}
+
 export const setUser = (params: SetUserParams) => {
   return axiosInstance.post('/users', params)
 }
@@ -53,4 +57,8 @@ export const updateUser = (params: FormData) => {
   return axiosInstance.patch('/user', params, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
+}
+
+export const updateUserProvider = (params: UpdateUserProviderParams) => {
+  return axiosInstance.patch('/user/provider', params)
 }

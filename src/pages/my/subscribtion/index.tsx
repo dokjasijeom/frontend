@@ -1,11 +1,15 @@
-import { Platform } from '@/@types/platform'
+import { ProviderItem } from '@/@types/series'
+import { User } from '@/@types/user'
+import { getProviders } from '@/api/providers'
+import { getUser, updateUserProvider } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { PROVIDER_TAB_LIST } from '@/constants/Tab'
+import useModal from '@/hooks/useModal'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const SubscribtionContainer = styled.div`
@@ -21,7 +25,7 @@ const SubscribtionWrapper = styled.div`
     ${({ theme }) => theme.typography.head1};
     color: ${({ theme }) => theme.color.gray[950]};
   }
-  .platform_wrapper {
+  .provider_wrapper {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
@@ -46,19 +50,55 @@ const SubscribtionItem = styled.div`
 
 function Subscribtion() {
   const router = useRouter()
+  const queryClient = useQueryClient()
+  const { showModal } = useModal()
 
-  const [subscribtion, setSubscribtion] = useState<Platform[]>([
-    { label: '네이버시리즈', value: 'series' },
-  ])
+  const { data: user } = useQuery<User>({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await getUser()
+      return res.data.data
+    },
+  })
 
-  const handleChangeSubscribtion = (platform: any) => {
-    const findItem = subscribtion?.find((v) => v.value === platform.value)
-    if (findItem) {
-      const temp = subscribtion.filter((v) => v.value !== platform.value)
-      setSubscribtion(temp)
-    } else {
-      setSubscribtion([...subscribtion, platform])
+  const [providers, setProviders] = useState<ProviderItem[]>([])
+  const [selectedProvider, setSelectedProvider] = useState<ProviderItem[]>([])
+
+  useEffect(() => {
+    async function fetchProviders() {
+      const res = await getProviders()
+      setProviders(res.data.data)
     }
+    fetchProviders()
+  }, [])
+
+  useEffect(() => {
+    if (user) {
+      setSelectedProvider(user.subscribeProvider)
+    }
+  }, [user])
+
+  const handleChangeSubscribtion = (provider: ProviderItem) => {
+    const findItem = selectedProvider?.find((v) => v.hashId === provider.hashId)
+    if (findItem) {
+      const temp = selectedProvider?.filter((v) => v.hashId !== provider.hashId)
+      setSelectedProvider(temp)
+    } else {
+      setSelectedProvider([...selectedProvider, provider])
+    }
+  }
+
+  const handleUpdateSubscription = async () => {
+    const providerIds = selectedProvider.map(
+      (provider) => provider.hashId,
+    ) as any
+    await updateUserProvider({ providers: providerIds }).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+      showModal({
+        title: '구독 중인 서비스',
+        body: '설정이 완료 되었습니다.',
+      })
+    })
   }
 
   return (
@@ -69,28 +109,28 @@ function Subscribtion() {
           구독 중인 서비스를 <br />
           선택해주세요.
         </div>
-        <div className="platform_wrapper">
-          {PROVIDER_TAB_LIST.map((provider) => (
+        <div className="provider_wrapper">
+          {providers.map((provider) => (
             <SubscribtionItem
-              key={provider.value}
+              key={provider.hashId}
               onClick={() => handleChangeSubscribtion(provider)}
               className={
-                subscribtion?.find((v) => v.value === provider.value)
+                selectedProvider.find((v) => v.hashId === provider.hashId)
                   ? 'active'
                   : ''
               }
             >
               <Image
-                src={`/images/${provider.value}.png`}
-                alt={provider.label}
+                src={`/images/${provider.name}.png`}
+                alt={provider.displayName}
                 width={16}
                 height={16}
               />
-              {provider.label}
+              {provider.displayName}
             </SubscribtionItem>
           ))}
         </div>
-        <Button>저장</Button>
+        <Button onClick={handleUpdateSubscription}>저장</Button>
       </SubscribtionWrapper>
     </SubscribtionContainer>
   )

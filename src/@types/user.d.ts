@@ -1,14 +1,15 @@
 import { PlatformType } from './platform'
-import { ProviderNameType, Series, SeriesType } from './series'
+import { ProviderItem, ProviderNameType, Series, SeriesType } from './series'
 
 export interface User {
   hashId: string
   email: string
-  Roles: string | null
+  profile: Profile
   likeSeries: Series[]
   likeSeriesCount: number
   recordSeries: RecordSeries[]
-  profile: Profile
+  recordSeriesCount: number
+  subscribeProvider: ProviderItem[]
 }
 
 export interface Profile {

@@ -4,7 +4,6 @@ import Image from 'next/image'
 import styled, { useTheme } from 'styled-components'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
-import { Platform } from '@/@types/platform'
 import { User } from '@/@types/user'
 
 const MyInfoWrapper = styled.div`
@@ -104,7 +103,7 @@ const PlusButton = styled.button`
   cursor: pointer;
 `
 
-const PlatformIcon = styled.div<{ index: number }>`
+const ProviderIcon = styled.div<{ index: number }>`
   border-radius: 50%;
   font-size: 0;
   border: solid 3px ${({ theme }) => theme.color.system.w};
@@ -118,7 +117,7 @@ const PlatformIcon = styled.div<{ index: number }>`
   }
 `
 
-const SubscribtionPlatformWrapper = styled.div`
+const SubscribtionProviderWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 34px;
@@ -141,10 +140,6 @@ function MyInfoContainer(props: MyInfoContainerProps) {
   const handleEditSubscribe = () => {
     router.push('/my/subscribtion')
   }
-
-  const mySubscribtion = [
-    { label: '네이버시리즈', value: 'series' },
-  ] as Platform[]
 
   return (
     <MyInfoWrapper>
@@ -220,27 +215,28 @@ function MyInfoContainer(props: MyInfoContainerProps) {
             구독 중인 서비스
           </div>
           <div className="box_content_wrapper">
-            {isEmpty(mySubscribtion) && (
+            {isEmpty(user.subscribeProvider) ? (
               <PlusButton>
                 <Icons name="Plus" width="20px" height="20px" />
               </PlusButton>
+            ) : (
+              <SubscribtionProviderWrapper>
+                {user.subscribeProvider.map((subscribtion, index) => (
+                  <ProviderIcon
+                    key={subscribtion.hashId}
+                    index={index}
+                    onClick={handleEditSubscribe}
+                  >
+                    <Image
+                      src={`/images/${subscribtion.name}.png`}
+                      alt={subscribtion.displayName}
+                      width={26}
+                      height={26}
+                    />
+                  </ProviderIcon>
+                ))}
+              </SubscribtionProviderWrapper>
             )}
-            <SubscribtionPlatformWrapper>
-              {mySubscribtion.map((subscribtion, index) => (
-                <PlatformIcon
-                  key={subscribtion.value}
-                  index={index}
-                  onClick={handleEditSubscribe}
-                >
-                  <Image
-                    src={`/images/${subscribtion.value}.png`}
-                    alt={subscribtion.label}
-                    width={26}
-                    height={26}
-                  />
-                </PlatformIcon>
-              ))}
-            </SubscribtionPlatformWrapper>
           </div>
         </Box>
       </MyContentsWrapper>
