@@ -24,6 +24,7 @@ const SubscribtionWrapper = styled.div`
   .platform_wrapper {
     display: flex;
     gap: 12px;
+    flex-wrap: wrap;
   }
 `
 
