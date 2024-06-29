@@ -42,18 +42,22 @@ const ButtonTabContainer = styled.div`
   .button_tab_wrapper {
     width: 100%;
     display: flex;
+    height: 33px;
   }
 `
 
 const ButtonTabItemWrapper = styled.div`
   padding: 8px 0;
-  height: 33px;
+  height: 100%;
   ${({ theme }) => theme.typography.body1};
   color: ${({ theme }) => theme.color.gray[600]};
   cursor: pointer;
   background: ${({ theme }) => theme.color.system.w};
   flex: 1;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &.active {
     color: ${({ theme }) => theme.color.system.w};
     background: ${({ theme }) => theme.color.main[600]};
@@ -62,7 +66,7 @@ const ButtonTabItemWrapper = styled.div`
 
 const ButtonTabDivider = styled.div`
   width: 1px;
-  height: 33px;
+  height: 100%;
   background: ${({ theme }) => theme.color.gray[100]};
 `
 
@@ -100,15 +104,16 @@ interface TabProps {
   tabList: TabItem[]
   selectedTab: TabItem
   onChange: (tab: TabItem) => void
+  className?: string
 }
 
 function Tab(props: TabProps) {
-  const { type = 'text', tabList, selectedTab, onChange } = props
+  const { type = 'text', tabList, selectedTab, onChange, className } = props
 
   const renderComponent = () => {
     if (type === 'text') {
       return (
-        <TextTabContainer>
+        <TextTabContainer className={className}>
           {tabList.map((tab, index) => (
             <TextTabWrapper key={tab.value}>
               <TextTabItemWrapper
@@ -125,7 +130,7 @@ function Tab(props: TabProps) {
     }
     if (type === 'button') {
       return (
-        <ButtonTabContainer>
+        <ButtonTabContainer className={className}>
           {tabList.map((tab, index) => (
             <div className="button_tab_wrapper" key={tab.value}>
               <ButtonTabItemWrapper
@@ -143,7 +148,7 @@ function Tab(props: TabProps) {
     }
     if (type === 'underbar') {
       return (
-        <UnderBarTabContainer>
+        <UnderBarTabContainer className={className}>
           {tabList.map((tab) => (
             <>
               <UnderBarTabItemWrapper
