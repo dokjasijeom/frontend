@@ -14,6 +14,7 @@ import SeriesPosterItem from '@/components/common/SeriesPosterItem/SeriesPosterI
 import Skeleton from '@/components/common/Skeleton/Skeleton'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
+import Toggle from '@/components/common/Toggle/Toggle'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import useDebounce from '@/hooks/useDebounce'
@@ -58,10 +59,13 @@ const MySeriesInfoWrapper = styled.div`
 
   .series_edit_wrapper {
   }
-  .record_button {
+  .record_button_wrapper {
     position: absolute;
     bottom: 20px;
     left: 178px;
+    display: flex;
+    align-items: end;
+    gap: 12px;
 
     @media (max-width: 400px) {
       left: 149px !important;
@@ -72,6 +76,17 @@ const MySeriesInfoWrapper = styled.div`
 
       @media (max-width: 400px) {
         left: 20px !important;
+      }
+    }
+
+    .complete_toggle_wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      .label {
+        ${({ theme }) => theme.typography.body4};
+        color: ${({ theme }) => theme.color.gray[800]};
       }
     }
   }
@@ -264,6 +279,8 @@ function LibraryDetail({
     { label: '카카오페이지', value: 'kakao-page' },
     { label: '리디북스', value: 'ridi' },
   ])
+
+  const [isComplete, setIsComplete] = useState(false)
 
   const debounceSearch = useDebounce(search, 200)
   const queryClient = useQueryClient()
@@ -504,15 +521,22 @@ function LibraryDetail({
                 삭제
               </Button>
             </div>
-            <Button
-              className={`record_button ${
+            <div
+              className={`record_button_wrapper ${
                 isNonExistSeries ? 'non_exist_series' : ''
               }`}
-              width="95px"
-              onClick={handleRecordModal}
             >
-              기록하기
-            </Button>
+              <Button width="95px" onClick={handleRecordModal}>
+                기록하기
+              </Button>
+              <div className="complete_toggle_wrapper">
+                <div className="label">완독</div>
+                <Toggle
+                  checked={isComplete}
+                  onChange={() => setIsComplete(!isComplete)}
+                />
+              </div>
+            </div>
           </MySeriesInfoWrapper>
         )}
         {!isEmpty(lastRecordEpisode) && (
