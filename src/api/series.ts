@@ -17,7 +17,6 @@ interface NonExistRecordSeriesParams {
   title: string
   author: string
   genre: string
-  totalEpisode: number
   seriesType: SeriesType
 }
 

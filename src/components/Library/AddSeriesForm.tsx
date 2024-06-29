@@ -4,13 +4,21 @@ import { useForm } from 'react-hook-form'
 import { nonExistRecordSeries } from '@/api/series'
 import { useQueryClient } from '@tanstack/react-query'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
-import { isEmpty } from 'lodash'
 import Input from '../common/Input/Input'
 import Button from '../common/Button/Button'
-import Selector, { OptionItem } from '../common/Selector/Selector'
+import Tab, { TabItem } from '../common/Tab/Tab'
 
 const AddSeriesFormWrapper = styled.div`
   width: 100%;
+
+  .series_type_tab_wrapper {
+    .button_tab_wrapper {
+      height: 44px;
+      div {
+        ${({ theme }) => theme.typography.body4};
+      }
+    }
+  }
   .add_book_form_wrapper {
     display: flex;
     flex-direction: column;
@@ -34,11 +42,10 @@ interface AddSeriesFormProps {
 }
 
 interface FormValues {
-  seriesType: OptionItem | null
+  seriesType: TabItem
   title: string
   author: string
   genre: string
-  totalEpisode: string
 }
 
 function AddSeriesForm(props: AddSeriesFormProps) {
@@ -46,11 +53,10 @@ function AddSeriesForm(props: AddSeriesFormProps) {
   const queryClient = useQueryClient()
   const { register, setValue, formState, watch } = useForm<FormValues>({
     defaultValues: {
-      seriesType: null,
+      seriesType: SERIES_TYPE_TAB_LIST[0],
       title: keyword,
       author: '',
       genre: '',
-      totalEpisode: '',
     },
   })
 
@@ -58,14 +64,6 @@ function AddSeriesForm(props: AddSeriesFormProps) {
   const watchTitle = watch('title')
   const watchAuthor = watch('author')
   const watchGenre = watch('genre')
-  const watchTotalEpisode = watch('totalEpisode')
-
-  const addComma = (number: string) => {
-    const returnString = number
-      ?.toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    return returnString
-  }
 
   useEffect(() => {
     register('seriesType', {
@@ -92,12 +90,6 @@ function AddSeriesForm(props: AddSeriesFormProps) {
         message: '장르를 입력해주세요.',
       },
     })
-    register('totalEpisode', {
-      required: {
-        value: true,
-        message: '전체 회차를 입력해주세요.',
-      },
-    })
   }, [register])
 
   const handleAddNonExistSeries = async () => {
@@ -105,7 +97,6 @@ function AddSeriesForm(props: AddSeriesFormProps) {
       title: watchTitle,
       author: watchAuthor,
       genre: watchGenre,
-      totalEpisode: Number(watchTotalEpisode),
       seriesType: watchSeriesType?.value,
     }
 
@@ -118,13 +109,14 @@ function AddSeriesForm(props: AddSeriesFormProps) {
   return (
     <AddSeriesFormWrapper>
       <form className="add_book_form_wrapper">
-        <Selector
-          {...register('seriesType')}
-          value={isEmpty(watchSeriesType) ? '선택' : watchSeriesType.label}
-          options={SERIES_TYPE_TAB_LIST}
-          onClickOption={(option: OptionItem) => {
-            setValue('seriesType', option, { shouldValidate: true })
+        <Tab
+          className="series_type_tab_wrapper"
+          type="button"
+          tabList={SERIES_TYPE_TAB_LIST}
+          onChange={(tab: TabItem) => {
+            setValue('seriesType', tab, { shouldValidate: true })
           }}
+          selectedTab={watchSeriesType}
         />
         <div className="form_item">
           <div className="label">제목</div>
@@ -165,22 +157,7 @@ function AddSeriesForm(props: AddSeriesFormProps) {
             }}
           />
         </div>
-        <div className="form_item">
-          <div className="label">전체 회차</div>
-          <Input
-            value={`${addComma(watchTotalEpisode)}`}
-            placeholder="총 몇 화인지 숫자만 입력해주세요."
-            {...register('totalEpisode')}
-            error={!!formState.errors.totalEpisode}
-            errorMessage={formState.errors.totalEpisode?.message}
-            onChange={(e) => {
-              const { value } = e.target
-              const onlyNumber = value.replace(/[^0-9]/g, '')
-              const str = onlyNumber.replaceAll(',', '')
-              setValue('totalEpisode', str, { shouldValidate: true })
-            }}
-          />
-        </div>
+
         <Button
           style={{ marginTop: '12px' }}
           disabled={!formState.isValid}
