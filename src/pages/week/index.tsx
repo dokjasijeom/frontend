@@ -29,7 +29,7 @@ const WeekTabWrapper = styled.div`
   padding: 16px 20px 0;
 `
 
-const BookListWrapper = styled.div`
+const SeriesListWrapper = styled.div`
   display: grid;
   width: 100%;
   justify-content: center;
@@ -61,12 +61,12 @@ function Week() {
   const [page, setPage] = useState(1)
   const [paginationData, setPaginationData] = useState<Pagination>()
   const targetRef = useRef(null)
-  const pageSize = 20
+  const pageSize = 15
 
   const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null)
   const router = useRouter()
 
-  const loadMore = useCallback(async () => {
+  const fetchMore = useCallback(async () => {
     const nextPage = page + 1
     const res = await getSeriesList({
       seriesType: selectedSeriesTypeTab.value,
@@ -82,7 +82,7 @@ function Week() {
 
   useInfiniteScrolling({
     observerRef,
-    fetchMore: loadMore,
+    fetchMore,
     hasMore: paginationData?.hasNext ?? false,
   })
 
@@ -139,7 +139,7 @@ function Week() {
             }}
           />
         </WeekTabWrapper>
-        <BookListWrapper>
+        <SeriesListWrapper>
           {isEmpty(weekSeries) ? (
             <>
               {Children.toArray(
@@ -164,7 +164,7 @@ function Week() {
               ))}
             </>
           )}
-        </BookListWrapper>
+        </SeriesListWrapper>
       </WeekWrapper>
       <div ref={targetRef} />
       <div ref={setObserverRef} />
