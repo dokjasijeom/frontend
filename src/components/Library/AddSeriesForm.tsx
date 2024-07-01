@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import { nonExistRecordSeries } from '@/api/series'
 import { useQueryClient } from '@tanstack/react-query'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
+import { updateNonExistRecordSeries } from '@/api/user'
+import { RecordSeries } from '@/@types/user'
 import Input from '../common/Input/Input'
 import Button from '../common/Button/Button'
 import Tab, { TabItem } from '../common/Tab/Tab'
@@ -37,6 +39,8 @@ const AddSeriesFormWrapper = styled.div`
   }
 `
 interface AddSeriesFormProps {
+  mySeries?: RecordSeries
+  isEdit?: boolean
   keyword: string
   onCloseModal: () => void
 }
@@ -49,14 +53,18 @@ interface FormValues {
 }
 
 function AddSeriesForm(props: AddSeriesFormProps) {
-  const { keyword, onCloseModal } = props
+  const { keyword, onCloseModal, isEdit = false, mySeries } = props
   const queryClient = useQueryClient()
   const { register, setValue, formState, watch } = useForm<FormValues>({
     defaultValues: {
-      seriesType: SERIES_TYPE_TAB_LIST[0],
-      title: keyword,
-      author: '',
-      genre: '',
+      seriesType: isEdit
+        ? SERIES_TYPE_TAB_LIST.find(
+            (item) => item.name === mySeries?.seriesType,
+          )
+        : SERIES_TYPE_TAB_LIST[0],
+      title: isEdit ? mySeries?.title : keyword,
+      author: isEdit ? mySeries?.author : '',
+      genre: isEdit ? mySeries?.genre : '',
     },
   })
 
@@ -100,10 +108,19 @@ function AddSeriesForm(props: AddSeriesFormProps) {
       seriesType: watchSeriesType?.name,
     }
 
-    await nonExistRecordSeries(params).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['user'] })
-      onCloseModal()
-    })
+    if (isEdit && mySeries) {
+      await updateNonExistRecordSeries({ id: mySeries.id, ...params }).then(
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['mySeriesDetail'] })
+          onCloseModal()
+        },
+      )
+    } else {
+      await nonExistRecordSeries(params).then(() => {
+        queryClient.invalidateQueries({ queryKey: ['user'] })
+        onCloseModal()
+      })
+    }
   }
 
   return (
@@ -163,7 +180,7 @@ function AddSeriesForm(props: AddSeriesFormProps) {
           disabled={!formState.isValid}
           onClick={handleAddNonExistSeries}
         >
-          추가
+          {isEdit ? '완료' : '추가'}
         </Button>
       </form>
     </AddSeriesFormWrapper>

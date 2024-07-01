@@ -366,7 +366,14 @@ function LibraryDetail({
     showModal({
       title: '편집',
       type: 'self',
-      body: <AddSeriesForm keyword="" onCloseModal={closeModal} />,
+      body: (
+        <AddSeriesForm
+          mySeries={mySeries}
+          isEdit
+          keyword=""
+          onCloseModal={closeModal}
+        />
+      ),
     })
   }
 

@@ -1,4 +1,5 @@
 // import { getFormData } from '@/utils/dataFormatting'
+import { SeriesType } from '@/@types/series'
 import axiosInstance from './axiosInstance'
 
 interface SetUserParams {
@@ -34,6 +35,14 @@ interface ForgetUserParams {
 interface UpdateReadCompleteParams {
   id: string
   readCompleted: boolean
+}
+
+interface UpdateNonExistRecordSeries {
+  id: number
+  title: string
+  author: string
+  genre: string
+  seriesType: SeriesType
 }
 
 export const setUser = (params: SetUserParams) => {
@@ -84,5 +93,17 @@ export const updateReadCompleted = (params: UpdateReadCompleteParams) => {
   const { id, readCompleted } = params
   return axiosInstance.patch(`/user/series/record/${id}`, {
     readCompleted,
+  })
+}
+
+export const updateNonExistRecordSeries = (
+  params: UpdateNonExistRecordSeries,
+) => {
+  const { id, title, author, genre, seriesType } = params
+  return axiosInstance.patch(`/user/series/record/${id}`, {
+    title,
+    author,
+    genre,
+    seriesType,
   })
 }
