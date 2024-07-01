@@ -97,7 +97,7 @@ function AddSeriesForm(props: AddSeriesFormProps) {
       title: watchTitle,
       author: watchAuthor,
       genre: watchGenre,
-      seriesType: watchSeriesType?.value,
+      seriesType: watchSeriesType?.name,
     }
 
     await nonExistRecordSeries(params).then(() => {
