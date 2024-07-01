@@ -148,7 +148,11 @@ function MyInfoContainer(props: MyInfoContainerProps) {
           <Icons name="Setting" onClick={handleEditMyInfo} />
         </SettingButton>
         <Image
-          src={user.profile.avatar || '/image/profile.png'}
+          src={
+            !isEmpty(user.profile.avatar)
+              ? user.profile.avatar
+              : '/images/profile.png'
+          }
           width={104}
           height={104}
           alt="profile"
