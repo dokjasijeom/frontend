@@ -181,7 +181,7 @@ export default function Home() {
           selectedTab={selectedWebToonProviderTab}
           tabList={PROVIDER_TAB_LIST}
           onChangeTab={(tab: TabItem) => setSelectedWebToonProviderTab(tab)}
-          onClickMore={() => {}}
+          onClickMore={() => router.push('/new/webtoon')}
         />
         <SwiperBookListWrapper>
           <SwiperPosterThumbnail seriesList={newWebToonSeries} />
