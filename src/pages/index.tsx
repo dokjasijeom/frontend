@@ -170,7 +170,7 @@ export default function Home() {
           selectedTab={selectedWebNovelProviderTab}
           tabList={PROVIDER_TAB_LIST}
           onChangeTab={(tab: TabItem) => setSelectedWebNovelProviderTab(tab)}
-          onClickMore={() => {}}
+          onClickMore={() => router.push('/new/webnovel')}
         />
         <SwiperBookListWrapper>
           <SwiperPosterThumbnail seriesList={newWebNovelSeries} />

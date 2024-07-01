@@ -11,6 +11,8 @@ interface GetSeriesParams {
 interface GetNewSeriesParams {
   provider?: string
   seriesType?: string
+  page?: number
+  pageSize?: number
 }
 
 interface NonExistRecordSeriesParams {
