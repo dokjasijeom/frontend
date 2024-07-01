@@ -207,8 +207,7 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
                 <span>{authorGenreText}</span>
               </div>
               <div className="platform_wrapper">
-                {!isEmpty(recordSeries.series) &&
-                  !isEmpty(recordSeries.recordProviders) &&
+                {!isEmpty(recordSeries.recordProviders) &&
                   recordSeries.recordProviders.map((provider: PlatformType) => (
                     <Image
                       key={provider}
@@ -224,13 +223,21 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
               <span className="current">
                 {recordSeries.recordEpisodeCount}화
               </span>
-              <span className="total">/{recordSeries.totalEpisode}화</span>
+              <span className="total">
+                /
+                {recordSeries.series
+                  ? recordSeries.series.totalEpisode
+                  : recordSeries.recordEpisodeCount}
+                화
+              </span>
             </div>
           </div>
         </SeriesItemWrapper>
         <ProgressValue
           value={progressValue(
-            recordSeries.totalEpisode,
+            recordSeries.series
+              ? recordSeries.series.totalEpisode
+              : recordSeries.recordEpisodeCount,
             recordSeries.recordEpisodeCount,
           )}
         />
