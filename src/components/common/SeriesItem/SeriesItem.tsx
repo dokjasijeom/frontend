@@ -102,15 +102,16 @@ function SeriesItem(props: SeriesItemProps) {
             <span>{authorGenreText}</span>
           </div>
           <div className="platform_wrapper">
-            {series.providers.map((provider) => (
-              <Image
-                key={provider.hashId}
-                src={`/images/${provider.name}.png`}
-                alt={provider.name}
-                width={20}
-                height={20}
-              />
-            ))}
+            {series.providers &&
+              series.providers.map((provider) => (
+                <Image
+                  key={provider.hashId}
+                  src={`/images/${provider.name}.png`}
+                  alt={provider.name}
+                  width={20}
+                  height={20}
+                />
+              ))}
           </div>
         </div>
       </div>
