@@ -27,6 +27,10 @@ interface UpdateUserProviderParams {
   providers: string[]
 }
 
+interface ForgetUserParams {
+  email: string
+}
+
 export const setUser = (params: SetUserParams) => {
   return axiosInstance.post('/users', params)
 }
@@ -65,4 +69,8 @@ export const updateUserProvider = (params: UpdateUserProviderParams) => {
 
 export const deleteUserAvatar = () => {
   return axiosInstance.delete('/user/avatar')
+}
+
+export const forgotUser = (params: ForgetUserParams) => {
+  return axiosInstance.post('/user/forgot', params)
 }
