@@ -3,7 +3,11 @@ import { ProviderItem } from '@/@types/series'
 import { RecordEpisode, RecordSeries } from '@/@types/user'
 import { getProviders } from '@/api/providers'
 import { deleteNonExistRecordSeries, deleteRecordSeries } from '@/api/series'
-import { deleteRecordEpisode, getMySeries } from '@/api/user'
+import {
+  deleteRecordEpisode,
+  getMySeries,
+  updateReadCompleted,
+} from '@/api/user'
 import AddSeriesForm from '@/components/Library/AddSeriesForm'
 import RecordModalBody from '@/components/Library/RecordModalBody'
 import Badge from '@/components/common/Badge/Badge'
@@ -278,8 +282,6 @@ function LibraryDetail({
   const [selectedEpisodes, setSelectedEpisodes] = useState<RecordEpisode[]>([])
   const [selectedProvider, setSelectedProvider] = useState<TabItem[]>(providers)
 
-  const [isComplete, setIsComplete] = useState(false)
-
   const debounceSearch = useDebounce(search, 200)
   const queryClient = useQueryClient()
 
@@ -461,6 +463,15 @@ function LibraryDetail({
     setIsEdit(true)
   }
 
+  const handleUpdateReadCompleted = async () => {
+    await updateReadCompleted({
+      id,
+      readCompleted: !mySeries?.readCompleted,
+    }).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['mySeriesDetail'] })
+    })
+  }
+
   return (
     <LibraryDetailContainer>
       <TitleHeader title="읽고 있는 작품" onClickBack={() => router.back()} />
@@ -498,9 +509,6 @@ function LibraryDetail({
             {mySeries.title && mySeries.author && mySeries.genre && (
               <NonExistSeriesInfoWrapper>
                 <div className="series_info">
-                  <div className="episode_wrapper">
-                    <div>총 {mySeries.totalEpisode}화</div>
-                  </div>
                   <div className="title">{mySeries.title}</div>
                   <div className="sub">
                     {mySeries.author.concat(' · ', mySeries.genre)}
@@ -539,8 +547,8 @@ function LibraryDetail({
               <div className="complete_toggle_wrapper">
                 <div className="label">완독</div>
                 <Toggle
-                  checked={isComplete}
-                  onChange={() => setIsComplete(!isComplete)}
+                  checked={mySeries.readCompleted}
+                  onChange={handleUpdateReadCompleted}
                 />
               </div>
             </div>

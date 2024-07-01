@@ -33,7 +33,7 @@ export interface RecordSeries {
   author?: string
   genre?: string
   series?: Series
-  totalEpisode: number
+  readCompleted: boolean
   recordEpisodeCount: number
   recordEpisodes: RecordEpisode[]
   seriesType: SeriesType

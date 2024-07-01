@@ -31,6 +31,11 @@ interface ForgetUserParams {
   email: string
 }
 
+interface UpdateReadCompleteParams {
+  id: string
+  readCompleted: boolean
+}
+
 export const setUser = (params: SetUserParams) => {
   return axiosInstance.post('/users', params)
 }
@@ -73,4 +78,11 @@ export const deleteUserAvatar = () => {
 
 export const forgotUser = (params: ForgetUserParams) => {
   return axiosInstance.post('/user/forgot', params)
+}
+
+export const updateReadCompleted = (params: UpdateReadCompleteParams) => {
+  const { id, readCompleted } = params
+  return axiosInstance.patch(`/user/series/record/${id}`, {
+    readCompleted,
+  })
 }
