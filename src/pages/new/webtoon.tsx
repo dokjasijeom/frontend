@@ -37,7 +37,7 @@ const SeriesListWrapper = styled.div`
   grid-template-columns: repeat(4, minmax(0, 1fr));
   row-gap: 16px;
   column-gap: 4px;
-  padding: 16px 20px 32px;
+  padding: 28px 20px 32px;
 
   @media (max-width: 560px) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
