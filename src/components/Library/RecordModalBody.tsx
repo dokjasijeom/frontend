@@ -29,6 +29,7 @@ const SeriesWrapper = styled.div`
   background: ${({ theme }) => theme.color.sub[50]};
   padding: 12px;
   position: relative;
+  min-height: 76px;
 
   .series_info_wrapper {
     display: flex;
@@ -105,6 +106,10 @@ const SeriesWrapper = styled.div`
       margin-top: 12px;
       position: unset;
     }
+
+    &.non_exist {
+      left: 12px;
+    }
     &.empty {
       color: ${({ theme }) => theme.color.gray[600]};
     }
@@ -159,6 +164,9 @@ function RecordModalBody(props: RecordModalBodyProps) {
         : ''
 
       result = authorText.concat(' · ', genreText)
+    }
+    if (recordSeries.author && recordSeries.genre) {
+      result = recordSeries.author?.concat(' · ', recordSeries.genre)
     }
     return result
   }, [recordSeries])
@@ -246,18 +254,21 @@ function RecordModalBody(props: RecordModalBodyProps) {
               alt=""
             />
           )}
-
           <div className="series_info">
             <div className="title_wrapper">
               <span className="title">
-                {recordSeries.series && recordSeries.series.title}
+                {recordSeries.series
+                  ? recordSeries.series.title
+                  : recordSeries.title}
               </span>
               <span className="sub">{authorGenreText}</span>
             </div>
           </div>
         </div>
         {!isEmpty(lastRecordEpisode) ? (
-          <div className="description">
+          <div
+            className={`description ${recordSeries.series ? '' : 'non_exist'}`}
+          >
             <Image
               unoptimized
               src={`/images/${lastRecordEpisode.providerName}.png`}
@@ -273,7 +284,11 @@ function RecordModalBody(props: RecordModalBodyProps) {
             에서 {lastRecordEpisode.episodeNumber}화까지 읽었어요!
           </div>
         ) : (
-          <div className="description empty">
+          <div
+            className={`description empty ${
+              recordSeries.series ? '' : 'non_exist'
+            }`}
+          >
             <Icons name="Content" width="16px" height="16px" />
             최근에 기록한 회차가 없어요!
           </div>
