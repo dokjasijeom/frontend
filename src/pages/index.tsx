@@ -3,19 +3,16 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import SwiperPosterThumbnail from '@/components/common/SwiperPosterThumbnail/SwiperPosterThumbnail'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
-import {
-  SERIES_TYPE_TAB_LIST,
-  WEEK_TAB_LIST,
-  PROVIDER_TAB_LIST,
-} from '@/constants/Tab'
+import { SERIES_TYPE_TAB_LIST, WEEK_TAB_LIST } from '@/constants/Tab'
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import { Children, useEffect, useState } from 'react'
 import { getNewSeriesList, getSeriesList } from '@/api/series'
-import { Series } from '@/@types/series'
+import { ProviderItem, Series } from '@/@types/series'
 import { WEBNOVEL, WEBTOON } from '@/constants/Series'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
 import { isEmpty, range } from 'lodash'
 import { useRouter } from 'next/router'
+import { getProviders } from '@/api/providers'
 
 const HomeContainer = styled.div``
 
@@ -62,12 +59,11 @@ export default function Home() {
     SERIES_TYPE_TAB_LIST[0],
   )
   const [selectedWeek, setSelectedWeek] = useState(WEEK_TAB_LIST[0])
+  const [providers, setProviders] = useState<ProviderItem[]>([])
   const [selectedWebNovelProviderTab, setSelectedWebNovelProviderTab] =
-    useState(PROVIDER_TAB_LIST[0])
-  const [selectedWebToonProviderTab, setSelectedWebToonProviderTab] = useState(
-    PROVIDER_TAB_LIST[0],
-  )
-
+    useState<TabItem>(providers[0])
+  const [selectedWebToonProviderTab, setSelectedWebToonProviderTab] =
+    useState<TabItem>(providers[0])
   const [weekSeries, setWeekSeries] = useState<Series[]>([])
   const [newWebNovelSeries, setNewWebNovelSeries] = useState<Series[]>([])
   const [newWebToonSeries, setNewWebToonSeries] = useState<Series[]>([])
@@ -75,42 +71,56 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
+    async function fetchProviders() {
+      const res = await getProviders()
+      setProviders(res.data.data)
+      setSelectedWebNovelProviderTab(res.data.data[0])
+      setSelectedWebToonProviderTab(res.data.data[0])
+    }
+    fetchProviders()
+  }, [])
+
+  useEffect(() => {
     async function fetchWeekSeries() {
       const res = await getSeriesList({
-        seriesType: selectedSeriesTypeTab.value,
-        publishDay: selectedWeek.value,
+        seriesType: selectedSeriesTypeTab.name,
+        publishDay: selectedWeek.name,
       })
 
       const { series } = res.data.data
       setWeekSeries(series)
     }
     fetchWeekSeries()
-  }, [selectedSeriesTypeTab.value, selectedWeek.value])
+  }, [selectedSeriesTypeTab.name, selectedWeek.name])
 
   useEffect(() => {
     async function fetchNewWebNovelSeries() {
       const res = await getNewSeriesList({
         seriesType: WEBNOVEL,
-        provider: selectedWebNovelProviderTab.value,
+        provider: selectedWebNovelProviderTab.name,
       })
 
       const { series } = res.data.data
       setNewWebNovelSeries(series)
     }
-    fetchNewWebNovelSeries()
-  }, [selectedWebNovelProviderTab.value])
+    if (!isEmpty(providers)) {
+      fetchNewWebNovelSeries()
+    }
+  }, [providers, selectedWebNovelProviderTab?.name])
 
   useEffect(() => {
     async function fetchNewWebToonSeries() {
       const res = await getNewSeriesList({
         seriesType: WEBTOON,
-        provider: selectedWebToonProviderTab.value,
+        provider: selectedWebToonProviderTab.name,
       })
       const { series } = res.data.data
       setNewWebToonSeries(series)
     }
-    fetchNewWebToonSeries()
-  }, [selectedWebToonProviderTab.value])
+    if (!isEmpty(providers)) {
+      fetchNewWebToonSeries()
+    }
+  }, [providers, selectedWebToonProviderTab?.name])
 
   return (
     <>
@@ -164,28 +174,34 @@ export default function Home() {
             </>
           )}
         </BookListWrapper>
-        <TabTitleHeader
-          iconName="New"
-          title="웹소설 신작"
-          selectedTab={selectedWebNovelProviderTab}
-          tabList={PROVIDER_TAB_LIST}
-          onChangeTab={(tab: TabItem) => setSelectedWebNovelProviderTab(tab)}
-          onClickMore={() => router.push('/new/webnovel')}
-        />
-        <SwiperBookListWrapper>
-          <SwiperPosterThumbnail seriesList={newWebNovelSeries} />
-        </SwiperBookListWrapper>
-        <TabTitleHeader
-          iconName="New"
-          title="웹툰 신작"
-          selectedTab={selectedWebToonProviderTab}
-          tabList={PROVIDER_TAB_LIST}
-          onChangeTab={(tab: TabItem) => setSelectedWebToonProviderTab(tab)}
-          onClickMore={() => router.push('/new/webtoon')}
-        />
-        <SwiperBookListWrapper>
-          <SwiperPosterThumbnail seriesList={newWebToonSeries} />
-        </SwiperBookListWrapper>
+        {!isEmpty(providers) && (
+          <>
+            <TabTitleHeader
+              iconName="New"
+              title="웹소설 신작"
+              selectedTab={selectedWebNovelProviderTab}
+              tabList={providers}
+              onChangeTab={(tab: TabItem) =>
+                setSelectedWebNovelProviderTab(tab)
+              }
+              onClickMore={() => router.push('/new/webnovel')}
+            />
+            <SwiperBookListWrapper>
+              <SwiperPosterThumbnail seriesList={newWebNovelSeries} />
+            </SwiperBookListWrapper>
+            <TabTitleHeader
+              iconName="New"
+              title="웹툰 신작"
+              selectedTab={selectedWebToonProviderTab}
+              tabList={providers}
+              onChangeTab={(tab: TabItem) => setSelectedWebToonProviderTab(tab)}
+              onClickMore={() => router.push('/new/webtoon')}
+            />
+            <SwiperBookListWrapper>
+              <SwiperPosterThumbnail seriesList={newWebToonSeries} />
+            </SwiperBookListWrapper>
+          </>
+        )}
       </HomeContainer>
     </>
   )

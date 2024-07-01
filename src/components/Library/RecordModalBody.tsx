@@ -1,12 +1,13 @@
 import Image from 'next/image'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
-import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import { isEmpty, range } from 'lodash'
 import { RecordSeries } from '@/@types/user'
 import { recordSeriesEpisode } from '@/api/user'
 import { useQueryClient } from '@tanstack/react-query'
 import useToast from '@/hooks/useToast'
+import { getProviders } from '@/api/providers'
+import { ProviderItem } from '@/@types/series'
 import Checkbox from '../common/Checkbox/Checkbox'
 import Selector, { OptionItem } from '../common/Selector/Selector'
 import RecordEpisodes, { Episodes } from './RecordEpisodes'
@@ -128,11 +129,20 @@ function RecordModalBody(props: RecordModalBodyProps) {
   const { recordSeries, onCloseModal } = props
   const theme = useTheme()
   const [isMulti, setIsMulti] = useState(false)
+  const [providers, setProviders] = useState<ProviderItem[]>([])
   const [provider, setProvider] = useState<OptionItem | null>(null)
   const [episodes, setEpisodes] = useState<Episodes>({ from: '0', to: '0' })
   const [isOverWriteEpisodeModal, setIsOverWriteEpisodeModal] = useState(false)
   const queryclient = useQueryClient()
   const { showToast } = useToast()
+
+  useEffect(() => {
+    async function fetchProviders() {
+      const res = await getProviders()
+      setProviders(res.data.data)
+    }
+    fetchProviders()
+  }, [])
 
   const handleChangeProvider = (option: OptionItem) => {
     setProvider(option)
@@ -158,7 +168,7 @@ function RecordModalBody(props: RecordModalBodyProps) {
     const to = Number(episodes.to)
     const params = {
       userRecordSeriesId: recordSeries.id,
-      providerName: provider?.value ?? PROVIDER_TAB_LIST[0].value,
+      providerName: provider?.name ?? providers[0].name,
       from: isMulti ? from : to,
       to,
     }
@@ -256,9 +266,9 @@ function RecordModalBody(props: RecordModalBodyProps) {
               alt=""
             />
             {
-              PROVIDER_TAB_LIST.find(
-                (item) => item.value === lastRecordEpisode.providerName,
-              )?.label
+              providers.find(
+                (item) => item.name === lastRecordEpisode.providerName,
+              )?.displayName
             }
             에서 {lastRecordEpisode.episodeNumber}화까지 읽었어요!
           </div>
@@ -282,11 +292,13 @@ function RecordModalBody(props: RecordModalBodyProps) {
           <div className="checkbox_label">여러 회차 기록하기</div>
         </Checkbox>
 
-        <Selector
-          value={isEmpty(provider) ? '선택' : provider.label}
-          options={PROVIDER_TAB_LIST}
-          onClickOption={(option) => handleChangeProvider(option)}
-        />
+        {!isEmpty(providers) && (
+          <Selector
+            value={isEmpty(provider) ? '선택' : provider.displayName}
+            options={providers}
+            onClickOption={(option) => handleChangeProvider(option)}
+          />
+        )}
         <RecordEpisodes isMulti={isMulti} setEpisodes={setEpisodes} />
       </RecordWrapper>
       <Button disabled={isEmpty(provider)} onClick={handleRecord}>

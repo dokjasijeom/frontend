@@ -52,9 +52,9 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
 
   const filterRecordSeriesList = useMemo(() => {
     return recordSeriesList.filter(
-      (list) => list.seriesType === selectedSeriesTypeTab.value,
+      (list) => list.seriesType === selectedSeriesTypeTab.name,
     )
-  }, [recordSeriesList, selectedSeriesTypeTab.value])
+  }, [recordSeriesList, selectedSeriesTypeTab.name])
 
   const handleDeleteRecordSeries = (recordSeries: RecordSeries) => {
     showModal({

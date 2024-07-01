@@ -52,8 +52,9 @@ const OptionItemWrapper = styled.div`
   }
 `
 export interface OptionItem {
-  label: string
-  value: string
+  displayName: string
+  hashId?: string
+  name: string
 }
 
 interface SelectorProps {
@@ -88,12 +89,12 @@ function Selector(props: SelectorProps) {
         <OptionsListWrapper>
           {options.map((option) => (
             <OptionItemWrapper
-              key={option.value}
+              key={option.name}
               onClick={() => {
                 handleClickOption(option)
               }}
             >
-              {option.label}
+              {option.displayName}
             </OptionItemWrapper>
           ))}
         </OptionsListWrapper>

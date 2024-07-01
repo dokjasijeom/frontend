@@ -123,7 +123,7 @@ function Category() {
     async function fetchCategories() {
       const providerArr = selectedProvider?.map((provider) => provider.hashId)
       const params = {
-        seriesType: selectedSeriesTypeTab.value,
+        seriesType: selectedSeriesTypeTab.name,
         page,
         pageSize: 20,
         providers: providerArr,
@@ -137,17 +137,12 @@ function Category() {
       setCategories(res.data.data)
     }
     fetchCategories()
-  }, [
-    page,
-    selectedGenre.hashId,
-    selectedProvider,
-    selectedSeriesTypeTab.value,
-  ])
+  }, [page, selectedGenre.hashId, selectedProvider, selectedSeriesTypeTab.name])
 
   useEffect(() => {
     async function fetchGenres() {
       const res = await getGenres({
-        seriesType: selectedSeriesTypeTab.value,
+        seriesType: selectedSeriesTypeTab.name,
       })
       setGenres([
         {
@@ -159,7 +154,7 @@ function Category() {
       ])
     }
     fetchGenres()
-  }, [selectedSeriesTypeTab.value])
+  }, [selectedSeriesTypeTab.name])
 
   useEffect(() => {
     async function fetchProviders() {

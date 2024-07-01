@@ -69,8 +69,8 @@ function Week() {
   const fetchMore = useCallback(async () => {
     const nextPage = page + 1
     const res = await getSeriesList({
-      seriesType: selectedSeriesTypeTab.value,
-      publishDay: selectedWeek.value,
+      seriesType: selectedSeriesTypeTab.name,
+      publishDay: selectedWeek.name,
       page: nextPage,
       pageSize,
     })
@@ -78,7 +78,7 @@ function Week() {
     setWeekSeries((prev) => [...prev, ...series])
     setPage(nextPage)
     setPaginationData(pagination)
-  }, [page, selectedSeriesTypeTab.value, selectedWeek.value])
+  }, [page, selectedSeriesTypeTab.name, selectedWeek.name])
 
   useInfiniteScrolling({
     observerRef,
@@ -89,8 +89,8 @@ function Week() {
   useEffect(() => {
     async function fetchWeekSeries() {
       const res = await getSeriesList({
-        seriesType: selectedSeriesTypeTab.value,
-        publishDay: selectedWeek.value,
+        seriesType: selectedSeriesTypeTab.name,
+        publishDay: selectedWeek.name,
         page: 1,
         pageSize,
       })
@@ -102,7 +102,7 @@ function Week() {
     }
 
     fetchWeekSeries()
-  }, [selectedSeriesTypeTab.value, selectedWeek.value])
+  }, [selectedSeriesTypeTab.name, selectedWeek.name])
 
   return (
     <WeekContainer>
@@ -119,7 +119,7 @@ function Week() {
             tabList={SERIES_TYPE_TAB_LIST}
             selectedTab={selectedSeriesTypeTab}
             onChange={async (tab) => {
-              if (selectedSeriesTypeTab.value !== tab.value) {
+              if (selectedSeriesTypeTab.name !== tab.name) {
                 await setPage(1)
                 await setWeekSeries([])
                 await setSelectedSeriesTypeTab(tab)
@@ -131,7 +131,7 @@ function Week() {
             tabList={WEEK_TAB_LIST}
             selectedTab={selectedWeek}
             onChange={async (tab) => {
-              if (selectedWeek.value !== tab.value) {
+              if (selectedWeek.name !== tab.name) {
                 await setPage(1)
                 await setWeekSeries([])
                 await setSelectedWeek(tab)

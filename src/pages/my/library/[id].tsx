@@ -1,6 +1,7 @@
 import { IParams } from '@/@types/interface'
-import { Platform } from '@/@types/platform'
+import { ProviderItem } from '@/@types/series'
 import { RecordEpisode, RecordSeries } from '@/@types/user'
+import { getProviders } from '@/api/providers'
 import { deleteNonExistRecordSeries, deleteRecordSeries } from '@/api/series'
 import { deleteRecordEpisode, getMySeries } from '@/api/user'
 import AddSeriesForm from '@/components/Library/AddSeriesForm'
@@ -12,11 +13,11 @@ import Icons from '@/components/common/Icons/Icons'
 import Input from '@/components/common/Input/Input'
 import SeriesPosterItem from '@/components/common/SeriesPosterItem/SeriesPosterItem'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
+import { TabItem } from '@/components/common/Tab/Tab'
 import TabTitleHeader from '@/components/common/TabTitleHeader/TabTitleHeader'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import Toggle from '@/components/common/Toggle/Toggle'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import useDebounce from '@/hooks/useDebounce'
 import useModal from '@/hooks/useModal'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -273,12 +274,9 @@ function LibraryDetail({
   const { showModal, closeModal } = useModal()
   const [isEdit, setIsEdit] = useState(false)
   const [search, setSearch] = useState('')
+  const [providers, setProviders] = useState<ProviderItem[]>([])
   const [selectedEpisodes, setSelectedEpisodes] = useState<RecordEpisode[]>([])
-  const [selectedProvider, setSelectedProvider] = useState<Platform[]>([
-    { label: '네이버시리즈', value: 'series' },
-    { label: '카카오페이지', value: 'kakao-page' },
-    { label: '리디북스', value: 'ridi' },
-  ])
+  const [selectedProvider, setSelectedProvider] = useState<TabItem[]>(providers)
 
   const [isComplete, setIsComplete] = useState(false)
 
@@ -293,6 +291,15 @@ function LibraryDetail({
     },
     retry: 0,
   })
+
+  useEffect(() => {
+    async function fetchProviders() {
+      const res = await getProviders()
+      setProviders(res.data.data)
+      setSelectedProvider(res.data.data)
+    }
+    fetchProviders()
+  }, [])
 
   useEffect(() => {
     if (isError) {
@@ -414,7 +421,7 @@ function LibraryDetail({
     if (!isEmpty(selectedProvider)) {
       const filter = recordEpisodes.filter((episode) =>
         selectedProvider.find(
-          (provider) => provider.value === episode.providerName,
+          (provider) => provider.name === episode.providerName,
         ),
       )
 
@@ -436,17 +443,17 @@ function LibraryDetail({
     }
   }
 
-  const handleselectedProvider = (platform: any) => {
+  const handleselectedProvider = (provider: any) => {
     const findPlatform = selectedProvider.find(
-      (item) => item.value === platform.value,
+      (item) => item.name === provider.name,
     )
     if (findPlatform) {
       const filterPlarform = selectedProvider.filter(
-        (item) => item.value !== platform.value,
+        (item) => item.name !== provider.name,
       )
       setSelectedProvider(filterPlarform)
     } else {
-      setSelectedProvider([...selectedProvider, platform])
+      setSelectedProvider([...selectedProvider, provider])
     }
   }
 
@@ -543,10 +550,10 @@ function LibraryDetail({
           <RecordBanner>
             <span className="bold">
               {
-                PROVIDER_TAB_LIST.find(
+                providers.find(
                   (provider) =>
-                    provider.value === lastRecordEpisode.providerName,
-                )?.label
+                    provider.name === lastRecordEpisode.providerName,
+                )?.displayName
               }
             </span>
             에서{' '}
@@ -571,13 +578,13 @@ function LibraryDetail({
                 전체 {mySeries?.recordEpisodeCount.toLocaleString()}
               </div>
               <div className="platform_wrapper">
-                {PROVIDER_TAB_LIST.map((provider) => (
+                {providers.map((provider) => (
                   <Checkbox
-                    key={provider.value}
+                    key={provider.name}
                     style={{ gap: '4px' }}
                     checked={Boolean(
                       selectedProvider.find(
-                        (item) => item.value === provider.value,
+                        (item) => item.name === provider.name,
                       ),
                     )}
                     onChange={() => {
@@ -585,7 +592,7 @@ function LibraryDetail({
                     }}
                     checkColor={theme.color.main[600]}
                   >
-                    <div className="checkbox_label">{provider.label}</div>
+                    <div className="checkbox_label">{provider.displayName}</div>
                   </Checkbox>
                 ))}
               </div>

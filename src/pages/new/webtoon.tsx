@@ -1,12 +1,12 @@
 import { Pagination } from '@/@types/categories'
-import { Series } from '@/@types/series'
+import { ProviderItem, Series } from '@/@types/series'
+import { getProviders } from '@/api/providers'
 import { getNewSeriesList } from '@/api/series'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
-import Tab from '@/components/common/Tab/Tab'
+import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import { WEBTOON } from '@/constants/Series'
-import { PROVIDER_TAB_LIST } from '@/constants/Tab'
 import { useInfiniteScrolling } from '@/hooks/useInfiniteScrolling'
 import { isEmpty, range } from 'lodash'
 import { useRouter } from 'next/router'
@@ -55,8 +55,9 @@ const SkeletonItem = styled.div`
 
 function NewWebtoon() {
   const [newWebToonSeries, setNewWebToonSeries] = useState<Series[]>([])
-  const [selectedWebToonProviderTab, setSelectedWebToonProviderTab] = useState(
-    PROVIDER_TAB_LIST[0],
+  const [providers, setProviders] = useState<ProviderItem[]>([])
+  const [selectedProvider, setSelectedProvider] = useState<TabItem>(
+    providers[0],
   )
   const [page, setPage] = useState(1)
   const [paginationData, setPaginationData] = useState<Pagination>()
@@ -70,7 +71,7 @@ function NewWebtoon() {
     const nextPage = page + 1
     const res = await getNewSeriesList({
       seriesType: WEBTOON,
-      provider: selectedWebToonProviderTab.value,
+      provider: selectedProvider.name,
       page: nextPage,
       pageSize,
     })
@@ -78,7 +79,7 @@ function NewWebtoon() {
     setNewWebToonSeries((prev) => [...prev, ...series])
     setPage(nextPage)
     setPaginationData(pagination)
-  }, [page, selectedWebToonProviderTab.value])
+  }, [page, selectedProvider?.name])
 
   useInfiniteScrolling({
     observerRef,
@@ -87,10 +88,19 @@ function NewWebtoon() {
   })
 
   useEffect(() => {
+    async function fetchProviders() {
+      const res = await getProviders()
+      setProviders(res.data.data)
+      setSelectedProvider(res.data.data[0])
+    }
+    fetchProviders()
+  }, [])
+
+  useEffect(() => {
     async function fetchNewWebToonSeries() {
       const res = await getNewSeriesList({
         seriesType: WEBTOON,
-        provider: selectedWebToonProviderTab.value,
+        provider: selectedProvider.name,
         page: 1,
         pageSize,
       })
@@ -98,11 +108,13 @@ function NewWebtoon() {
       const { series, pagination } = res.data.data
 
       setPaginationData(pagination)
+
       setNewWebToonSeries(series)
     }
-
-    fetchNewWebToonSeries()
-  }, [selectedWebToonProviderTab.value])
+    if (!isEmpty(providers)) {
+      fetchNewWebToonSeries()
+    }
+  }, [providers, selectedProvider?.name])
 
   return (
     <NewWebtoonContainer>
@@ -114,18 +126,20 @@ function NewWebtoon() {
       />
       <NewWebtoonWrapper>
         <NewWebtoonTabWrapper>
-          <Tab
-            type="text"
-            tabList={PROVIDER_TAB_LIST}
-            selectedTab={selectedWebToonProviderTab}
-            onChange={async (tab) => {
-              if (selectedWebToonProviderTab.value !== tab.value) {
-                await setPage(1)
-                await setNewWebToonSeries([])
-                await setSelectedWebToonProviderTab(tab)
-              }
-            }}
-          />
+          {!isEmpty(providers) && (
+            <Tab
+              type="text"
+              tabList={providers}
+              selectedTab={selectedProvider}
+              onChange={async (tab) => {
+                if (selectedProvider.name !== tab.name) {
+                  await setPage(1)
+                  await setNewWebToonSeries([])
+                  await setSelectedProvider(tab)
+                }
+              }}
+            />
+          )}
         </NewWebtoonTabWrapper>
         <SeriesListWrapper>
           {isEmpty(newWebToonSeries) ? (

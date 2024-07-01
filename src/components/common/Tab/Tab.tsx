@@ -95,8 +95,9 @@ const UnderBarTabItemWrapper = styled.div`
 `
 
 export interface TabItem {
-  label: string
-  value: string
+  displayName: string
+  hashId?: string
+  name: string
 }
 
 interface TabProps {
@@ -115,12 +116,12 @@ function Tab(props: TabProps) {
       return (
         <TextTabContainer className={className}>
           {tabList.map((tab, index) => (
-            <TextTabWrapper key={tab.value}>
+            <TextTabWrapper key={tab.name}>
               <TextTabItemWrapper
-                className={selectedTab.value === tab.value ? 'active' : ''}
+                className={selectedTab.name === tab.name ? 'active' : ''}
                 onClick={() => onChange(tab)}
               >
-                {tab.label}
+                {tab.displayName}
               </TextTabItemWrapper>
               {tabList.length !== index + 1 && <TextTabDivider />}
             </TextTabWrapper>
@@ -132,13 +133,13 @@ function Tab(props: TabProps) {
       return (
         <ButtonTabContainer className={className}>
           {tabList.map((tab, index) => (
-            <div className="button_tab_wrapper" key={tab.value}>
+            <div className="button_tab_wrapper" key={tab.name}>
               <ButtonTabItemWrapper
-                className={selectedTab.value === tab.value ? 'active' : ''}
-                key={tab.value}
+                className={selectedTab.name === tab.name ? 'active' : ''}
+                key={tab.name}
                 onClick={() => onChange(tab)}
               >
-                {tab.label}
+                {tab.displayName}
               </ButtonTabItemWrapper>
               {tabList.length !== index + 1 && <ButtonTabDivider />}
             </div>
@@ -152,11 +153,11 @@ function Tab(props: TabProps) {
           {tabList.map((tab) => (
             <>
               <UnderBarTabItemWrapper
-                className={selectedTab.value === tab.value ? 'active' : ''}
-                key={tab.value}
+                className={selectedTab.name === tab.name ? 'active' : ''}
+                key={tab.name}
                 onClick={() => onChange(tab)}
               >
-                {tab.label}
+                {tab.displayName}
               </UnderBarTabItemWrapper>
             </>
           ))}

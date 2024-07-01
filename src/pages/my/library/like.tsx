@@ -97,12 +97,12 @@ function Like() {
   const filterLikeSeriesList = useMemo(() => {
     if (!isEmpty(user) && !isEmpty(user.likeSeries)) {
       return user.likeSeries.filter(
-        (list: LikeSeries) => list.seriesType === selectedTab.value,
+        (list: LikeSeries) => list.seriesType === selectedTab.name,
       )
     }
 
     return []
-  }, [selectedTab.value, user])
+  }, [selectedTab.name, user])
 
   return (
     <LikeContainer>
