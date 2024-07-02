@@ -238,7 +238,11 @@ function Profile({
   }
 
   const handleDeleteUser = async () => {
-    await deleteUser()
+    await deleteUser().then(() => {
+      deleteCookie('DS_AUT')
+      deleteCookie('DS_USER')
+      router.push('/')
+    })
   }
 
   const handleWithdrawal = () => {
