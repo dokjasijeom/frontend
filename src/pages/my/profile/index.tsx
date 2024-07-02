@@ -1,5 +1,5 @@
 import { User } from '@/@types/user'
-import { deleteUserAvatar, getUser, updateUser } from '@/api/user'
+import { deleteUser, deleteUserAvatar, getUser, updateUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Divider from '@/components/common/Divider/Divider'
 import Input from '@/components/common/Input/Input'
@@ -233,8 +233,11 @@ function Profile({
     router.push('/')
   }
 
+  const handleDeleteUser = async () => {
+    await deleteUser()
+  }
+
   const handleWithdrawal = () => {
-    // TODO: 회원 탈퇴
     showModal({
       type: 'confirm',
       title: '회원 탈퇴',
@@ -250,6 +253,7 @@ function Profile({
       ),
       negativeText: '취소',
       positiveText: '탈퇴하기',
+      onPositiveClick: handleDeleteUser,
     })
   }
 
@@ -382,6 +386,17 @@ export const getServerSideProps: GetServerSideProps<{
   })
 
   const isForgotPassword = !!cookies.isForgotPassword
+
+  const isLogin = cookies.DS_AUT
+
+  if (!isLogin) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    }
+  }
 
   return {
     props: {
