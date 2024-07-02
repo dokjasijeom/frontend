@@ -218,6 +218,10 @@ function Profile({
           router.push('/my/library')
         },
       })
+
+      if (watchPassword && watchPasswordConfirm && isForgotPassword) {
+        deleteCookie('isForgotPassword')
+      }
     })
   }
 
