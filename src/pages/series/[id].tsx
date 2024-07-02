@@ -13,6 +13,7 @@ import Icons from '@/components/common/Icons/Icons'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
+import useModal from '@/hooks/useModal'
 import useToast from '@/hooks/useToast'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
@@ -191,12 +192,14 @@ const PlatformItem = styled.div`
 
 function SeriesDetail({
   hashId,
+  isLogin,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const theme = useTheme()
 
   const queryClient = useQueryClient()
   const { showToast } = useToast()
+  const { showModal } = useModal()
 
   const { data: series } = useQuery<Series>({
     queryKey: ['seriesDetail'],
@@ -212,6 +215,7 @@ function SeriesDetail({
       const res = await getUser()
       return res.data.data
     },
+    enabled: isLogin,
   })
 
   const isUserLikeSeries = useMemo(() => {
@@ -233,7 +237,18 @@ function SeriesDetail({
   })
 
   const handleLikeSeries = async () => {
-    seriesLikeMutation.mutate()
+    if (isLogin) {
+      seriesLikeMutation.mutate()
+    } else {
+      showModal({
+        type: 'confirm',
+        title: '회원가입',
+        body: '회원가입하고 내 서재에 기록해 보세요!',
+        negativeText: '다음에 하기',
+        positiveText: '회원가입 하기',
+        onPositiveClick: () => router.push('/auth/login'),
+      })
+    }
   }
 
   const isUserRecordSeries = useMemo(() => {
@@ -246,7 +261,7 @@ function SeriesDetail({
   }, [series, user])
 
   const handleAddMyLibrary = async () => {
-    if (!isEmpty(series)) {
+    if (isLogin && !isEmpty(series)) {
       if (isUserRecordSeries) {
         router.push(`/my/library/${isUserRecordSeries.id}`)
       } else {
@@ -256,6 +271,17 @@ function SeriesDetail({
           queryClient.invalidateQueries({ queryKey: ['user'] })
         })
       }
+    }
+
+    if (!isLogin) {
+      showModal({
+        type: 'confirm',
+        title: '회원가입',
+        body: '회원가입하고 내 서재에 기록해 보세요!',
+        negativeText: '다음에 하기',
+        positiveText: '회원가입 하기',
+        onPositiveClick: () => router.push('/auth/login'),
+      })
     }
   }
 
@@ -392,12 +418,23 @@ SeriesDetail.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps: GetServerSideProps<{
   hashId: string
+  isLogin: boolean
 }> = async (context) => {
   const { id } = context.params as IParams
+  const cookiesString = context.req.headers.cookie as string
+  const cookies = {} as any
+
+  cookiesString?.split(';').forEach((cookie) => {
+    const [key, value] = cookie.split('=').map((c) => c.trim())
+    cookies[key] = value
+  })
+
+  const isLogin = !!cookies.DS_AUT
 
   return {
     props: {
       hashId: id,
+      isLogin,
     },
   }
 }

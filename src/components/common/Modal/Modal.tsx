@@ -59,6 +59,7 @@ const ModalButtonGroup = styled.div`
 
   button {
     display: flex;
+    padding: 12px;
     flex: 1;
     justify-content: center;
   }
