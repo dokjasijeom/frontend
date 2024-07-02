@@ -5,7 +5,6 @@ import Icons from '@/components/common/Icons/Icons'
 import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { MockMyBook } from '@/constants/MockData'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import useToast from '@/hooks/useToast'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -115,7 +114,7 @@ function Like() {
           onChange={(tab) => setSelectedTab(tab)}
         />
         <LikeBookListWrapper>
-          {isEmpty(MockMyBook.webNovel) && (
+          {isEmpty(filterLikeSeriesList) && (
             <EmptyBook>
               <Image
                 src="/images/empty_book.png"

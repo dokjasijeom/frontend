@@ -204,7 +204,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
           </div>
           <div className="box_content_wrapper">
             <button type="button" className="count">
-              67
+              {user.completeRecordSeriesCount}
             </button>
           </div>
         </Box>

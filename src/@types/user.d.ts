@@ -9,6 +9,8 @@ export interface User {
   likeSeriesCount: number
   recordSeries: RecordSeries[]
   recordSeriesCount: number
+  completeRecordSeries: RecordSeries[]
+  completeRecordSeriesCount: number
   subscribeProvider: ProviderItem[]
 }
 

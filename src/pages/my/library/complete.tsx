@@ -1,14 +1,16 @@
-import BookItem from '@/components/common/BookItem/BookItem'
+import { RecordSeries, User } from '@/@types/user'
+import { getUser } from '@/api/user'
 import Divider from '@/components/common/Divider/Divider'
+import RecordSeriesItem from '@/components/common/RecordSeriesItem/RecordSeriesItem'
 import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { MockMyBook } from '@/constants/MockData'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
+import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const CompleteContainer = styled.div``
@@ -32,17 +34,53 @@ const EmptyBook = styled.div`
 `
 
 const CompleteBookWrapper = styled.div`
-  display: flex;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
   padding: 12px;
   justify-content: space-between;
   align-items: center;
-  min-height: 74px;
-  cursor: pointer;
+
+  .add_button_body {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  @media (max-width: 490px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    width: 100%;
+    padding: 12px 0;
+    button {
+      width: 100%;
+    }
+  }
 `
+
 function Complete() {
   const router = useRouter()
   const [selectedTab, setSelectedTab] = useState(SERIES_TYPE_TAB_LIST[0])
   const theme = useTheme()
+
+  const { data: user } = useQuery<User>({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await getUser()
+      return res.data.data
+    },
+  })
+
+  const filterCompletedRecordSeriesList = useMemo(() => {
+    if (!isEmpty(user) && !isEmpty(user.completeRecordSeries)) {
+      return user.completeRecordSeries.filter(
+        (list: RecordSeries) => list.seriesType === selectedTab.name,
+      )
+    }
+
+    return []
+  }, [selectedTab.name, user])
 
   return (
     <CompleteContainer>
@@ -55,7 +93,7 @@ function Complete() {
           onChange={(tab) => setSelectedTab(tab)}
         />
         <CompleteBookListWrapper>
-          {isEmpty(MockMyBook.webNovel) && (
+          {isEmpty(filterCompletedRecordSeriesList) && (
             <EmptyBook>
               <Image
                 src="/images/empty_book.png"
@@ -63,25 +101,23 @@ function Complete() {
                 height={105}
                 alt=""
               />
-              찜한 작품이 없어요.
+              완독한 작품이 없어요.
             </EmptyBook>
           )}
-          {MockMyBook.webNovel.map((book) => (
-            <>
-              <CompleteBookWrapper
-                key={book.id}
-                onClick={() => {
-                  router.push(`/my/library/${book.id}`)
-                }}
-              >
-                <BookItem book={book} />
-              </CompleteBookWrapper>
-              <Divider
-                color={theme.color.gray[100]}
-                style={{ margin: '8px 0' }}
-              />
-            </>
-          ))}
+          {!isEmpty(filterCompletedRecordSeriesList) &&
+            filterCompletedRecordSeriesList.map(
+              (recordSeries: RecordSeries) => (
+                <>
+                  <CompleteBookWrapper key={recordSeries.id}>
+                    <RecordSeriesItem recordSeries={recordSeries} />
+                  </CompleteBookWrapper>
+                  <Divider
+                    color={theme.color.gray[100]}
+                    style={{ margin: '8px 0' }}
+                  />
+                </>
+              ),
+            )}
         </CompleteBookListWrapper>
       </CompleteWrapper>
     </CompleteContainer>
