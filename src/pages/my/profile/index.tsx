@@ -3,6 +3,7 @@ import { deleteUser, deleteUserAvatar, getUser, updateUser } from '@/api/user'
 import Button from '@/components/common/Button/Button'
 import Divider from '@/components/common/Divider/Divider'
 import Input from '@/components/common/Input/Input'
+import Modal from '@/components/common/Modal/Modal'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import useModal from '@/hooks/useModal'
@@ -115,6 +116,7 @@ function Profile({
   const router = useRouter()
   const { showModal } = useModal()
   const queryClient = useQueryClient()
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false)
 
   const { data: user } = useQuery<User>({
     queryKey: ['user'],
@@ -149,10 +151,8 @@ function Profile({
   }, [uploadedImage, user])
 
   useEffect(() => {
-    if (isForgotPassword) {
-      showModal({ title: '비밀번호 변경', body: '비밀번호를 변경해주세요!' })
-    }
-  }, [isForgotPassword, showModal])
+    setShowChangePasswordModal(isForgotPassword)
+  }, [isForgotPassword])
 
   useEffect(() => {
     if (!isEmpty(user)) {
@@ -260,6 +260,14 @@ function Profile({
   return (
     <ProfileContainer>
       <TitleHeader title="프로필 수정" onClickBack={() => router.back()} />
+      {showChangePasswordModal && (
+        <Modal
+          title="비밀번호 변경"
+          onClose={() => setShowChangePasswordModal(false)}
+        >
+          비밀번호를 변경해주세요!
+        </Modal>
+      )}
       <ProfileImageWrapper>
         <ImageWrapper>
           <label htmlFor="upload">
@@ -385,8 +393,7 @@ export const getServerSideProps: GetServerSideProps<{
     cookies[key] = value
   })
 
-  const isForgotPassword = !!cookies.isForgotPassword
-
+  const isForgotPassword = cookies.isForgotPassword === 'true'
   const isLogin = cookies.DS_AUT
 
   if (!isLogin) {
