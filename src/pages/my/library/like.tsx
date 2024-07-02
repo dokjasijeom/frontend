@@ -8,15 +8,16 @@ import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import useToast from '@/hooks/useToast'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { isEmpty } from 'lodash'
+import { isEmpty, range } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useMemo, useState } from 'react'
+import React, { Children, ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import SeriesItem from '@/components/common/SeriesItem/SeriesItem'
 import { Series } from '@/@types/series'
 import { LikeSeries, RecordSeries, User } from '@/@types/user'
 import { recordSeries } from '@/api/series'
+import Skeleton from '@/components/common/Skeleton/Skeleton'
 
 const LikeContainer = styled.div``
 
@@ -25,6 +26,21 @@ const LikeWrapper = styled.div`
 `
 const LikeBookListWrapper = styled.div`
   padding: 20px;
+`
+const SkeletonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 12px;
+`
+
+const SkeletonItem = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 `
 
 const EmptyBook = styled.div`
@@ -71,7 +87,7 @@ function Like() {
   const { showToast } = useToast()
   const queryClient = useQueryClient()
 
-  const { data: user } = useQuery<User>({
+  const { data: user, isLoading } = useQuery<User>({
     queryKey: ['user'],
     queryFn: async () => {
       const res = await getUser()
@@ -114,7 +130,22 @@ function Like() {
           onChange={(tab) => setSelectedTab(tab)}
         />
         <LikeBookListWrapper>
-          {isEmpty(filterLikeSeriesList) && (
+          {isLoading && (
+            <SkeletonWrapper>
+              {Children.toArray(
+                range(4).map(() => (
+                  <SkeletonItem>
+                    <Skeleton width="50px" height="50px" />
+                    <div>
+                      <Skeleton width="150px" height="14px" />
+                      <Skeleton width="100px" />
+                    </div>
+                  </SkeletonItem>
+                )),
+              )}
+            </SkeletonWrapper>
+          )}
+          {!isLoading && isEmpty(filterLikeSeriesList) && (
             <EmptyBook>
               <Image
                 src="/images/empty_book.png"
@@ -169,6 +200,19 @@ function Like() {
                 </>
               )
             })}
+          {/* <SkeletonWrapper>
+            {Children.toArray(
+              range(4).map(() => (
+                <SkeletonItem>
+                  <Skeleton width="50px" height="50px" />
+                  <div>
+                    <Skeleton width="150px" height="14px" />
+                    <Skeleton width="100px" />
+                  </div>
+                </SkeletonItem>
+              )),
+            )}
+          </SkeletonWrapper> */}
         </LikeBookListWrapper>
       </LikeWrapper>
     </LikeContainer>

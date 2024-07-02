@@ -2,15 +2,16 @@ import { RecordSeries, User } from '@/@types/user'
 import { getUser } from '@/api/user'
 import Divider from '@/components/common/Divider/Divider'
 import RecordSeriesItem from '@/components/common/RecordSeriesItem/RecordSeriesItem'
+import Skeleton from '@/components/common/Skeleton/Skeleton'
 import Tab from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import { useQuery } from '@tanstack/react-query'
-import { isEmpty } from 'lodash'
+import { isEmpty, range } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useMemo, useState } from 'react'
+import React, { Children, ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 const CompleteContainer = styled.div``
@@ -20,6 +21,22 @@ const CompleteWrapper = styled.div`
 `
 const CompleteBookListWrapper = styled.div`
   padding: 20px;
+`
+
+const SkeletonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 12px;
+`
+
+const SkeletonItem = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 `
 
 const EmptyBook = styled.div`
@@ -64,7 +81,7 @@ function Complete() {
   const [selectedTab, setSelectedTab] = useState(SERIES_TYPE_TAB_LIST[0])
   const theme = useTheme()
 
-  const { data: user } = useQuery<User>({
+  const { data: user, isLoading } = useQuery<User>({
     queryKey: ['user'],
     queryFn: async () => {
       const res = await getUser()
@@ -93,7 +110,22 @@ function Complete() {
           onChange={(tab) => setSelectedTab(tab)}
         />
         <CompleteBookListWrapper>
-          {isEmpty(filterCompletedRecordSeriesList) && (
+          {isLoading && (
+            <SkeletonWrapper>
+              {Children.toArray(
+                range(4).map(() => (
+                  <SkeletonItem>
+                    <Skeleton width="50px" height="50px" />
+                    <div>
+                      <Skeleton width="150px" height="14px" />
+                      <Skeleton width="100px" />
+                    </div>
+                  </SkeletonItem>
+                )),
+              )}
+            </SkeletonWrapper>
+          )}
+          {!isLoading && isEmpty(filterCompletedRecordSeriesList) && (
             <EmptyBook>
               <Image
                 src="/images/empty_book.png"
