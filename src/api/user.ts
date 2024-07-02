@@ -107,3 +107,7 @@ export const updateNonExistRecordSeries = (
     seriesType,
   })
 }
+
+export const deleteUser = () => {
+  return axiosInstance.delete('/user')
+}
