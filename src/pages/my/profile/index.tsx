@@ -10,6 +10,7 @@ import { getImageUrl } from '@/utils/dataFormatting'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteCookie } from 'cookies-next'
 import { isEmpty } from 'lodash'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useEffect, useMemo, useState } from 'react'
@@ -108,7 +109,9 @@ const ListButton = styled.button`
   color: ${({ theme }) => theme.color.gray[600]};
 `
 
-function Profile() {
+function Profile({
+  isForgotPassword,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const { showModal } = useModal()
   const queryClient = useQueryClient()
@@ -144,6 +147,12 @@ function Profile() {
 
     return '/images/profile.png'
   }, [uploadedImage, user])
+
+  useEffect(() => {
+    if (isForgotPassword) {
+      showModal({ title: '비밀번호 변경', body: '비밀번호를 변경해주세요!' })
+    }
+  }, [isForgotPassword, showModal])
 
   useEffect(() => {
     if (!isEmpty(user)) {
@@ -359,6 +368,26 @@ function Profile() {
 
 Profile.getLayout = function getLayout(page: ReactElement) {
   return <OnlyFooterLayout>{page}</OnlyFooterLayout>
+}
+
+export const getServerSideProps: GetServerSideProps<{
+  isForgotPassword: boolean
+}> = async (context) => {
+  const cookiesString = context.req.headers.cookie as string
+  const cookies = {} as any
+
+  cookiesString?.split(';').forEach((cookie) => {
+    const [key, value] = cookie.split('=').map((c) => c.trim())
+    cookies[key] = value
+  })
+
+  const isForgotPassword = !!cookies.isForgotPassword
+
+  return {
+    props: {
+      isForgotPassword,
+    },
+  }
 }
 
 export default Profile
