@@ -14,6 +14,7 @@ import { Categories } from '@/@types/categories'
 import { getGenres } from '@/api/genres'
 import { Genre, ProviderItem } from '@/@types/series'
 import { getProviders } from '@/api/providers'
+import Image from 'next/image'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -69,6 +70,17 @@ const CategoryFilterWrapper = styled.div`
   }
 `
 
+const EmptyBook = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 140px;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  ${({ theme }) => theme.typography.body2};
+  color: ${({ theme }) => theme.color.gray[800]};
+`
+
 const CategoryListWrapper = styled.div`
   padding: 20px;
 
@@ -119,6 +131,7 @@ function Category() {
   const [categories, setCategories] = useState<Categories>()
   const [selectedProvider, setSelectedProvider] = useState<ProviderItem[]>()
 
+  console.log(categories)
   useEffect(() => {
     async function fetchCategories() {
       const providerArr = selectedProvider?.map((provider) => provider.hashId)
@@ -262,18 +275,33 @@ function Category() {
           <div className="total_count">
             전체 {categories?.pagination.totalCount.toLocaleString()}
           </div>
-          <div className="series_list">
-            {categories?.series.map((series) => (
-              <Thumbnail key={series.hashId} series={series} />
-            ))}
-          </div>
-          <div className="pagination_wrapper">
-            <Pagination
-              pageCount={categories?.pagination.totalPage ?? 1}
-              currentPage={page}
-              onChangePage={handleChangePage}
-            />
-          </div>
+          {isEmpty(categories?.series) ? (
+            <EmptyBook>
+              <Image
+                src="/images/empty_book.png"
+                width={210}
+                height={105}
+                alt=""
+              />
+              등록된 작품이 없어요.
+            </EmptyBook>
+          ) : (
+            <>
+              <div className="series_list">
+                {categories?.series.map((series) => (
+                  <Thumbnail key={series.hashId} series={series} />
+                ))}
+              </div>
+
+              <div className="pagination_wrapper">
+                <Pagination
+                  pageCount={categories?.pagination.totalPage ?? 1}
+                  currentPage={page}
+                  onChangePage={handleChangePage}
+                />
+              </div>
+            </>
+          )}
         </CategoryListWrapper>
       </CategoryWrapper>
     </CategoryContainer>
