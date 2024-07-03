@@ -219,8 +219,11 @@ function Profile({
         },
       })
 
-      if (watchPassword && watchPasswordConfirm) {
-        deleteCookie('isForgotPassword')
+      if (watchPassword && watchPasswordConfirm && isForgotPassword) {
+        deleteCookie('isForgotPassword', {
+          path: '/my/profile',
+          domain: 'doksi.kr',
+        })
       }
     })
   }
