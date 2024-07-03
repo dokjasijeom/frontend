@@ -27,7 +27,7 @@ const SearchBox = styled.div`
   border: 1px solid ${({ theme }) => theme.color.gray[200]};
   background: ${({ theme }) => theme.color.system.w};
   overflow: hidden;
-  z-index: 1;
+  z-index: 2;
 `
 
 const SearchBoxItem = styled.div`
