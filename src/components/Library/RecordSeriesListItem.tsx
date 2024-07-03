@@ -211,7 +211,7 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
                   recordSeries.recordProviders.map((provider: PlatformType) => (
                     <Image
                       key={provider}
-                      src={`/images/${provider}.png`}
+                      src={`/images/${provider}.svg`}
                       alt={provider}
                       width={20}
                       height={20}

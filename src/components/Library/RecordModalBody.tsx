@@ -271,7 +271,7 @@ function RecordModalBody(props: RecordModalBodyProps) {
           >
             <Image
               unoptimized
-              src={`/images/${lastRecordEpisode.providerName}.png`}
+              src={`/images/${lastRecordEpisode.providerName}.svg`}
               width={16}
               height={16}
               alt=""

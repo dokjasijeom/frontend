@@ -87,7 +87,7 @@ function Thumbnail(props: ThumbnailProps) {
             series.providers.map((provider: Provider) => (
               <Image
                 key={provider.hashId}
-                src={`/images/${provider.name}.png`}
+                src={`/images/${provider.name}.svg`}
                 alt={provider.name}
                 width={20}
                 height={20}

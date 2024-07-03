@@ -232,7 +232,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
                     onClick={handleEditSubscribe}
                   >
                     <Image
-                      src={`/images/${subscribtion.name}.png`}
+                      src={`/images/${subscribtion.name}.svg`}
                       alt={subscribtion.displayName}
                       width={26}
                       height={26}

@@ -384,7 +384,7 @@ function SeriesDetail({
                   >
                     <Image
                       key={provider.hashId}
-                      src={`/images/${provider.name}.png`}
+                      src={`/images/${provider.name}.svg`}
                       alt={provider.displayName}
                       width={20}
                       height={20}

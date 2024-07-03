@@ -121,7 +121,7 @@ function Subscribtion() {
               }
             >
               <Image
-                src={`/images/${provider.name}.png`}
+                src={`/images/${provider.name}.svg`}
                 alt={provider.displayName}
                 width={16}
                 height={16}
