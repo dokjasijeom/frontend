@@ -131,7 +131,6 @@ function Category() {
   const [categories, setCategories] = useState<Categories>()
   const [selectedProvider, setSelectedProvider] = useState<ProviderItem[]>()
 
-  console.log(categories)
   useEffect(() => {
     async function fetchCategories() {
       const providerArr = selectedProvider?.map((provider) => provider.hashId)
@@ -295,7 +294,8 @@ function Category() {
 
               <div className="pagination_wrapper">
                 <Pagination
-                  pageCount={categories?.pagination.totalPage ?? 1}
+                  totalPage={categories?.pagination.totalPage ?? 1}
+                  pageCount={10}
                   currentPage={page}
                   onChangePage={handleChangePage}
                 />

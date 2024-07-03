@@ -30,12 +30,12 @@ const PaginationButton = styled.button`
 interface PaginationProps {
   pageCount: number // 보여줄 페이지 개수
   currentPage: number // 현재 페이지
+  totalPage: number // 전체 페이지 개수
   onChangePage: (page: number) => void
 }
 
 function Pagination(props: PaginationProps) {
-  const { pageCount, currentPage, onChangePage } = props
-
+  const { pageCount, currentPage, totalPage, onChangePage } = props
   const [start, setStart] = useState(1) // 시작 페이지
 
   const handlePrev = () => {
@@ -44,6 +44,7 @@ function Pagination(props: PaginationProps) {
   }
 
   const handleNext = () => {
+    if (currentPage === totalPage) return
     onChangePage(currentPage + 1)
   }
 
@@ -57,14 +58,18 @@ function Pagination(props: PaginationProps) {
       <Icons name="ChevronLeft" onClick={handlePrev} />
       <PaginationButtonWrapper>
         {[...Array(pageCount)].map((a, i) => (
-          <PaginationButton
-            // eslint-disable-next-line react/no-array-index-key
-            key={i}
-            className={`${currentPage === start + i && 'active'}`}
-            onClick={() => onChangePage(start + i)}
-          >
-            {start + i}
-          </PaginationButton>
+          <>
+            {start + i <= totalPage && (
+              <PaginationButton
+                // eslint-disable-next-line react/no-array-index-key
+                key={i}
+                className={`${currentPage === start + i && 'active'}`}
+                onClick={() => onChangePage(start + i)}
+              >
+                {start + i}
+              </PaginationButton>
+            )}
+          </>
         ))}
       </PaginationButtonWrapper>
       <Icons name="ChevronRight" onClick={handleNext} />
