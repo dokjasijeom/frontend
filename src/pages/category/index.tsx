@@ -1,11 +1,11 @@
-import Tab from '@/components/common/Tab/Tab'
+import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { SERIES_TYPE_TAB_LIST, SORT_TAB_LIST } from '@/constants/Tab'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { Children, ReactElement, useEffect, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
-import { isEmpty } from 'lodash'
+import { isEmpty, range } from 'lodash'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import Pagination from '@/components/common/Pagination/Pagination'
@@ -15,6 +15,8 @@ import { getGenres } from '@/api/genres'
 import { Genre, ProviderItem } from '@/@types/series'
 import { getProviders } from '@/api/providers'
 import Image from 'next/image'
+import Skeleton from '@/components/common/Skeleton/Skeleton'
+import { useQuery } from '@tanstack/react-query'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -81,6 +83,12 @@ const EmptyBook = styled.div`
   color: ${({ theme }) => theme.color.gray[800]};
 `
 
+const SkeletonItem = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
 const CategoryListWrapper = styled.div`
   padding: 20px;
 
@@ -114,12 +122,11 @@ const CategoryListWrapper = styled.div`
 function Category() {
   const router = useRouter()
   const theme = useTheme()
-  const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] = useState(
+  const [selectedSeriesType, setSelectedSeriesType] = useState(
     SERIES_TYPE_TAB_LIST[0],
   )
 
   const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
-
   const [page, setPage] = useState(1)
   const [selectedGenre, setSeletedGenre] = useState<Genre>({
     hashId: 'all',
@@ -128,14 +135,18 @@ function Category() {
   })
   const [genres, setGenres] = useState<Genre[]>()
   const [providers, setProviders] = useState<ProviderItem[]>([])
-  const [categories, setCategories] = useState<Categories>()
   const [selectedProvider, setSelectedProvider] = useState<ProviderItem[]>()
 
-  useEffect(() => {
-    async function fetchCategories() {
+  const {
+    data: categories,
+    refetch,
+    isLoading,
+  } = useQuery<Categories>({
+    queryKey: ['categories'],
+    queryFn: async () => {
       const providerArr = selectedProvider?.map((provider) => provider.hashId)
       const params = {
-        seriesType: selectedSeriesTypeTab.name,
+        seriesType: selectedSeriesType.name,
         page,
         pageSize: 20,
         providers: providerArr,
@@ -146,20 +157,14 @@ function Category() {
       }
 
       const res = await getCategories(params)
-      setCategories(res.data.data)
-    }
-    fetchCategories().then(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      })
-    })
-  }, [page, selectedGenre.hashId, selectedProvider, selectedSeriesTypeTab.name])
+      return res.data.data
+    },
+  })
 
   useEffect(() => {
     async function fetchGenres() {
       const res = await getGenres({
-        seriesType: selectedSeriesTypeTab.name,
+        seriesType: selectedSeriesType.name,
       })
       setGenres([
         {
@@ -171,7 +176,7 @@ function Category() {
       ])
     }
     fetchGenres()
-  }, [selectedSeriesTypeTab.name])
+  }, [selectedSeriesType.name])
 
   useEffect(() => {
     async function fetchProviders() {
@@ -182,12 +187,37 @@ function Category() {
     fetchProviders()
   }, [])
 
+  useEffect(() => {
+    refetch()
+  }, [
+    selectedGenre,
+    selectedSeriesType,
+    selectedSort,
+    selectedProvider,
+    refetch,
+  ])
+
   const handleChangePage = (currentPage: number) => {
     setPage(currentPage)
   }
 
+  const handleSelectedSeriesType = (seriesType: TabItem) => {
+    setSelectedSeriesType(seriesType)
+    setSeletedGenre({
+      hashId: 'all',
+      name: '전체',
+      genreType: 'common',
+    })
+    setPage(1)
+  }
+
   const handleSelectedGenre = (genre: Genre) => {
     setSeletedGenre(genre)
+    setPage(1)
+  }
+
+  const handleSelectedSort = (sort: TabItem) => {
+    setSelectedSort(sort)
   }
 
   const handleselectedProvider = (provider: ProviderItem) => {
@@ -217,14 +247,9 @@ function Category() {
         <Tab
           type="underbar"
           tabList={SERIES_TYPE_TAB_LIST}
-          selectedTab={selectedSeriesTypeTab}
+          selectedTab={selectedSeriesType}
           onChange={(tab) => {
-            setSelectedSeriesTypeTab(tab)
-            setSeletedGenre({
-              hashId: 'all',
-              name: '전체',
-              genreType: 'common',
-            })
+            handleSelectedSeriesType(tab)
           }}
         />
         <CategoryTabWrapper>
@@ -247,7 +272,7 @@ function Category() {
             tabList={SORT_TAB_LIST}
             selectedTab={selectedSort}
             onChange={(tab) => {
-              setSelectedSort(tab)
+              handleSelectedSort(tab)
             }}
           />
           <div className="platform_wrapper">
@@ -279,7 +304,25 @@ function Category() {
           <div className="total_count">
             전체 {categories?.pagination.totalCount.toLocaleString()}
           </div>
-          {isEmpty(categories?.series) ? (
+          {isLoading && (
+            <div className="series_list">
+              {Children.toArray(
+                range(12).map(() => (
+                  <SkeletonItem>
+                    <Skeleton
+                      width="100%"
+                      height="100%"
+                      style={{ aspectRatio: 1, margin: 0 }}
+                    />
+                    <Skeleton height="18px" style={{ marginTop: '8px' }} />
+                    <Skeleton width="50%" />
+                    <Skeleton width="30%" />
+                  </SkeletonItem>
+                )),
+              )}
+            </div>
+          )}
+          {isEmpty(categories?.series) && !isLoading && (
             <EmptyBook>
               <Image
                 src="/images/empty_book.png"
@@ -289,7 +332,8 @@ function Category() {
               />
               등록된 작품이 없어요.
             </EmptyBook>
-          ) : (
+          )}
+          {!isEmpty(categories?.series) && (
             <>
               <div className="series_list">
                 {categories?.series.map((series) => (
