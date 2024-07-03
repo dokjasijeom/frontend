@@ -148,7 +148,12 @@ function Category() {
       const res = await getCategories(params)
       setCategories(res.data.data)
     }
-    fetchCategories()
+    fetchCategories().then(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+    })
   }, [page, selectedGenre.hashId, selectedProvider, selectedSeriesTypeTab.name])
 
   useEffect(() => {
