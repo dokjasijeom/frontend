@@ -143,6 +143,10 @@ const SeriesInfoWrapper = styled.div`
         bottom: 20px;
         left: 20px;
       }
+
+      .like_button {
+        min-width: 77px;
+      }
       .button_body {
         display: flex;
         flex-shrink: 0;
@@ -324,6 +328,7 @@ function SeriesDetail({
               </div>
               <div className="action_button_wrapper">
                 <Button
+                  className="like_button"
                   type={isUserLikeSeries ? 'primary' : 'secondary'}
                   width="auto"
                   onClick={handleLikeSeries}
