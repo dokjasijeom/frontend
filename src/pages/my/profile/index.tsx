@@ -221,8 +221,8 @@ function Profile({
 
       if (watchPassword && watchPasswordConfirm && isForgotPassword) {
         deleteCookie('isForgotPassword', {
-          path: '/my/profile',
-          domain: 'doksi.kr',
+          path: '/',
+          domain: '.doksi.kr',
         })
       }
     })
@@ -235,15 +235,27 @@ function Profile({
   }
 
   const handleLogout = () => {
-    deleteCookie('DS_AUT')
-    deleteCookie('DS_USER')
+    deleteCookie('DS_AUT', {
+      path: '/',
+      domain: '.doksi.kr',
+    })
+    deleteCookie('DS_USER', {
+      path: '/',
+      domain: '.doksi.kr',
+    })
     router.push('/')
   }
 
   const handleDeleteUser = async () => {
     await deleteUser().then(() => {
-      deleteCookie('DS_AUT')
-      deleteCookie('DS_USER')
+      deleteCookie('DS_AUT', {
+        path: '/',
+        domain: '.doksi.kr',
+      })
+      deleteCookie('DS_USER', {
+        path: '/',
+        domain: '.doksi.kr',
+      })
       router.push('/')
     })
   }
@@ -314,7 +326,7 @@ function Profile({
             <div className="label">이메일</div>
             <Input
               disabled
-              value="e-mail@gmail.com"
+              value={user?.email ?? ''}
               placeholder="이메일을 입력해주세요."
               onChange={() => {}}
             />
