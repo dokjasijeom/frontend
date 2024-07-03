@@ -23,6 +23,7 @@ const SearchBox = styled.div`
   position: absolute;
   width: 100%;
   top: 54px;
+  left: 0;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.color.gray[200]};
   background: ${({ theme }) => theme.color.system.w};
