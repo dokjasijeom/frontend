@@ -57,8 +57,14 @@ function Login() {
   const handleLogin = async () => {
     await login({ email: watchEmail, password: watchPassword })
       .then((res: any) => {
-        setCookie('DS_AUT', res.data.data.token)
-        setCookie('DS_USER', res.data)
+        setCookie('DS_AUT', res.data.data.token, {
+          path: '/',
+          domain: '.doksi.kr',
+        })
+        setCookie('DS_USER', res.data, {
+          path: '/',
+          domain: '.doksi.kr',
+        })
         router.push('/')
       })
       .catch(() => {
