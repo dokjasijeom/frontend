@@ -125,15 +125,17 @@ function Search({ query }: SearchPageProps) {
       }
     }
   }
-  const handleChangeSearch = (value: string) => {
-    setKeyword(value)
+  const handleChangeSearch = async (value: string) => {
+    await setKeyword(value)
+  }
 
+  useEffect(() => {
     if (!isEmpty(keyword)) {
       setShowSearchBox(true)
     } else {
       setShowSearchBox(false)
     }
-  }
+  }, [keyword])
 
   useEffect(() => {
     async function fetchAutoCompleteList() {
@@ -167,7 +169,7 @@ function Search({ query }: SearchPageProps) {
           onChange={(e) => handleChangeSearch(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-        {!isEmpty(autoCompleteList) && !isEmpty(keyword) && showSearchBox && (
+        {!isEmpty(autoCompleteList) && showSearchBox && (
           <SearchBox>
             {autoCompleteList.map((autoComplete) => (
               <SearchBoxItem
