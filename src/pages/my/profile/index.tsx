@@ -219,7 +219,7 @@ function Profile({
         },
       })
 
-      if (watchPassword && watchPasswordConfirm && isForgotPassword) {
+      if (watchPassword && watchPasswordConfirm) {
         deleteCookie('isForgotPassword')
       }
     })
