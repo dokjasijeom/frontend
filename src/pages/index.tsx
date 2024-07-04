@@ -50,6 +50,10 @@ const SwiperBookListWrapper = styled.div`
   .swiper {
     .swiper-slide {
       width: 184px;
+
+      @media (max-width: 490px) {
+        width: 158px;
+      }
     }
   }
 `

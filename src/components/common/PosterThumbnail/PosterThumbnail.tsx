@@ -10,6 +10,10 @@ const PosterThumbnailContainer = styled.div`
   flex-direction: column;
   gap: 8px;
   cursor: pointer;
+
+  @media (max-width: 490px) {
+    width: 158px;
+  }
 `
 
 const ThumbnailImageWrapper = styled.div`
@@ -17,6 +21,10 @@ const ThumbnailImageWrapper = styled.div`
   width: 184px;
   border-radius: 12px;
   overflow: hidden;
+
+  @media (max-width: 490px) {
+    width: 158px;
+  }
   .series_info_wrapper {
     width: 100%;
     position: absolute;
@@ -51,6 +59,11 @@ const ThumbnailImage = styled.img`
   height: 300px;
   object-fit: cover;
   border-radius: 12px;
+
+  @media (max-width: 490px) {
+    width: 158px;
+    height: 258px;
+  }
 `
 
 interface PosterThumbnailProps {
