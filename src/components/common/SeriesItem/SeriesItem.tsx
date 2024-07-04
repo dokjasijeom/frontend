@@ -106,7 +106,7 @@ function SeriesItem(props: SeriesItemProps) {
               series.providers.map((provider) => (
                 <Image
                   key={provider.hashId}
-                  src={`/images/${provider.name}.png`}
+                  src={`/images/${provider.name}.svg`}
                   alt={provider.name}
                   width={20}
                   height={20}
