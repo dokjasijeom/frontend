@@ -200,19 +200,6 @@ function Like() {
                 </>
               )
             })}
-          {/* <SkeletonWrapper>
-            {Children.toArray(
-              range(4).map(() => (
-                <SkeletonItem>
-                  <Skeleton width="50px" height="50px" />
-                  <div>
-                    <Skeleton width="150px" height="14px" />
-                    <Skeleton width="100px" />
-                  </div>
-                </SkeletonItem>
-              )),
-            )}
-          </SkeletonWrapper> */}
         </LikeBookListWrapper>
       </LikeWrapper>
     </LikeContainer>
