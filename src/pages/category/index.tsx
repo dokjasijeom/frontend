@@ -219,7 +219,7 @@ function Category() {
     refetch()
   }
 
-  const handleselectedProvider = (provider: ProviderItem) => {
+  const handleselectedProvider = async (provider: ProviderItem) => {
     if (selectedProvider) {
       const findProvider = selectedProvider.find(
         (item) => item.hashId === provider.hashId,
@@ -228,10 +228,12 @@ function Category() {
         const filterProvider = selectedProvider.filter(
           (item) => item.hashId !== provider.hashId,
         )
-        setSelectedProvider(filterProvider)
+        await setSelectedProvider(filterProvider)
       } else {
-        setSelectedProvider([...selectedProvider, provider])
+        await setSelectedProvider([...selectedProvider, provider])
       }
+
+      await refetch()
     }
   }
   return (
