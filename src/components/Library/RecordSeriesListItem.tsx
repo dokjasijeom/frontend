@@ -247,6 +247,7 @@ function RecordSeriesListItem(props: RecordSeriesListItemProps) {
           style={{ marginLeft: '12px', flexShrink: '0' }}
           type="text"
           width="38px"
+          height="74px"
           onClick={onEdit}
         >
           삭제
