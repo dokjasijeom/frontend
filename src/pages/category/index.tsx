@@ -32,7 +32,7 @@ const CategoryTabWrapper = styled.div`
   flex-wrap: wrap;
 `
 
-const SubscribtionItem = styled.div`
+const SubscriptionItem = styled.div`
   padding: 12px 20px;
   border-radius: 100px;
   height: 41px;
@@ -256,7 +256,7 @@ function Category() {
         <CategoryTabWrapper>
           {!isEmpty(genres) &&
             genres?.map((genre) => (
-              <SubscribtionItem
+              <SubscriptionItem
                 key={genre.hashId}
                 onClick={() => handleSelectedGenre(genre)}
                 className={
@@ -264,7 +264,7 @@ function Category() {
                 }
               >
                 {genre.name}
-              </SubscribtionItem>
+              </SubscriptionItem>
             ))}
         </CategoryTabWrapper>
         <CategoryFilterWrapper>

@@ -117,7 +117,7 @@ const ProviderIcon = styled.div<{ index: number }>`
   }
 `
 
-const SubscribtionProviderWrapper = styled.div`
+const SubscriptionProviderWrapper = styled.div`
   display: flex;
   width: 100%;
   height: 34px;
@@ -138,7 +138,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
     router.push('/my/profile')
   }
   const handleEditSubscribe = () => {
-    router.push('/my/subscribtion')
+    router.push('/my/subscription')
   }
 
   return (
@@ -224,22 +224,22 @@ function MyInfoContainer(props: MyInfoContainerProps) {
                 <Icons name="Plus" width="20px" height="20px" />
               </PlusButton>
             ) : (
-              <SubscribtionProviderWrapper>
-                {user.subscribeProvider.map((subscribtion, index) => (
+              <SubscriptionProviderWrapper>
+                {user.subscribeProvider.map((subscription, index) => (
                   <ProviderIcon
-                    key={subscribtion.hashId}
+                    key={subscription.hashId}
                     index={index}
                     onClick={handleEditSubscribe}
                   >
                     <Image
-                      src={`/images/${subscribtion.name}.svg`}
-                      alt={subscribtion.displayName}
+                      src={`/images/${subscription.name}.svg`}
+                      alt={subscription.displayName}
                       width={26}
                       height={26}
                     />
                   </ProviderIcon>
                 ))}
-              </SubscribtionProviderWrapper>
+              </SubscriptionProviderWrapper>
             )}
           </div>
         </Box>

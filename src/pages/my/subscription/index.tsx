@@ -12,11 +12,11 @@ import { useRouter } from 'next/router'
 import React, { ReactElement, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-const SubscribtionContainer = styled.div`
+const SubscriptionContainer = styled.div`
   padding-top: 56px;
 `
 
-const SubscribtionWrapper = styled.div`
+const SubscriptionWrapper = styled.div`
   padding: 16px 20px;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@ const SubscribtionWrapper = styled.div`
   }
 `
 
-const SubscribtionItem = styled.div`
+const SubscriptionItem = styled.div`
   padding: 12px 20px;
   border-radius: 100px;
   height: 41px;
@@ -49,7 +49,7 @@ const SubscribtionItem = styled.div`
   }
 `
 
-function Subscribtion() {
+function Subscription() {
   const router = useRouter()
   const queryClient = useQueryClient()
   const { showModal } = useModal()
@@ -79,7 +79,7 @@ function Subscribtion() {
     }
   }, [user])
 
-  const handleChangeSubscribtion = (provider: ProviderItem) => {
+  const handleChangeSubscription = (provider: ProviderItem) => {
     const findItem = selectedProvider?.find((v) => v.hashId === provider.hashId)
     if (findItem) {
       const temp = selectedProvider?.filter((v) => v.hashId !== provider.hashId)
@@ -103,18 +103,18 @@ function Subscribtion() {
   }
 
   return (
-    <SubscribtionContainer>
+    <SubscriptionContainer>
       <TitleHeader title="구독 중인 서비스" onClickBack={() => router.back()} />
-      <SubscribtionWrapper>
+      <SubscriptionWrapper>
         <div className="title">
           구독 중인 서비스를 <br />
           선택해주세요.
         </div>
         <div className="provider_wrapper">
           {providers.map((provider) => (
-            <SubscribtionItem
+            <SubscriptionItem
               key={provider.hashId}
-              onClick={() => handleChangeSubscribtion(provider)}
+              onClick={() => handleChangeSubscription(provider)}
               className={
                 selectedProvider.find((v) => v.hashId === provider.hashId)
                   ? 'active'
@@ -128,17 +128,17 @@ function Subscribtion() {
                 height={16}
               />
               {provider.displayName}
-            </SubscribtionItem>
+            </SubscriptionItem>
           ))}
         </div>
         <Button onClick={handleUpdateSubscription}>저장</Button>
-      </SubscribtionWrapper>
-    </SubscribtionContainer>
+      </SubscriptionWrapper>
+    </SubscriptionContainer>
   )
 }
 
-Subscribtion.getLayout = function getLayout(page: ReactElement) {
+Subscription.getLayout = function getLayout(page: ReactElement) {
   return <OnlyFooterLayout>{page}</OnlyFooterLayout>
 }
 
-export default Subscribtion
+export default Subscription
