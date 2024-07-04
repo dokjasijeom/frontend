@@ -35,6 +35,7 @@ const SubscribtionWrapper = styled.div`
 const SubscribtionItem = styled.div`
   padding: 12px 20px;
   border-radius: 100px;
+  height: 41px;
   background: ${({ theme }) => theme.color.gray[50]};
   ${({ theme }) => theme.typography.body4};
   display: flex;
