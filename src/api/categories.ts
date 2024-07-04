@@ -3,7 +3,7 @@ import axiosInstance from './axiosInstance'
 export interface GetCategoriesParams {
   seriesType?: string
   genre?: string
-  providers?: string
+  providers?: string[]
   page: number
   pageSize: number
 }

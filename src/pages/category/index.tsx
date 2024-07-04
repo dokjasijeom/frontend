@@ -3,7 +3,7 @@ import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { SERIES_TYPE_TAB_LIST, SORT_TAB_LIST } from '@/constants/Tab'
 import { useRouter } from 'next/router'
-import React, { Children, ReactElement, useEffect, useState } from 'react'
+import React, { Children, ReactElement, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { isEmpty, range } from 'lodash'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
@@ -134,9 +134,33 @@ function Category() {
     name: '전체',
     genreType: 'common',
   })
-  const [genres, setGenres] = useState<Genre[]>()
-  const [providers, setProviders] = useState<ProviderItem[]>([])
-  const [selectedProvider, setSelectedProvider] = useState<ProviderItem[]>()
+
+  const [selectedProvider, setSelectedProvider] = useState<ProviderItem[]>([])
+
+  const { data: providers } = useQuery<ProviderItem[]>({
+    queryKey: ['providers'],
+    queryFn: async () => {
+      const res = await getProviders()
+      setSelectedProvider(res.data.data)
+      return res.data.data
+    },
+  })
+  const { data: genres, refetch: refetchGenre } = useQuery<Genre[]>({
+    queryKey: ['genres'],
+    queryFn: async () => {
+      const res = await getGenres({
+        seriesType: selectedSeriesType.name,
+      })
+      return [
+        {
+          hashId: 'all',
+          name: '전체',
+          genreType: 'common',
+        },
+        ...res.data.data,
+      ]
+    },
+  })
 
   const {
     data: categories,
@@ -160,49 +184,19 @@ function Category() {
       const res = await getCategories(params)
       return res.data.data
     },
+    enabled: !isEmpty(providers),
   })
 
-  useEffect(() => {
-    async function fetchGenres() {
-      const res = await getGenres({
-        seriesType: selectedSeriesType.name,
-      })
-      setGenres([
-        {
-          hashId: 'all',
-          name: '전체',
-          genreType: 'common',
-        },
-        ...res.data.data,
-      ])
-    }
-    fetchGenres()
-  }, [selectedSeriesType.name])
-
-  useEffect(() => {
-    async function fetchProviders() {
-      const res = await getProviders()
-      setProviders(res.data.data)
-      setSelectedProvider(res.data.data)
-    }
-    fetchProviders()
-  }, [])
-
-  useEffect(() => {
-    refetch()
-  }, [
-    selectedGenre,
-    selectedSeriesType,
-    selectedSort,
-    selectedProvider,
-    refetch,
-  ])
-
-  const handleChangePage = (currentPage: number) => {
-    setPage(currentPage)
+  const handleChangePage = async (currentPage: number) => {
+    await setPage(currentPage)
+    await refetch()
+    await window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
 
-  const handleSelectedSeriesType = (seriesType: TabItem) => {
+  const handleSelectedSeriesType = async (seriesType: TabItem) => {
     setSelectedSeriesType(seriesType)
     setSeletedGenre({
       hashId: 'all',
@@ -210,15 +204,19 @@ function Category() {
       genreType: 'common',
     })
     setPage(1)
+    await refetchGenre()
+    await refetch()
   }
 
-  const handleSelectedGenre = (genre: Genre) => {
+  const handleSelectedGenre = async (genre: Genre) => {
     setSeletedGenre(genre)
-    setPage(1)
+    await setPage(1)
+    await refetch()
   }
 
   const handleSelectedSort = (sort: TabItem) => {
     setSelectedSort(sort)
+    refetch()
   }
 
   const handleselectedProvider = (provider: ProviderItem) => {
@@ -278,7 +276,7 @@ function Category() {
           />
           <div className="platform_wrapper">
             {!isEmpty(providers) &&
-              providers.map((provider) => (
+              providers?.map((provider) => (
                 <Checkbox
                   key={provider.hashId}
                   style={{ gap: '4px' }}
