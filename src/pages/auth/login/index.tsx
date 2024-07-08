@@ -57,13 +57,14 @@ function Login() {
   const handleLogin = async () => {
     await login({ email: watchEmail, password: watchPassword })
       .then((res: any) => {
+        console.log(process.env.NEXT_PUBLIC_COOKIE_DOMAIN)
         setCookie('DS_AUT', res.data.data.token, {
           path: '/',
-          domain: '.doksi.kr',
+          domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         })
         setCookie('DS_USER', res.data, {
           path: '/',
-          domain: '.doksi.kr',
+          domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         })
         router.push('/')
       })

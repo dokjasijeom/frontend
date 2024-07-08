@@ -222,7 +222,7 @@ function Profile({
       if (watchPassword && watchPasswordConfirm && isForgotPassword) {
         deleteCookie('isForgotPassword', {
           path: '/',
-          domain: '.doksi.kr',
+          domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         })
       }
     })
@@ -237,11 +237,11 @@ function Profile({
   const handleLogout = () => {
     deleteCookie('DS_AUT', {
       path: '/',
-      domain: '.doksi.kr',
+      domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
     })
     deleteCookie('DS_USER', {
       path: '/',
-      domain: '.doksi.kr',
+      domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
     })
     router.push('/')
   }
@@ -250,11 +250,11 @@ function Profile({
     await deleteUser().then(() => {
       deleteCookie('DS_AUT', {
         path: '/',
-        domain: '.doksi.kr',
+        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
       })
       deleteCookie('DS_USER', {
         path: '/',
-        domain: '.doksi.kr',
+        domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
       })
       router.push('/')
     })

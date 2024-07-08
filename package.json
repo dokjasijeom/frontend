@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "local": "env-cmd -f .env.localhost next dev -p 3000",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000",
     "lint": "next lint",
     "vercel-deploy": "next build && next export"
   },
@@ -14,6 +15,7 @@
     "@types/lodash": "^4.14.202",
     "axios": "^1.6.8",
     "cookies-next": "^4.1.1",
+    "env-cmd": "^10.1.0",
     "lodash": "^4.17.21",
     "next": "14.0.1",
     "react": "^18",
