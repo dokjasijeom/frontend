@@ -37,5 +37,6 @@ export const color = {
     series: '#00E54F',
     'kakao-page': '#FEBC00',
     ridi: '#1E9EFF',
+    lezhin: '#EC1C23',
   },
 }
