@@ -225,7 +225,7 @@ function MyInfoContainer(props: MyInfoContainerProps) {
               </PlusButton>
             ) : (
               <SubscriptionProviderWrapper>
-                {user.subscribeProvider.map((subscription, index) => (
+                {user.subscribeProvider.reverse().map((subscription, index) => (
                   <ProviderIcon
                     key={subscription.hashId}
                     index={index}
