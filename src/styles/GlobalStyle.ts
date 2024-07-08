@@ -23,8 +23,8 @@ const GlobalStyle = createGlobalStyle`
     text-decoration:none;
     color:inherit;
   }
-  
-  @font-face {
+
+@font-face {
     font-family: 'Pretendard';
     font-weight: 300;
     font-style: normal;
@@ -34,8 +34,8 @@ const GlobalStyle = createGlobalStyle`
         url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Light.woff') format('woff'),
         url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Light.ttf') format("truetype");
     font-display: swap;
-  }
-  @font-face {
+}
+@font-face {
     font-family: 'Pretendard';
     font-weight: 400;
     font-style: normal;
@@ -45,9 +45,19 @@ const GlobalStyle = createGlobalStyle`
         url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Regular.woff') format('woff'),
         url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Regular.ttf') format("truetype");
     font-display: swap;
-  }
-
-  @font-face {
+}
+@font-face {
+    font-family: 'Pretendard';
+    font-weight: 500;
+    font-style: normal;
+    src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.eot');
+    src: url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.eot?#iefix') format('embedded-opentype'),
+        url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.woff2') format('woff2'),
+        url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.woff') format('woff'),
+        url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Medium.ttf') format("truetype");
+    font-display: swap;
+}
+@font-face {
     font-family: 'Pretendard';
     font-weight: 700;
     font-style: normal;
@@ -57,7 +67,7 @@ const GlobalStyle = createGlobalStyle`
         url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Bold.woff') format('woff'),
         url('https://cdn.jsdelivr.net/gh/webfontworld/pretendard/Pretendard-Bold.ttf') format("truetype");
     font-display: swap;
-  }
+}
 
 
 `
