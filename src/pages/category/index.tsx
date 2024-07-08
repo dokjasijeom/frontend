@@ -57,7 +57,7 @@ const CategoryFilterWrapper = styled.div`
   align-items: center;
   flex-direction: row;
 
-  @media (max-width: 500px) {
+  @media (max-width: 560px) {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
@@ -65,6 +65,10 @@ const CategoryFilterWrapper = styled.div`
   .platform_wrapper {
     display: flex;
     gap: 12px;
+
+    @media (max-width: 390px) {
+      gap: 8px;
+    }
 
     .checkbox_label {
       flex: 1;
