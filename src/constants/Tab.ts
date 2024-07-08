@@ -17,6 +17,6 @@ export const WEEK_TAB_LIST = [
 
 export const SORT_TAB_LIST = [
   { displayName: '인기순', name: 'popular' },
-  { displayName: '찜 많은 순', name: 'heart' },
-  { displayName: '독자픽 순', name: 'dokjapick' },
+  { displayName: '찜 많은 순', name: 'like' },
+  { displayName: '독자픽 순', name: 'pick' },
 ]

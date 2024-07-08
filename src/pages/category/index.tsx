@@ -172,9 +172,10 @@ function Category() {
       const providerArr = selectedProvider?.map((provider) => provider.hashId)
       const params = {
         seriesType: selectedSeriesType.name,
+        providers: providerArr,
+        sort: selectedSort.name,
         page,
         pageSize: 20,
-        providers: providerArr,
       } as GetCategoriesParams
 
       if (selectedGenre.hashId !== 'all') {
@@ -214,9 +215,10 @@ function Category() {
     await refetch()
   }
 
-  const handleSelectedSort = (sort: TabItem) => {
+  const handleSelectedSort = async (sort: TabItem) => {
     setSelectedSort(sort)
-    refetch()
+    await setPage(1)
+    await refetch()
   }
 
   const handleselectedProvider = async (provider: ProviderItem) => {
