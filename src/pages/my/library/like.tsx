@@ -15,7 +15,7 @@ import React, { Children, ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import SeriesItem from '@/components/common/SeriesItem/SeriesItem'
 import { Series } from '@/@types/series'
-import { LikeSeries, RecordSeries, User } from '@/@types/user'
+import { LikeSeries, User } from '@/@types/user'
 import { recordSeries } from '@/api/series'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
 
@@ -95,18 +95,11 @@ function Like() {
     },
   })
 
-  const handleAddMyLibrary = async (
-    series: Series,
-    isUserRecordSeries: RecordSeries,
-  ) => {
-    if (isUserRecordSeries) {
-      router.push(`/my/library/${isUserRecordSeries.id}`)
-    } else {
-      await recordSeries(series.hashId).then(() => {
-        showToast({ message: '기록장에 추가했어요!' })
-        queryClient.invalidateQueries({ queryKey: ['user'] })
-      })
-    }
+  const handleAddMyLibrary = async (series: Series) => {
+    await recordSeries(series.hashId).then(() => {
+      showToast({ message: '기록장에 추가했어요!' })
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+    })
   }
 
   const filterLikeSeriesList = useMemo(() => {
@@ -172,7 +165,9 @@ function Like() {
                       type={isUserRecordSeries ? 'primary' : 'secondary'}
                       onClick={() => {
                         if (isUserRecordSeries) {
-                          handleAddMyLibrary(series, isUserRecordSeries)
+                          router.push(`/my/library/${isUserRecordSeries.id}`)
+                        } else {
+                          handleAddMyLibrary(series)
                         }
                       }}
                     >
