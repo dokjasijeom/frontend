@@ -632,9 +632,6 @@ function LibraryDetail({
               />
             </div>
             <RecordEpisodesWrapper>
-              {isEmpty(filteredEpisodes) && (
-                <div className="empty_episodes">기록된 회차가 없어요.</div>
-              )}
               {(!isEmpty(selectedEpisodes) || isEdit) && (
                 <DeleteBox>
                   <div className="selected_info">
@@ -660,6 +657,9 @@ function LibraryDetail({
                     {!isEmpty(selectedEpisodes) ? '삭제' : '취소'}
                   </button>
                 </DeleteBox>
+              )}
+              {isEmpty(filteredEpisodes) && (
+                <div className="empty_episodes">기록된 회차가 없어요.</div>
               )}
               <div className="episodes_wrapper">
                 {filteredEpisodes.map((episode) => (
