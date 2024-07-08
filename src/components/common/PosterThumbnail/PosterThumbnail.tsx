@@ -27,30 +27,42 @@ const ThumbnailImageWrapper = styled.div`
   }
   .series_info_wrapper {
     width: 100%;
+    height: 50%;
     position: absolute;
     bottom: 0;
     padding-bottom: 16px;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 10%, #000 83.85%);
-    .series_title {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 10%, #000 65%);
+
+    .series_info {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
       width: 100%;
-      padding: 0 20px;
-      ${({ theme }) => theme.typography.head1};
-      color: ${({ theme }) => theme.color.system.w};
-      word-break: keep-all;
-      text-align: center;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-    .series_author {
-      text-align: center;
-      ${({ theme }) => theme.typography.body4};
-      color: ${({ theme }) => theme.color.system.w};
+      transform: translateX(-50%);
+
+      .series_title {
+        width: 100%;
+        padding: 0 20px;
+        ${({ theme }) => theme.typography.head1};
+        color: ${({ theme }) => theme.color.system.w};
+        word-break: keep-all;
+        text-align: center;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-shadow: 2px 2px 2px ${({ theme }) => theme.color.system.bk};
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+      .series_author {
+        text-align: center;
+        ${({ theme }) => theme.typography.body4};
+        color: ${({ theme }) => theme.color.system.w};
+        word-break: keep-all;
+      }
     }
   }
 `
@@ -80,9 +92,11 @@ function PosterThumbnail(props: PosterThumbnailProps) {
       <ThumbnailImageWrapper>
         <ThumbnailImage src={series.thumbnail} />
         <div className="series_info_wrapper">
-          <div className="series_title">{series.title}</div>
-          <div className="series_author">
-            {series.authors.map((value) => value.name).join('/')}
+          <div className="series_info">
+            <div className="series_title">{series.title}</div>
+            <div className="series_author">
+              {series.authors.map((value) => value.name).join('/')}
+            </div>
           </div>
         </div>
       </ThumbnailImageWrapper>
