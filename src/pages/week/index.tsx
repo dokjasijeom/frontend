@@ -2,20 +2,14 @@ import { Pagination } from '@/@types/categories'
 import { Series } from '@/@types/series'
 import { getSeriesList } from '@/api/series'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
-import Tab from '@/components/common/Tab/Tab'
+import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import { SERIES_TYPE_TAB_LIST, WEEK_TAB_LIST } from '@/constants/Tab'
 import { useInfiniteScrolling } from '@/hooks/useInfiniteScrolling'
 import { isEmpty, range } from 'lodash'
 import { useRouter } from 'next/router'
-import React, {
-  Children,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { Children, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const WeekContainer = styled.div``
@@ -53,15 +47,12 @@ const SkeletonItem = styled.div`
 `
 
 function Week() {
-  const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] = useState(
-    SERIES_TYPE_TAB_LIST[0],
-  )
-  const [selectedWeek, setSelectedWeek] = useState(WEEK_TAB_LIST[0])
+  const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] = useState<TabItem>()
+  const [selectedWeek, setSelectedWeek] = useState<TabItem>()
   const [weekSeries, setWeekSeries] = useState<Series[]>([])
   const [page, setPage] = useState(1)
   const [paginationData, setPaginationData] = useState<Pagination>()
-  const targetRef = useRef(null)
-  const pageSize = 15
+  const pageSize = 20
 
   const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null)
   const router = useRouter()
@@ -69,8 +60,8 @@ function Week() {
   const fetchMore = useCallback(async () => {
     const nextPage = page + 1
     const res = await getSeriesList({
-      seriesType: selectedSeriesTypeTab.name,
-      publishDay: selectedWeek.name,
+      seriesType: selectedSeriesTypeTab?.name,
+      publishDay: selectedWeek?.name,
       page: nextPage,
       pageSize,
     })
@@ -78,7 +69,7 @@ function Week() {
     setWeekSeries((prev) => [...prev, ...series])
     setPage(nextPage)
     setPaginationData(pagination)
-  }, [page, selectedSeriesTypeTab.name, selectedWeek.name])
+  }, [page, selectedSeriesTypeTab?.name, selectedWeek?.name])
 
   useInfiniteScrolling({
     observerRef,
@@ -87,10 +78,32 @@ function Week() {
   })
 
   useEffect(() => {
+    if (router.isReady) {
+      if (router.query.seriesType) {
+        const findSeriesType = SERIES_TYPE_TAB_LIST.find(
+          (v) => v.name === router.query.seriesType,
+        ) as TabItem
+        setSelectedSeriesTypeTab(findSeriesType)
+      } else {
+        setSelectedSeriesTypeTab(SERIES_TYPE_TAB_LIST[0])
+      }
+
+      if (router.query.week) {
+        const findWeek = WEEK_TAB_LIST.find(
+          (v) => v.name === router.query.week,
+        ) as TabItem
+        setSelectedWeek(findWeek)
+      } else {
+        setSelectedWeek(WEEK_TAB_LIST[0])
+      }
+    }
+  }, [router.isReady, router.query])
+
+  useEffect(() => {
     async function fetchWeekSeries() {
       const res = await getSeriesList({
-        seriesType: selectedSeriesTypeTab.name,
-        publishDay: selectedWeek.name,
+        seriesType: selectedSeriesTypeTab?.name,
+        publishDay: selectedWeek?.name,
         page: 1,
         pageSize,
       })
@@ -101,43 +114,88 @@ function Week() {
       setWeekSeries(series)
     }
 
-    fetchWeekSeries()
-  }, [selectedSeriesTypeTab.name, selectedWeek.name])
+    if (!isEmpty(selectedSeriesTypeTab) && !isEmpty(selectedWeek)) {
+      fetchWeekSeries()
+    }
+  }, [selectedSeriesTypeTab, selectedWeek])
+
+  const handleChangeSeriesTypeTab = async (tab: TabItem) => {
+    if (selectedSeriesTypeTab?.name !== tab.name) {
+      await setPage(1)
+      await setWeekSeries([])
+      await setSelectedSeriesTypeTab(tab)
+    }
+    router.replace(
+      {
+        pathname: '/week',
+        query: {
+          seriesType: tab.name,
+          week: selectedWeek?.name,
+        },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
+
+  const handleChangeWeek = async (tab: TabItem) => {
+    if (selectedWeek?.name !== tab.name) {
+      await setPage(1)
+      await setWeekSeries([])
+      await setSelectedWeek(tab)
+    }
+    router.replace(
+      {
+        pathname: '/week',
+        query: {
+          seriesType: selectedSeriesTypeTab?.name,
+          week: tab.name,
+        },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
 
   return (
     <WeekContainer>
       <TitleHeader
         title="요일별 연재 작품"
         onClickBack={() => {
-          router.back()
+          router.push(
+            {
+              pathname: '/',
+              query: {
+                seriesType: selectedSeriesTypeTab?.name,
+                week: selectedWeek?.name,
+              },
+            },
+            '/',
+          )
         }}
       />
       <WeekWrapper>
         <WeekTabWrapper>
-          <Tab
-            type="text"
-            tabList={SERIES_TYPE_TAB_LIST}
-            selectedTab={selectedSeriesTypeTab}
-            onChange={async (tab) => {
-              if (selectedSeriesTypeTab.name !== tab.name) {
-                await setPage(1)
-                await setWeekSeries([])
-                await setSelectedSeriesTypeTab(tab)
-              }
-            }}
-          />
-          <Tab
-            type="button"
-            tabList={WEEK_TAB_LIST}
-            selectedTab={selectedWeek}
-            onChange={async (tab) => {
-              if (selectedWeek.name !== tab.name) {
-                await setPage(1)
-                await setWeekSeries([])
-                await setSelectedWeek(tab)
-              }
-            }}
-          />
+          {selectedSeriesTypeTab && (
+            <Tab
+              type="text"
+              tabList={SERIES_TYPE_TAB_LIST}
+              selectedTab={selectedSeriesTypeTab}
+              onChange={async (tab) => {
+                handleChangeSeriesTypeTab(tab)
+              }}
+            />
+          )}
+          {selectedWeek && (
+            <Tab
+              type="button"
+              tabList={WEEK_TAB_LIST}
+              selectedTab={selectedWeek}
+              onChange={async (tab) => {
+                handleChangeWeek(tab)
+              }}
+            />
+          )}
         </WeekTabWrapper>
         <SeriesListWrapper>
           {isEmpty(weekSeries) ? (
@@ -166,7 +224,6 @@ function Week() {
           )}
         </SeriesListWrapper>
       </WeekWrapper>
-      <div ref={targetRef} />
       <div ref={setObserverRef} />
     </WeekContainer>
   )
