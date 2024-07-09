@@ -175,7 +175,7 @@ export default function Home() {
 
   const handleChangeSeriesTypeTab = (tab: TabItem) => {
     setSelectedSeriesTypeTab(tab)
-    router.push(
+    router.replace(
       {
         pathname: '/',
         query: {
@@ -191,7 +191,7 @@ export default function Home() {
   }
   const handleChangeWeek = (tab: TabItem) => {
     setSelectedWeek(tab)
-    router.push(
+    router.replace(
       {
         pathname: '/',
         query: {
@@ -207,7 +207,7 @@ export default function Home() {
   }
   const handleChangeWebNovelProvider = (tab: TabItem) => {
     setSelectedWebNovelProviderTab(tab)
-    router.push(
+    router.replace(
       {
         pathname: '/',
         query: {
@@ -223,7 +223,7 @@ export default function Home() {
   }
   const handleChangeWebToonProvider = (tab: TabItem) => {
     setSelectedWebToonProviderTab(tab)
-    router.push(
+    router.replace(
       {
         pathname: '/',
         query: {
@@ -253,7 +253,16 @@ export default function Home() {
             handleChangeSeriesTypeTab(tab)
           }}
           onClickMore={() => {
-            router.push('/week')
+            router.push(
+              {
+                pathname: '/week',
+                query: {
+                  seriesType: selectedSeriesTypeTab?.name,
+                  week: selectedWeek?.name,
+                },
+              },
+              '/week',
+            )
           }}
         />
         {selectedWeek && (
