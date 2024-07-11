@@ -1,6 +1,7 @@
 import GlobalModal from '@/components/common/Modal/GlobalModal'
 import GlobalToast from '@/components/common/Toast/GlobalToast'
 import AppLayout from '@/components/layout/AppLayout'
+import useScrollRestoration from '@/hooks/useScrollRestoration'
 import GlobalStyle from '@/styles/GlobalStyle'
 import theme from '@/styles/theme'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -19,11 +20,17 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+export default function App({
+  Component,
+  pageProps,
+  router,
+}: AppPropsWithLayout) {
   const getLayout =
     Component.getLayout || ((page) => <AppLayout>{page}</AppLayout>)
 
   const queryClient = new QueryClient()
+  useScrollRestoration(router)
+
   return (
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
