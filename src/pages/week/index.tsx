@@ -1,4 +1,3 @@
-import { Pagination } from '@/@types/categories'
 import { Series } from '@/@types/series'
 import { getSeriesList } from '@/api/series'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
@@ -6,10 +5,12 @@ import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import { SERIES_TYPE_TAB_LIST, WEEK_TAB_LIST } from '@/constants/Tab'
-import { useInfiniteScrolling } from '@/hooks/useInfiniteScrolling'
+import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty, range } from 'lodash'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
-import React, { Children, useCallback, useEffect, useState } from 'react'
+import React, { Children, useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 const WeekContainer = styled.div``
@@ -46,84 +47,66 @@ const SkeletonItem = styled.div`
   flex-direction: column;
 `
 
-function Week() {
-  const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] = useState<TabItem>()
-  const [selectedWeek, setSelectedWeek] = useState<TabItem>()
-  const [weekSeries, setWeekSeries] = useState<Series[]>([])
-  const [page, setPage] = useState(1)
-  const [paginationData, setPaginationData] = useState<Pagination>()
+function Week({
+  seriesType,
+  week,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] =
+    useState<TabItem>(seriesType)
+  const [selectedWeek, setSelectedWeek] = useState<TabItem>(week)
   const pageSize = 20
 
-  const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null)
   const router = useRouter()
+  const queryClient = useQueryClient()
 
-  const fetchMore = useCallback(async () => {
-    const nextPage = page + 1
-    const res = await getSeriesList({
-      seriesType: selectedSeriesTypeTab?.name,
-      publishDay: selectedWeek?.name,
-      page: nextPage,
-      pageSize,
-    })
-    const { series, pagination } = res.data.data
-    setWeekSeries((prev) => [...prev, ...series])
-    setPage(nextPage)
-    setPaginationData(pagination)
-  }, [page, selectedSeriesTypeTab?.name, selectedWeek?.name])
+  const fetchWeekSeries = useCallback(
+    async (pageParam: any) => {
+      const nextPage = pageParam
 
-  useInfiniteScrolling({
-    observerRef,
-    fetchMore,
-    hasMore: paginationData?.hasNext ?? false,
-  })
-
-  useEffect(() => {
-    if (router.isReady) {
-      if (router.query.seriesType) {
-        const findSeriesType = SERIES_TYPE_TAB_LIST.find(
-          (v) => v.name === router.query.seriesType,
-        ) as TabItem
-        setSelectedSeriesTypeTab(findSeriesType)
-      } else {
-        setSelectedSeriesTypeTab(SERIES_TYPE_TAB_LIST[0])
-      }
-
-      if (router.query.week) {
-        const findWeek = WEEK_TAB_LIST.find(
-          (v) => v.name === router.query.week,
-        ) as TabItem
-        setSelectedWeek(findWeek)
-      } else {
-        setSelectedWeek(WEEK_TAB_LIST[0])
-      }
-    }
-  }, [router.isReady, router.query])
-
-  useEffect(() => {
-    async function fetchWeekSeries() {
       const res = await getSeriesList({
         seriesType: selectedSeriesTypeTab?.name,
         publishDay: selectedWeek?.name,
-        page: 1,
+        page: nextPage,
         pageSize,
       })
 
-      const { series, pagination } = res.data.data
+      return res.data.data
+    },
+    [selectedSeriesTypeTab, selectedWeek],
+  )
 
-      setPaginationData(pagination)
-      setWeekSeries(series)
-    }
+  const {
+    data: weekSeries,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['weekSeries'],
+    queryFn: ({ pageParam }) => fetchWeekSeries(pageParam),
+    getNextPageParam: (lastPage) => {
+      return lastPage.pagination.currentPage ===
+        lastPage.pagination.totalPage || lastPage.pagination.totalPage === 0
+        ? undefined
+        : lastPage.pagination.currentPage + 1
+    },
+    initialPageParam: 1,
+    select: (data) => {
+      return (data.pages ?? []).flatMap((item) => item.series)
+    },
+    enabled: !isEmpty(selectedSeriesTypeTab) && !isEmpty(selectedWeek),
+  })
 
-    if (!isEmpty(selectedSeriesTypeTab) && !isEmpty(selectedWeek)) {
-      fetchWeekSeries()
-    }
-  }, [selectedSeriesTypeTab, selectedWeek])
+  const { setTarget } = useIntersectionObserver({
+    hasNextPage,
+    fetchNextPage,
+  })
 
   const handleChangeSeriesTypeTab = async (tab: TabItem) => {
     if (selectedSeriesTypeTab?.name !== tab.name) {
-      await setPage(1)
-      await setWeekSeries([])
+      queryClient.refetchQueries({ queryKey: ['weekSeries'], exact: true })
       await setSelectedSeriesTypeTab(tab)
+      refetch()
     }
     router.replace(
       {
@@ -133,16 +116,15 @@ function Week() {
           week: selectedWeek?.name,
         },
       },
-      undefined,
+      '/week',
       { shallow: true },
     )
   }
 
   const handleChangeWeek = async (tab: TabItem) => {
     if (selectedWeek?.name !== tab.name) {
-      await setPage(1)
-      await setWeekSeries([])
       await setSelectedWeek(tab)
+      refetch()
     }
     router.replace(
       {
@@ -152,7 +134,7 @@ function Week() {
           week: tab.name,
         },
       },
-      undefined,
+      '/week',
       { shallow: true },
     )
   }
@@ -217,16 +199,62 @@ function Week() {
             </>
           ) : (
             <>
-              {weekSeries.map((item) => (
-                <Thumbnail key={item.hashId} series={item} />
-              ))}
+              {weekSeries &&
+                weekSeries.map((item: Series) => (
+                  <Thumbnail key={item.hashId} series={item} />
+                ))}
             </>
           )}
         </SeriesListWrapper>
       </WeekWrapper>
-      <div ref={setObserverRef} />
+      {isFetchingNextPage ? (
+        <SeriesListWrapper>
+          {Children.toArray(
+            range(12).map(() => (
+              <SkeletonItem>
+                <Skeleton
+                  width="100%"
+                  height="100%"
+                  style={{ aspectRatio: 1, margin: 0 }}
+                />
+                <Skeleton height="18px" style={{ marginTop: '8px' }} />
+                <Skeleton width="50%" />
+                <Skeleton width="30%" />
+              </SkeletonItem>
+            )),
+          )}
+        </SeriesListWrapper>
+      ) : (
+        <div ref={setTarget} />
+      )}
     </WeekContainer>
   )
+}
+
+export const getServerSideProps: GetServerSideProps<{
+  seriesType: TabItem
+  week: TabItem
+}> = async (context) => {
+  let seriesType = SERIES_TYPE_TAB_LIST[0] as TabItem
+  let week = WEEK_TAB_LIST[0] as TabItem
+  if (context.query.seriesType) {
+    const findSeriesType = SERIES_TYPE_TAB_LIST.find(
+      (v) => v.name === context.query.seriesType,
+    ) as TabItem
+
+    seriesType = findSeriesType
+  }
+
+  if (context.query.week) {
+    const findWeek = WEEK_TAB_LIST.find(
+      (v) => v.name === context.query.week,
+    ) as TabItem
+    week = findWeek
+  }
+
+  return {
+    props: { seriesType, week },
+  }
 }
 
 export default Week
