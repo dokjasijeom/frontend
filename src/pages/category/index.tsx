@@ -3,7 +3,7 @@ import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { SERIES_TYPE_TAB_LIST, SORT_TAB_LIST } from '@/constants/Tab'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { isEmpty } from 'lodash'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
@@ -17,6 +17,7 @@ import { getProviders } from '@/api/providers'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSkeleton'
+import { WEBNOVEL } from '@/constants/Series'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -143,6 +144,14 @@ function Category() {
       return res.data.data
     },
   })
+
+  const seriesTypeProviders = useMemo(() => {
+    if (selectedSeriesType.name === WEBNOVEL) {
+      return providers?.filter((v) => v.name !== 'lezhin')
+    }
+    return providers
+  }, [providers, selectedSeriesType])
+
   const { data: genres, refetch: refetchGenre } = useQuery<Genre[]>({
     queryKey: ['genres'],
     queryFn: async () => {
@@ -276,8 +285,8 @@ function Category() {
             }}
           />
           <div className="platform_wrapper">
-            {!isEmpty(providers) &&
-              providers?.map((provider) => (
+            {!isEmpty(seriesTypeProviders) &&
+              seriesTypeProviders?.map((provider) => (
                 <Checkbox
                   key={provider.hashId}
                   style={{ gap: '4px' }}
