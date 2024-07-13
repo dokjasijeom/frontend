@@ -3,9 +3,9 @@ import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { SERIES_TYPE_TAB_LIST, SORT_TAB_LIST } from '@/constants/Tab'
 import { useRouter } from 'next/router'
-import React, { Children, ReactElement, useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
-import { isEmpty, range } from 'lodash'
+import { isEmpty } from 'lodash'
 import Checkbox from '@/components/common/Checkbox/Checkbox'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import Pagination from '@/components/common/Pagination/Pagination'
@@ -15,8 +15,8 @@ import { getGenres } from '@/api/genres'
 import { Genre, ProviderItem } from '@/@types/series'
 import { getProviders } from '@/api/providers'
 import Image from 'next/image'
-import Skeleton from '@/components/common/Skeleton/Skeleton'
 import { useQuery } from '@tanstack/react-query'
+import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSkeleton'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -86,12 +86,6 @@ const EmptyBook = styled.div`
   gap: 20px;
   ${({ theme }) => theme.typography.body2};
   color: ${({ theme }) => theme.color.gray[800]};
-`
-
-const SkeletonItem = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
 `
 
 const CategoryListWrapper = styled.div`
@@ -313,20 +307,7 @@ function Category() {
           </div>
           {isLoading && (
             <div className="series_list">
-              {Children.toArray(
-                range(12).map(() => (
-                  <SkeletonItem>
-                    <Skeleton
-                      width="100%"
-                      height="100%"
-                      style={{ aspectRatio: 1, margin: 0 }}
-                    />
-                    <Skeleton height="18px" style={{ marginTop: '8px' }} />
-                    <Skeleton width="50%" />
-                    <Skeleton width="30%" />
-                  </SkeletonItem>
-                )),
-              )}
+              <ThumbnailListSkeleton />
             </div>
           )}
           {isEmpty(categories?.series) && !isLoading && (
