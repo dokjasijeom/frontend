@@ -18,10 +18,15 @@ const WeekContainer = styled.div``
 const WeekWrapper = styled.div``
 
 const WeekTabWrapper = styled.div`
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
+  top: 56px;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px 20px 0;
+  padding: 16px 20px;
 `
 
 const SeriesListWrapper = styled.div`
@@ -31,7 +36,7 @@ const SeriesListWrapper = styled.div`
   grid-template-columns: repeat(4, minmax(0, 1fr));
   row-gap: 16px;
   column-gap: 4px;
-  padding: 16px 20px 32px;
+  padding: 103px 20px 32px;
 
   @media (max-width: 560px) {
     grid-template-columns: repeat(3, minmax(0, 1fr));

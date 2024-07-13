@@ -19,10 +19,15 @@ const NewWebnovelContainer = styled.div``
 const NewWebnovelWrapper = styled.div``
 
 const NewWebnovelTabWrapper = styled.div`
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
+  top: 56px;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px 20px 0;
+  padding: 16px 20px;
 `
 
 const SeriesListWrapper = styled.div`
@@ -32,7 +37,7 @@ const SeriesListWrapper = styled.div`
   grid-template-columns: repeat(4, minmax(0, 1fr));
   row-gap: 16px;
   column-gap: 4px;
-  padding: 28px 20px 32px;
+  padding: 52px 20px 32px;
 
   @media (max-width: 560px) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
