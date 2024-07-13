@@ -100,7 +100,8 @@ function NewWebtoon({
   const handleChangeProviderTab = async (tab: TabItem) => {
     if (selectedProvider.name !== tab.name) {
       await setSelectedProvider(tab)
-      refetch()
+      await refetch()
+      window.scrollTo(0, 0)
     }
 
     router.replace(

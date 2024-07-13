@@ -103,7 +103,8 @@ function Week({
   const handleChangeSeriesTypeTab = async (tab: TabItem) => {
     if (selectedSeriesTypeTab?.name !== tab.name) {
       await setSelectedSeriesTypeTab(tab)
-      refetch()
+      await refetch()
+      window.scrollTo(0, 0)
     }
     router.replace(
       {
@@ -121,7 +122,8 @@ function Week({
   const handleChangeWeek = async (tab: TabItem) => {
     if (selectedWeek?.name !== tab.name) {
       await setSelectedWeek(tab)
-      refetch()
+      await refetch()
+      window.scrollTo(0, 0)
     }
     router.replace(
       {
