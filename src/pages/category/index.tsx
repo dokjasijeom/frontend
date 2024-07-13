@@ -191,7 +191,6 @@ function Category() {
     await refetch()
     await window.scrollTo({
       top: 0,
-      behavior: 'smooth',
     })
   }
 
