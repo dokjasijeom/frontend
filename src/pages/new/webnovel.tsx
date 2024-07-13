@@ -1,22 +1,17 @@
-import { Pagination } from '@/@types/categories'
-import { ProviderItem, Series } from '@/@types/series'
+import { ProviderItem } from '@/@types/series'
 import { getProviders } from '@/api/providers'
 import { getNewSeriesList } from '@/api/series'
-import Skeleton from '@/components/common/Skeleton/Skeleton'
+import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSkeleton'
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import { WEBNOVEL } from '@/constants/Series'
-import { useInfiniteScrolling } from '@/hooks/useInfiniteScrolling'
-import { isEmpty, range } from 'lodash'
+import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { isEmpty } from 'lodash'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
-import React, {
-  Children,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 const NewWebnovelContainer = styled.div``
@@ -47,131 +42,153 @@ const SeriesListWrapper = styled.div`
   }
 `
 
-const SkeletonItem = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`
-
-function NewWebnovel() {
-  const [newWebNovelSeries, setNewWebNovelSeries] = useState<Series[]>([])
-  const [providers, setProviders] = useState<ProviderItem[]>([])
-  const [selectedProvider, setSelectedProvider] = useState<TabItem>(
-    providers[0],
-  )
-  const [page, setPage] = useState(1)
-  const [paginationData, setPaginationData] = useState<Pagination>()
-  const targetRef = useRef(null)
+function NewWebnovel({
+  providers,
+  queryProvider,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [selectedProvider, setSelectedProvider] =
+    useState<TabItem>(queryProvider)
   const pageSize = 20
 
-  const [observerRef, setObserverRef] = useState<null | HTMLDivElement>(null)
   const router = useRouter()
 
-  const fetchMore = useCallback(async () => {
-    const nextPage = page + 1
-    const res = await getNewSeriesList({
-      seriesType: WEBNOVEL,
-      provider: selectedProvider?.name,
-      page: nextPage,
-      pageSize,
-    })
-    const { series, pagination } = res.data.data
-    setNewWebNovelSeries((prev) => [...prev, ...series])
-    setPage(nextPage)
-    setPaginationData(pagination)
-  }, [page, selectedProvider?.name])
-
-  useInfiniteScrolling({
-    observerRef,
-    fetchMore,
-    hasMore: paginationData?.hasNext ?? false,
-  })
-
-  useEffect(() => {
-    async function fetchProviders() {
-      const res = await getProviders()
-      setProviders(res.data.data)
-      setSelectedProvider(res.data.data[0])
-    }
-    fetchProviders()
-  }, [])
-
-  useEffect(() => {
-    async function fetchNewWebNovelSeries() {
+  const fetchNewSeries = useCallback(
+    async (pageParam: any) => {
       const res = await getNewSeriesList({
         seriesType: WEBNOVEL,
         provider: selectedProvider?.name,
-        page: 1,
+        page: pageParam,
         pageSize,
       })
 
-      const { series, pagination } = res.data.data
+      return res.data.data
+    },
+    [selectedProvider],
+  )
 
-      setPaginationData(pagination)
-      setNewWebNovelSeries(series)
+  const {
+    data: newWebNovelSeries,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['newWebNovelSeries'],
+    queryFn: ({ pageParam }) => fetchNewSeries(pageParam),
+    getNextPageParam: (lastPage) => {
+      return lastPage.pagination.currentPage ===
+        lastPage.pagination.totalPage || lastPage.pagination.totalPage === 0
+        ? undefined
+        : lastPage.pagination.currentPage + 1
+    },
+    initialPageParam: 1,
+    select: (data) => {
+      return (data.pages ?? []).flatMap((item) => item.series)
+    },
+    enabled: !isEmpty(providers) && !isEmpty(selectedProvider),
+  })
+
+  const { setTarget } = useIntersectionObserver({
+    hasNextPage,
+    fetchNextPage,
+  })
+
+  const handleChangeProviderTab = async (tab: TabItem) => {
+    if (selectedProvider.name !== tab.name) {
+      await setSelectedProvider(tab)
+      refetch()
     }
 
-    if (!isEmpty(providers)) {
-      fetchNewWebNovelSeries()
-    }
-  }, [providers, selectedProvider?.name])
+    router.replace(
+      {
+        pathname: '/new/webnovel',
+        query: {
+          newWebNovelProvider: tab.name,
+        },
+      },
+      '/new/webnovel',
+      { shallow: true },
+    )
+  }
 
   return (
     <NewWebnovelContainer>
       <TitleHeader
         title="웹소설 신작"
         onClickBack={() => {
-          router.back()
+          router.push(
+            {
+              pathname: '/',
+              query: {
+                newWebNovelProvider: selectedProvider.name,
+              },
+            },
+            '/',
+          )
         }}
       />
       <NewWebnovelWrapper>
         <NewWebnovelTabWrapper>
-          {!isEmpty(providers) && (
+          {!isEmpty(providers) && !isEmpty(selectedProvider) && (
             <Tab
               type="text"
               tabList={providers}
               selectedTab={selectedProvider}
               onChange={async (tab) => {
-                if (selectedProvider.name !== tab.name) {
-                  await setPage(1)
-                  await setNewWebNovelSeries([])
-                  await setSelectedProvider(tab)
-                }
+                handleChangeProviderTab(tab)
               }}
             />
           )}
         </NewWebnovelTabWrapper>
         <SeriesListWrapper>
           {isEmpty(newWebNovelSeries) ? (
-            <>
-              {Children.toArray(
-                range(12).map(() => (
-                  <SkeletonItem>
-                    <Skeleton
-                      width="100%"
-                      height="100%"
-                      style={{ aspectRatio: 1, margin: 0 }}
-                    />
-                    <Skeleton height="18px" style={{ marginTop: '8px' }} />
-                    <Skeleton width="50%" />
-                    <Skeleton width="30%" />
-                  </SkeletonItem>
-                )),
-              )}
-            </>
+            <ThumbnailListSkeleton />
           ) : (
             <>
-              {newWebNovelSeries.map((item) => (
-                <Thumbnail key={item.hashId} series={item} />
-              ))}
+              {newWebNovelSeries &&
+                newWebNovelSeries.map((item) => (
+                  <Thumbnail key={item.hashId} series={item} />
+                ))}
             </>
           )}
         </SeriesListWrapper>
       </NewWebnovelWrapper>
-      <div ref={targetRef} />
-      <div ref={setObserverRef} />
+      {isFetchingNextPage ? (
+        <SeriesListWrapper>
+          <ThumbnailListSkeleton />
+        </SeriesListWrapper>
+      ) : (
+        <div ref={setTarget} />
+      )}
     </NewWebnovelContainer>
   )
+}
+
+export const getServerSideProps: GetServerSideProps<{
+  providers: ProviderItem[]
+  queryProvider: TabItem
+}> = async (context) => {
+  let providers = [] as ProviderItem[]
+  let queryProvider = {} as TabItem
+  const res = await getProviders()
+
+  providers = res.data.data
+
+  if (providers) {
+    if (context.query.newWebNovelProvider) {
+      const findProvider = providers.find(
+        (v) => v.name === context.query.newWebNovelProvider,
+      ) as TabItem
+      queryProvider = findProvider
+    } else {
+      // eslint-disable-next-line prefer-destructuring
+      queryProvider = providers[0]
+    }
+  }
+
+  return {
+    props: { providers, queryProvider },
+  }
 }
 
 export default NewWebnovel
