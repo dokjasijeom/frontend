@@ -13,7 +13,7 @@ function restoreScrollPos() {
 
     window.scrollTo(0, scrollPos)
     sessionStorage.removeItem('scrollPos')
-  }, 300)
+  }, 250)
 }
 
 export default function useScrollRestoration(router: NextRouter) {
