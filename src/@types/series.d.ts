@@ -8,7 +8,7 @@ export type Day = 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN'
 
 export type DisplayDay = '월' | '화' | '수' | '목' | '금' | '토' | '일'
 
-export type ProviderNameType = 'series' | 'kakao-page' | 'ridi'
+export type ProviderNameType = 'series' | 'kakao-page' | 'ridi' | 'lezhin'
 
 export interface Series {
   hashId: string

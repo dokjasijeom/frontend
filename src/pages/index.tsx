@@ -244,7 +244,7 @@ export default function Home({
               iconName="New"
               title="웹소설 신작"
               selectedTab={selectedWebNovelProviderTab}
-              tabList={providers}
+              tabList={providers.filter((v) => v.name !== 'lezhin')}
               onChangeTab={(tab: TabItem) => handleChangeWebNovelProvider(tab)}
               onClickMore={() => {
                 router.push(

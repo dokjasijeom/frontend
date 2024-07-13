@@ -172,7 +172,7 @@ export const getServerSideProps: GetServerSideProps<{
   let queryProvider = {} as TabItem
   const res = await getProviders()
 
-  providers = res.data.data
+  providers = res.data.data.filter((v: ProviderItem) => v.name !== 'lezhin')
 
   if (providers) {
     if (context.query.newWebNovelProvider) {
