@@ -8,7 +8,7 @@ interface IuseIntersectionObserverProps {
 }
 
 export const useIntersectionObserver = ({
-  threshold = 0.1,
+  threshold = 1,
   hasNextPage,
   fetchNextPage,
 }: IuseIntersectionObserverProps) => {
