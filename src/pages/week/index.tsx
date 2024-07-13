@@ -6,7 +6,7 @@ import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import { SERIES_TYPE_TAB_LIST, WEEK_TAB_LIST } from '@/constants/Tab'
 import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty, range } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
@@ -57,7 +57,6 @@ function Week({
   const pageSize = 20
 
   const router = useRouter()
-  const queryClient = useQueryClient()
 
   const fetchWeekSeries = useCallback(
     async (pageParam: any) => {
@@ -104,7 +103,6 @@ function Week({
 
   const handleChangeSeriesTypeTab = async (tab: TabItem) => {
     if (selectedSeriesTypeTab?.name !== tab.name) {
-      queryClient.refetchQueries({ queryKey: ['weekSeries'], exact: true })
       await setSelectedSeriesTypeTab(tab)
       refetch()
     }
