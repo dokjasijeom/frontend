@@ -1,5 +1,9 @@
-<img width="900" alt="Frame 8" src="https://github.com/dokjasijeom/frontend/assets/51918951/5f87f913-3fb4-4de4-8d7b-72bfd8c71813">
+# 📖 독자시점
+[독자시점 바로가기 👀](https://www.doksi.kr/)
 
+<p align="center">
+<img width="600" src="https://github.com/user-attachments/assets/8b1810b3-3336-4860-a6cd-5728c7a75ee8">
+</p>
 
 # ⚙️ 기술 스택
 |⚒️|🔮|
