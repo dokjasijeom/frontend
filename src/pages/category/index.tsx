@@ -1,7 +1,11 @@
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
 import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
-import { SERIES_TYPE_TAB_LIST, SORT_TAB_LIST } from '@/constants/Tab'
+import {
+  DEFAULT_GENRE_ITEM,
+  SERIES_TYPE_TAB_LIST,
+  SORT_TAB_LIST,
+} from '@/constants/Tab'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
@@ -12,12 +16,13 @@ import Pagination from '@/components/common/Pagination/Pagination'
 import { GetCategoriesParams, getCategories } from '@/api/categories'
 import { Categories } from '@/@types/categories'
 import { getGenres } from '@/api/genres'
-import { Genre, ProviderItem } from '@/@types/series'
+import { Genre, Genres, ProviderItem } from '@/@types/series'
 import { getProviders } from '@/api/providers'
 import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSkeleton'
-import { WEBNOVEL } from '@/constants/Series'
+import { PAGE_SIZE, WEBNOVEL, WEBTOON } from '@/constants/Series'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -119,55 +124,34 @@ const CategoryListWrapper = styled.div`
     align-items: center;
   }
 `
-function Category() {
+function Category({
+  queryPage,
+  querySeriesType,
+  queryGenres,
+  queryGenre,
+  querySort,
+  providers,
+  queryProvider,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const theme = useTheme()
-  const [selectedSeriesType, setSelectedSeriesType] = useState(
-    SERIES_TYPE_TAB_LIST[0],
-  )
+  const [selectedSeriesType, setSelectedSeriesType] = useState(querySeriesType)
+  const [selectedSort, setSelectedSort] = useState(querySort)
+  const [page, setPage] = useState(queryPage)
+  const [selectedGenre, setSeletedGenre] = useState<Genre>(queryGenre)
+  const [selectedProvider, setSelectedProvider] =
+    useState<ProviderItem[]>(queryProvider)
 
-  const [selectedSort, setSelectedSort] = useState(SORT_TAB_LIST[0])
-  const [page, setPage] = useState(1)
-  const [selectedGenre, setSeletedGenre] = useState<Genre>({
-    hashId: 'all',
-    name: '전체',
-    genreType: 'common',
-  })
-
-  const [selectedProvider, setSelectedProvider] = useState<ProviderItem[]>([])
-
-  const { data: providers } = useQuery<ProviderItem[]>({
-    queryKey: ['providers'],
-    queryFn: async () => {
-      const res = await getProviders()
-      setSelectedProvider(res.data.data)
-      return res.data.data
-    },
-  })
+  const genres = useMemo(() => {
+    return queryGenres[selectedSeriesType.name]
+  }, [queryGenres, selectedSeriesType?.name])
 
   const seriesTypeProviders = useMemo(() => {
-    if (selectedSeriesType.name === WEBNOVEL) {
+    if (selectedSeriesType?.name === WEBNOVEL) {
       return providers?.filter((v) => v.name !== 'lezhin')
     }
     return providers
   }, [providers, selectedSeriesType])
-
-  const { data: genres, refetch: refetchGenre } = useQuery<Genre[]>({
-    queryKey: ['genres'],
-    queryFn: async () => {
-      const res = await getGenres({
-        seriesType: selectedSeriesType.name,
-      })
-      return [
-        {
-          hashId: 'all',
-          name: '전체',
-          genreType: 'common',
-        },
-        ...res.data.data,
-      ]
-    },
-  })
 
   const {
     data: categories,
@@ -182,8 +166,8 @@ function Category() {
         providers: providerArr,
         sort: selectedSort.name,
         page,
-        pageSize: 20,
-      } as GetCategoriesParams
+        pageSize: PAGE_SIZE,
+      } as unknown as GetCategoriesParams
 
       if (selectedGenre.hashId !== 'all') {
         params.genre = selectedGenre.hashId
@@ -201,33 +185,88 @@ function Category() {
     await window.scrollTo({
       top: 0,
     })
+
+    router.replace(
+      {
+        pathname: '/category',
+        query: {
+          page: currentPage,
+          seriesType: selectedSeriesType.name,
+          genre: selectedGenre.hashId,
+          sort: selectedSort.name,
+          provider: JSON.stringify(selectedProvider),
+        },
+      },
+      '/category',
+      { shallow: true },
+    )
   }
 
   const handleSelectedSeriesType = async (seriesType: TabItem) => {
     setSelectedSeriesType(seriesType)
-    setSeletedGenre({
-      hashId: 'all',
-      name: '전체',
-      genreType: 'common',
-    })
-    setPage(1)
-    await refetchGenre()
+    await setSeletedGenre(DEFAULT_GENRE_ITEM)
+    await setPage(1)
     await refetch()
+
+    router.replace(
+      {
+        pathname: '/category',
+        query: {
+          page: 1,
+          seriesType: seriesType.name,
+          genre: DEFAULT_GENRE_ITEM.hashId,
+          sort: selectedSort.name,
+          provider: JSON.stringify(selectedProvider),
+        },
+      },
+      '/category',
+      { shallow: true },
+    )
   }
 
   const handleSelectedGenre = async (genre: Genre) => {
     setSeletedGenre(genre)
     await setPage(1)
     await refetch()
+
+    router.replace(
+      {
+        pathname: '/category',
+        query: {
+          page: 1,
+          seriesType: selectedSeriesType.name,
+          genre: genre.hashId,
+          sort: selectedSort.name,
+          provider: JSON.stringify(selectedProvider),
+        },
+      },
+      '/category',
+      { shallow: true },
+    )
   }
 
   const handleSelectedSort = async (sort: TabItem) => {
     setSelectedSort(sort)
     await setPage(1)
     await refetch()
+
+    router.replace(
+      {
+        pathname: '/category',
+        query: {
+          page: 1,
+          seriesType: selectedSeriesType.name,
+          genre: selectedGenre.hashId,
+          sort: sort.name,
+          provider: JSON.stringify(selectedProvider),
+        },
+      },
+      '/category',
+      { shallow: true },
+    )
   }
 
-  const handleselectedProvider = async (provider: ProviderItem) => {
+  const handleSelectedProvider = async (provider: ProviderItem) => {
     if (selectedProvider) {
       const findProvider = selectedProvider.find(
         (item) => item.hashId === provider.hashId,
@@ -237,8 +276,38 @@ function Category() {
           (item) => item.hashId !== provider.hashId,
         )
         await setSelectedProvider(filterProvider)
+
+        router.replace(
+          {
+            pathname: '/category',
+            query: {
+              page,
+              seriesType: selectedSeriesType.name,
+              genre: selectedGenre.hashId,
+              sort: selectedSort.name,
+              provider: JSON.stringify(filterProvider),
+            },
+          },
+          '/category',
+          { shallow: true },
+        )
       } else {
         await setSelectedProvider([...selectedProvider, provider])
+
+        router.replace(
+          {
+            pathname: '/category',
+            query: {
+              page,
+              seriesType: selectedSeriesType.name,
+              genre: selectedGenre.hashId,
+              sort: selectedSort.name,
+              provider: JSON.stringify([...selectedProvider, provider]),
+            },
+          },
+          '/category',
+          { shallow: true },
+        )
       }
 
       await refetch()
@@ -263,7 +332,7 @@ function Category() {
         />
         <CategoryTabWrapper>
           {!isEmpty(genres) &&
-            genres?.map((genre) => (
+            genres.map((genre: Genre) => (
               <SubscriptionItem
                 key={genre.hashId}
                 onClick={() => handleSelectedGenre(genre)}
@@ -300,7 +369,7 @@ function Category() {
                       : false
                   }
                   onChange={() => {
-                    handleselectedProvider(provider)
+                    handleSelectedProvider(provider)
                   }}
                   checkColor={theme.color.main[600]}
                 >
@@ -352,6 +421,95 @@ function Category() {
     </CategoryContainer>
   )
 }
+
+export const getServerSideProps: GetServerSideProps<{
+  queryPage: number
+  querySeriesType: TabItem
+  queryGenres: Genres
+  queryGenre: Genre
+  querySort: TabItem
+  providers: ProviderItem[]
+  queryProvider: ProviderItem[]
+}> = async (context) => {
+  let querySeriesType = SERIES_TYPE_TAB_LIST[0] as TabItem
+  let queryPage = 1
+  let queryGenres = {
+    webnovel: [DEFAULT_GENRE_ITEM],
+    webtoon: [DEFAULT_GENRE_ITEM],
+  } as Genres
+  let queryGenre = DEFAULT_GENRE_ITEM as Genre
+  let querySort = SORT_TAB_LIST[0]
+  const providers = (await getProviders()).data.data
+  let queryProvider = providers
+
+  if (context.query.provider) {
+    queryProvider = JSON.parse(context.query.provider as any)
+  }
+
+  if (context.query.seriesType) {
+    const findSeriesType = SERIES_TYPE_TAB_LIST.find(
+      (v) => v.name === context.query.seriesType,
+    ) as TabItem
+
+    if (findSeriesType) {
+      querySeriesType = findSeriesType
+    }
+  }
+
+  const webNovelGenres = (
+    await getGenres({
+      seriesType: WEBNOVEL,
+    })
+  ).data.data
+
+  const webToonGenres = (
+    await getGenres({
+      seriesType: WEBTOON,
+    })
+  ).data.data
+
+  queryGenres = {
+    webnovel: [DEFAULT_GENRE_ITEM, ...webNovelGenres],
+    webtoon: [DEFAULT_GENRE_ITEM, ...webToonGenres],
+  }
+
+  if (context.query.genre && querySeriesType && queryGenres) {
+    const findGenre = queryGenres[querySeriesType.name].find(
+      (v) => v.hashId === context.query.genre,
+    ) as Genre
+
+    if (findGenre) {
+      queryGenre = findGenre
+    }
+  }
+
+  if (context.query.page) {
+    queryPage = Number(context.query.page)
+  }
+
+  if (context.query.sort) {
+    const findSort = SORT_TAB_LIST.find(
+      (v) => v.name === context.query.sort,
+    ) as TabItem
+
+    if (findSort) {
+      querySort = findSort
+    }
+  }
+
+  return {
+    props: {
+      queryPage,
+      querySeriesType,
+      queryGenre,
+      queryGenres,
+      querySort,
+      providers,
+      queryProvider,
+    },
+  }
+}
+
 Category.getLayout = function getLayout(page: ReactElement) {
   return <OnlyFooterLayout>{page}</OnlyFooterLayout>
 }

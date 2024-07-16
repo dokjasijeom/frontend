@@ -49,6 +49,9 @@ export interface Genre {
   genreType: GenreType
   name: string
 }
+export interface Genres {
+  [key: string]: Genre[]
+}
 
 export interface PublishDay {
   id: number

@@ -1,3 +1,4 @@
+import { Genre } from '@/@types/series'
 import { TabItem } from '@/components/common/Tab/Tab'
 
 export const SERIES_TYPE_TAB_LIST = [
@@ -19,4 +20,10 @@ export const SORT_TAB_LIST = [
   { displayName: '인기순', name: 'popular' },
   { displayName: '찜 많은 순', name: 'like' },
   { displayName: '독자픽 순', name: 'pick' },
-]
+] as TabItem[]
+
+export const DEFAULT_GENRE_ITEM = {
+  hashId: 'all',
+  name: '전체',
+  genreType: 'common',
+} as Genre
