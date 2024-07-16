@@ -1,8 +1,9 @@
 # 📖 독자시점
 [독자시점 바로가기 👀](https://www.doksi.kr/)
 
+<br/>
 <p align="center">
-<img width="600" src="https://github.com/user-attachments/assets/8b1810b3-3336-4860-a6cd-5728c7a75ee8">
+<img width="600" src="https://github.com/user-attachments/assets/bd8bc4e5-9b03-4f18-a50f-7cc8e3f4170a">
 </p>
 
 # ⚙️ 기술 스택
