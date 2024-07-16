@@ -153,7 +153,7 @@ function Search({ query }: SearchPageProps) {
       <SearchWrapper>
         <Input
           value={keyword}
-          placeholder="제목이나 작가를 검색해보세요."
+          placeholder="제목을 검색해보세요."
           suffix={
             !isEmpty(keyword) ? (
               <Icons
@@ -182,13 +182,6 @@ function Search({ query }: SearchPageProps) {
           </SearchBox>
         )}
       </SearchWrapper>
-      {/* {isEmpty(searchKeyword) && (
-        <SearchMain
-          keywords={keywords}
-          handleClearKeywords={handleClearKeywords}
-          handleDeleteKeyword={handleDeleteKeyword}
-        />
-      )} */}
       {searchKeyword ? (
         <SearchResult keyword={searchKeyword} />
       ) : (
