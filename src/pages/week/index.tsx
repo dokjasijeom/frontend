@@ -4,6 +4,7 @@ import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSke
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
+import { PAGE_SIZE } from '@/constants/Series'
 import { SERIES_TYPE_TAB_LIST, WEEK_TAB_LIST } from '@/constants/Tab'
 import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -53,7 +54,6 @@ function Week({
   const [selectedSeriesTypeTab, setSelectedSeriesTypeTab] =
     useState<TabItem>(seriesType)
   const [selectedWeek, setSelectedWeek] = useState<TabItem>(week)
-  const pageSize = 20
 
   const router = useRouter()
 
@@ -65,7 +65,7 @@ function Week({
         seriesType: selectedSeriesTypeTab?.name,
         publishDay: selectedWeek?.name,
         page: nextPage,
-        pageSize,
+        pageSize: PAGE_SIZE,
       })
 
       return res.data.data

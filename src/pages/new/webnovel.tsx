@@ -5,7 +5,7 @@ import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSke
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
-import { WEBNOVEL } from '@/constants/Series'
+import { PAGE_SIZE, WEBNOVEL } from '@/constants/Series'
 import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
@@ -53,7 +53,6 @@ function NewWebnovel({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [selectedProvider, setSelectedProvider] =
     useState<TabItem>(queryProvider)
-  const pageSize = 20
 
   const router = useRouter()
 
@@ -63,7 +62,7 @@ function NewWebnovel({
         seriesType: WEBNOVEL,
         provider: selectedProvider?.name,
         page: pageParam,
-        pageSize,
+        pageSize: PAGE_SIZE,
       })
 
       return res.data.data

@@ -5,7 +5,7 @@ import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSke
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
 import TitleHeader from '@/components/common/TitleHeader/TitleHeader'
-import { WEBTOON } from '@/constants/Series'
+import { PAGE_SIZE, WEBTOON } from '@/constants/Series'
 import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
@@ -53,7 +53,6 @@ function NewWebtoon({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [selectedProvider, setSelectedProvider] =
     useState<TabItem>(queryProvider)
-  const pageSize = 20
 
   const router = useRouter()
 
@@ -63,7 +62,7 @@ function NewWebtoon({
         seriesType: WEBTOON,
         provider: selectedProvider.name,
         page: pageParam,
-        pageSize,
+        pageSize: PAGE_SIZE,
       })
       return res.data.data
     },
