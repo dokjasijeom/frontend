@@ -1,4 +1,3 @@
-import { PlatformType } from '@/@types/platform'
 import { RecordSeries } from '@/@types/user'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
@@ -118,7 +117,7 @@ function RecordSeriesItem(props: RecordSeriesItemProps) {
           </div>
           <div className="platform_wrapper">
             {!isEmpty(recordSeries.recordProviders) &&
-              recordSeries.recordProviders.map((provider: PlatformType) => (
+              recordSeries.recordProviders.map((provider) => (
                 <Image
                   key={provider}
                   src={`/images/${provider}.svg`}

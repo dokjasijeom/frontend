@@ -5,14 +5,14 @@ import styled, { CSSProperties } from 'styled-components'
 const SkeletonContainer = styled.div<{
   width: string
   height: string
-  isCircle: boolean
+  $isCircle: boolean
 }>`
   overflow: hidden;
   position: relative;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   background: #e9e9e9;
-  border-radius: ${({ isCircle }) => (isCircle ? '50%' : '12px')};
+  border-radius: ${({ $isCircle }) => ($isCircle ? '50%' : '12px')};
   line-height: 1;
 
   &:after {
@@ -70,7 +70,7 @@ function Skeleton(props: SkeletonProps) {
             style={style}
             width={width}
             height={height}
-            isCircle={isCircle}
+            $isCircle={isCircle}
           />
         )),
       )}

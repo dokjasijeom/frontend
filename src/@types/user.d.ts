@@ -1,4 +1,3 @@
-import { PlatformType } from './platform'
 import { ProviderItem, ProviderNameType, Series, SeriesType } from './series'
 
 export interface User {
@@ -39,7 +38,7 @@ export interface RecordSeries {
   recordEpisodeCount: number
   recordEpisodes: RecordEpisode[]
   seriesType: SeriesType
-  recordProviders: PlatformType[]
+  recordProviders: ProviderNameType[]
 }
 
 export interface RecordEpisode {
