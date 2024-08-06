@@ -4,7 +4,13 @@ import AppLayout from '@/components/layout/AppLayout'
 import useScrollRestoration from '@/hooks/useScrollRestoration'
 import GlobalStyle from '@/styles/GlobalStyle'
 import theme from '@/styles/theme'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { deleteCookie } from 'cookies-next'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
@@ -28,7 +34,31 @@ export default function App({
   const getLayout =
     Component.getLayout || ((page) => <AppLayout>{page}</AppLayout>)
 
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 0,
+      },
+    },
+    queryCache: new QueryCache({
+      onError: (error) => {
+        const { response } = error as unknown as AxiosError
+
+        if (response?.status === 401) {
+          router.push('/auth/login')
+
+          deleteCookie('DS_AUT', {
+            path: '/',
+            domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+          })
+          deleteCookie('DS_USER', {
+            path: '/',
+            domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
+          })
+        }
+      },
+    }),
+  })
   useScrollRestoration(router)
 
   return (

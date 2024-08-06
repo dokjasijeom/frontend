@@ -291,7 +291,6 @@ function LibraryDetail({
       const res = await getMySeries(id)
       return res.data.data
     },
-    retry: 0,
   })
 
   useEffect(() => {
