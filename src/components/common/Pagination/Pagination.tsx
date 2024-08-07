@@ -58,18 +58,17 @@ function Pagination(props: PaginationProps) {
       <Icons name="ChevronLeft" onClick={handlePrev} />
       <PaginationButtonWrapper>
         {[...Array(pageCount)].map((a, i) => (
-          <>
+          // eslint-disable-next-line react/no-array-index-key
+          <React.Fragment key={i}>
             {start + i <= totalPage && (
               <PaginationButton
-                // eslint-disable-next-line react/no-array-index-key
-                key={i}
                 className={`${currentPage === start + i && 'active'}`}
                 onClick={() => onChangePage(start + i)}
               >
                 {start + i}
               </PaginationButton>
             )}
-          </>
+          </React.Fragment>
         ))}
       </PaginationButtonWrapper>
       <Icons name="ChevronRight" onClick={handleNext} />

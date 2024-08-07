@@ -151,15 +151,13 @@ function Tab(props: TabProps) {
       return (
         <UnderBarTabContainer className={className}>
           {tabList.map((tab) => (
-            <>
-              <UnderBarTabItemWrapper
-                className={selectedTab.name === tab.name ? 'active' : ''}
-                key={tab.name}
-                onClick={() => onChange(tab)}
-              >
-                {tab.displayName}
-              </UnderBarTabItemWrapper>
-            </>
+            <UnderBarTabItemWrapper
+              key={tab.name}
+              className={selectedTab.name === tab.name ? 'active' : ''}
+              onClick={() => onChange(tab)}
+            >
+              {tab.displayName}
+            </UnderBarTabItemWrapper>
           ))}
         </UnderBarTabContainer>
       )
