@@ -68,6 +68,10 @@ export default function App({
           <Head>
             <title>독자시점</title>
             <meta
+              name="description"
+              content="검색과 기록을 한 눈에! 웹소설 & 웹툰 통합 관리 플랫폼"
+            />
+            <meta
               name="viewport"
               content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover, user-scalable=0"
             />
