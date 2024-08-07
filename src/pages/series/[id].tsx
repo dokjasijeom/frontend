@@ -38,7 +38,7 @@ const SkeletonWrapper = styled.div`
     height: 200px;
     flex-shrink: 0;
 
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
       width: 116px;
       height: 166px;
     }
@@ -54,7 +54,7 @@ const SeriesInfoWrapper = styled.div`
   padding: 20px;
   display: flex;
   gap: 18px;
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     padding: 20px 20px 78px;
     gap: 12px;
   }
@@ -137,7 +137,7 @@ const SeriesInfoWrapper = styled.div`
       grid-template-columns: auto 1fr;
       gap: 8px;
 
-      @media (max-width: 400px) {
+      @media (max-width: 420px) {
         width: calc(100% - 40px);
         position: absolute;
         bottom: 20px;
@@ -297,7 +297,12 @@ function SeriesDetail({
           <SeriesInfoWrapper>
             {!isEmpty(series.thumbnail) && (
               <div className="thumbnail_wrapper">
-                <Image unoptimized src={series.thumbnail} fill alt="" />
+                <Image
+                  src={series.thumbnail}
+                  fill
+                  sizes="280px"
+                  alt={series.title}
+                />
               </div>
             )}
             <div className="series_info_wrapper">

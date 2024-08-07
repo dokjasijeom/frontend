@@ -1,4 +1,5 @@
 import { Series } from '@/@types/series'
+import { IMAGE_BLUR } from '@/constants/Image'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -87,12 +88,14 @@ function SeriesItem(props: SeriesItemProps) {
     <SeriesItemWrapper onClick={() => router.push(`/series/${series.hashId}`)}>
       {!isEmpty(series?.thumbnail) && (
         <Image
-          unoptimized
           className="series_thumbnail_image"
           src={series?.thumbnail}
           width={50}
           height={50}
-          alt=""
+          placeholder="blur"
+          blurDataURL={IMAGE_BLUR}
+          sizes="120px"
+          alt={series.title}
         />
       )}
       <div className="series_info_wrapper">

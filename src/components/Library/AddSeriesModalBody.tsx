@@ -9,6 +9,7 @@ import { getSeries, recordSeries } from '@/api/series'
 import { Series } from '@/@types/series'
 import { useQueryClient } from '@tanstack/react-query'
 import useToast from '@/hooks/useToast'
+import { IMAGE_BLUR } from '@/constants/Image'
 import Input from '../common/Input/Input'
 import Icons from '../common/Icons/Icons'
 import Badge from '../common/Badge/Badge'
@@ -261,7 +262,10 @@ function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
                   className="thumbnail"
                   src={selectedSeries.thumbnail}
                   fill
-                  alt=""
+                  placeholder="blur"
+                  blurDataURL={IMAGE_BLUR}
+                  alt={selectedSeries.title}
+                  sizes="(max-width: 400px) 120px, 280px"
                 />
               </ThumbnailWrapper>
               <div className="book_info_wrapper">

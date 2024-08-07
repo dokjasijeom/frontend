@@ -64,7 +64,7 @@ function SwiperNavigationButton({
           src={`/images/${type}_button.png`}
           width={32}
           height={32}
-          alt=""
+          alt={type}
         />
       </SwiperNavigationButtonContainer>
     )

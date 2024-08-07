@@ -1,4 +1,5 @@
 import { RecordSeries } from '@/@types/user'
+import { IMAGE_BLUR } from '@/constants/Image'
 import { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -99,12 +100,14 @@ function RecordSeriesItem(props: RecordSeriesItemProps) {
     >
       {!isEmpty(recordSeries.series) && (
         <Image
-          unoptimized
           className="series_thumbnail_image"
           src={recordSeries.series.thumbnail}
           width={50}
           height={50}
-          alt=""
+          sizes="120px"
+          placeholder="blur"
+          blurDataURL={IMAGE_BLUR}
+          alt={recordSeries.series.title}
         />
       )}
       <div className="series_info_wrapper">

@@ -393,7 +393,7 @@ function Category({
                 src="/images/empty_book.png"
                 width={210}
                 height={105}
-                alt=""
+                alt="empty"
               />
               등록된 작품이 없어요.
             </EmptyBook>

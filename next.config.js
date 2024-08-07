@@ -29,6 +29,9 @@ const nextConfig = {
   },
   reactStrictMode: true,
   images: {
+    imageSizes: [120, 280, 360, 400],
+    deviceSizes: [120, 280, 360, 400],
+    formats: ['image/avif', 'image/webp'],
     domains: ['res.cloudinary.com'],
   },
   compiler: {

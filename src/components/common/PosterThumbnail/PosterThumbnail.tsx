@@ -1,4 +1,6 @@
 import { Series } from '@/@types/series'
+import { IMAGE_BLUR } from '@/constants/Image'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
 import styled from 'styled-components'
@@ -66,15 +68,19 @@ const ThumbnailImageWrapper = styled.div`
     }
   }
 `
-const ThumbnailImage = styled.img`
+
+const ThumbnailWrapper = styled.div`
   width: 184px;
   height: 300px;
-  object-fit: cover;
-  border-radius: 12px;
-
+  position: relative;
   @media (max-width: 490px) {
     width: 158px;
     height: 258px;
+  }
+
+  img {
+    object-fit: cover;
+    border-radius: 12px;
   }
 `
 
@@ -90,7 +96,16 @@ function PosterThumbnail(props: PosterThumbnailProps) {
       onClick={() => router.push(`/series/${series.hashId}`)}
     >
       <ThumbnailImageWrapper>
-        <ThumbnailImage src={series.thumbnail} />
+        <ThumbnailWrapper>
+          <Image
+            alt={series.title}
+            src={series.thumbnail}
+            placeholder="blur"
+            blurDataURL={IMAGE_BLUR}
+            fill
+            sizes="(max-width: 490px) 316px, 368px"
+          />
+        </ThumbnailWrapper>
         <div className="series_info_wrapper">
           <div className="series_info">
             <div className="series_title">{series.title}</div>

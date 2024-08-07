@@ -4,6 +4,7 @@ import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 import { Series } from '@/@types/series'
 import { WEBNOVEL, WEBNOVEL_TEXT, WEBTOON_TEXT } from '@/constants/Series'
+import { IMAGE_BLUR } from '@/constants/Image'
 import Badge from '../Badge/Badge'
 import Icons from '../Icons/Icons'
 
@@ -32,7 +33,7 @@ const SeriesPosterItemWrapper = styled.div`
       object-fit: cover;
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
       width: 116px;
       height: 166px;
     }
@@ -133,7 +134,14 @@ function SeriesPosterItem(props: SeriesPosterItemProps) {
               color={theme.color.gray[950]}
             />
           )}
-          <Image src={series.thumbnail} fill alt="" />
+          <Image
+            src={series.thumbnail}
+            fill
+            alt={series.title}
+            sizes="280px"
+            placeholder="blur"
+            blurDataURL={IMAGE_BLUR}
+          />
         </div>
       )}
       <div className="series_info_wrapper">

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { Provider, Series } from '@/@types/series'
 import { isEmpty } from 'lodash'
+import { IMAGE_BLUR } from '@/constants/Image'
 import Icons from '../Icons/Icons'
 
 const ThumbnailContainer = styled.div`
@@ -42,20 +43,25 @@ const ThumbnailContainer = styled.div`
 
 const ThumbnailImageWrapper = styled.div`
   position: relative;
-  .platform_wrapper {
+  .provider_wrapper {
     position: absolute;
     top: 8px;
     right: 8px;
     display: flex;
     gap: 4px;
+    z-index: 1;
   }
 `
-const ThumbnailImage = styled.img`
+
+const ThumbnailWrapper = styled.div`
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
   aspect-ratio: 1;
+  position: relative;
+  img {
+    object-fit: cover;
+    border-radius: 12px;
+  }
 `
 
 interface ThumbnailProps {
@@ -82,7 +88,7 @@ function Thumbnail(props: ThumbnailProps) {
   return (
     <ThumbnailContainer onClick={() => router.push(`/series/${series.hashId}`)}>
       <ThumbnailImageWrapper>
-        <div className="platform_wrapper">
+        <div className="provider_wrapper">
           {!isEmpty(series.providers) &&
             series.providers.map((provider: Provider) => (
               <Image
@@ -94,7 +100,17 @@ function Thumbnail(props: ThumbnailProps) {
               />
             ))}
         </div>
-        <ThumbnailImage src={series.thumbnail} />
+        <ThumbnailWrapper>
+          <Image
+            alt={series.title}
+            src={series.thumbnail}
+            placeholder="blur"
+            blurDataURL={IMAGE_BLUR}
+            fill
+            priority
+            sizes="(max-width: 419px) 380px, (max-width: 560px) 340px, 274px"
+          />
+        </ThumbnailWrapper>
       </ThumbnailImageWrapper>
       <div className="series_info_wrapper">
         <div className="series_title">{series.title}</div>
