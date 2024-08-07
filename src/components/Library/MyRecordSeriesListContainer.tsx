@@ -100,7 +100,7 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
         tabList={SERIES_TYPE_TAB_LIST}
         moreButton={
           !isEmpty(recordSeriesList) ? (
-            <Button type="text" width="auto">
+            <Button type="text" width="auto" height="26px">
               {isEdit ? '완료' : '편집 모드'}
             </Button>
           ) : (

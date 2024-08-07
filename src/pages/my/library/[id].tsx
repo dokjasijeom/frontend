@@ -40,14 +40,14 @@ const SkeletonWrapper = styled.div`
   padding: 20px;
   display: flex;
   gap: 20px;
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     gap: 12px;
   }
   .skeleton_thumbnail_wrapper {
     width: 140px;
     height: 200px;
     flex-shrink: 0;
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
       width: 116px;
       height: 166px;
     }
@@ -72,14 +72,14 @@ const MySeriesInfoWrapper = styled.div`
     align-items: end;
     gap: 12px;
 
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
       left: 149px !important;
     }
 
     &.non_exist_series {
       left: 20px;
 
-      @media (max-width: 400px) {
+      @media (max-width: 420px) {
         left: 20px !important;
       }
     }
@@ -123,7 +123,8 @@ const RecordDetail = styled.div`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-
+    align-items: center;
+    gap: 20px;
     .total_text {
       color: ${({ theme }) => theme.color.gray[800]};
       ${({ theme }) => theme.typography.body1};
@@ -131,7 +132,6 @@ const RecordDetail = styled.div`
     .platform_wrapper {
       display: flex;
       gap: 12px;
-
       .checkbox_label {
         flex: 1;
         ${({ theme }) => theme.typography.body1};
@@ -170,7 +170,7 @@ const DeleteBox = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     flex-direction: column;
 
     .selected_info {
@@ -249,7 +249,7 @@ const RecordEpisodesWrapper = styled.div`
   padding: 10px;
   background: ${({ theme }) => theme.color.gray[50]};
   border-radius: 12px;
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     padding: 9px;
   }
 
@@ -580,7 +580,7 @@ function LibraryDetail({
             iconName="Content"
             title="기록장"
             moreButton={
-              <Button type="text" width="auto">
+              <Button type="text" width="auto" height="26px">
                 {isEdit || isEmpty(filteredEpisodes) ? '' : '편집'}
               </Button>
             }
