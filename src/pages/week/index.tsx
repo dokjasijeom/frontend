@@ -21,6 +21,7 @@ const WeekWrapper = styled.div``
 const WeekTabWrapper = styled.div`
   position: fixed;
   width: 100%;
+  max-width: 600px;
   background-color: #fff;
   top: 56px;
   z-index: 2;

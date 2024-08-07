@@ -21,6 +21,7 @@ const NewWebtoonWrapper = styled.div``
 const NewWebtoonTabWrapper = styled.div`
   position: fixed;
   width: 100%;
+  max-width: 600px;
   background-color: #fff;
   top: 56px;
   z-index: 2;
