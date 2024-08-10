@@ -182,7 +182,10 @@ function Week({
           )}
         </WeekTabWrapper>
         {isEmpty(weekSeries) && !isLoading && (
-          <Empty description="등록된 작품이 없어요." />
+          <Empty
+            description="등록된 작품이 없어요."
+            style={{ paddingTop: '200px' }}
+          />
         )}
         <SeriesListWrapper>
           {isLoading && <ThumbnailListSkeleton />}
