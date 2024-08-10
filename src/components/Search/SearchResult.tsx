@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 import { getSearchList } from '@/api/search'
 import { Series } from '@/@types/series'
 import { isEmpty } from 'lodash'
-import Image from 'next/image'
 import SeriesPosterItem from '../common/SeriesPosterItem/SeriesPosterItem'
+import Empty from '../common/Empty/Empty'
 
 const SearchResultContainer = styled.div`
   padding-top: 20px;
@@ -27,19 +27,6 @@ const SearchResultWrapper = styled.div`
 const SeriesItemWrapper = styled.div`
   background: ${({ theme }) => theme.color.gray[50]};
   border-radius: 12px;
-`
-
-const EmptyWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  ${({ theme }) => theme.typography.body2};
-  color: ${({ theme }) => theme.color.gray[800]};
-  text-align: center;
-  gap: 20px;
-  margin-top: 80px;
 `
 
 interface SearchResultProps {
@@ -79,15 +66,11 @@ function SearchResult(props: SearchResultProps) {
           </SearchResultWrapper>
         </>
       ) : (
-        <EmptyWrapper>
-          <Image
-            src="/images/empty_search.png"
-            width={120}
-            height={120}
-            alt="empty"
-          />
-          검색 결과가 없습니다.
-        </EmptyWrapper>
+        <Empty
+          type="search"
+          description="검색 결과가 없습니다."
+          style={{ paddingTop: '80px' }}
+        />
       )}
     </SearchResultContainer>
   )

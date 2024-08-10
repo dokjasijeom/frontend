@@ -18,11 +18,11 @@ import { Categories } from '@/@types/categories'
 import { getGenres } from '@/api/genres'
 import { Genre, Genres, ProviderItem } from '@/@types/series'
 import { getProviders } from '@/api/providers'
-import Image from 'next/image'
 import { useQuery } from '@tanstack/react-query'
 import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSkeleton'
 import { PAGE_SIZE, WEBNOVEL, WEBTOON } from '@/constants/Series'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import Empty from '@/components/common/Empty/Empty'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -81,17 +81,6 @@ const CategoryFilterWrapper = styled.div`
       ${({ theme }) => theme.typography.body1};
     }
   }
-`
-
-const EmptyBook = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-top: 140px;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  ${({ theme }) => theme.typography.body2};
-  color: ${({ theme }) => theme.color.gray[800]};
 `
 
 const CategoryListWrapper = styled.div`
@@ -388,15 +377,7 @@ function Category({
             </div>
           )}
           {isEmpty(categories?.series) && !isLoading && (
-            <EmptyBook>
-              <Image
-                src="/images/empty_book.png"
-                width={210}
-                height={105}
-                alt="empty"
-              />
-              등록된 작품이 없어요.
-            </EmptyBook>
+            <Empty description="등록된 작품이 없어요." />
           )}
           {!isEmpty(categories?.series) && (
             <>

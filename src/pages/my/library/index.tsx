@@ -19,7 +19,7 @@ import Skeleton from '@/components/common/Skeleton/Skeleton'
 const LibraryContainer = styled.div`
   padding-top: 56px;
   position: relative;
-  height: calc(100vh - 55px);
+  height: calc(100vh - 88px);
 `
 
 const AddPlusButtonWrapper = styled.div`

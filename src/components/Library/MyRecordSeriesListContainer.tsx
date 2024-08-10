@@ -6,28 +6,15 @@ import { RecordSeries } from '@/@types/user'
 import { isEmpty } from 'lodash'
 import { deleteNonExistRecordSeries, deleteRecordSeries } from '@/api/series'
 import { useQueryClient } from '@tanstack/react-query'
-import Image from 'next/image'
 import TabTitleHeader from '../common/TabTitleHeader/TabTitleHeader'
 import RecordSeriesListItem from './RecordSeriesListItem'
 import RecordModalBody from './RecordModalBody'
 import { TabItem } from '../common/Tab/Tab'
 import Button from '../common/Button/Button'
+import Empty from '../common/Empty/Empty'
 
 const MyRecordSeriesListContainerWrapper = styled.div`
   padding-bottom: 160px;
-`
-
-const EmptyWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  ${({ theme }) => theme.typography.body2};
-  color: ${({ theme }) => theme.color.gray[800]};
-  text-align: center;
-  gap: 20px;
-  margin-top: 140px;
 `
 
 const ListWrapper = styled.div`
@@ -124,17 +111,15 @@ function MyRecordSeriesListContainer(props: MyRecordSeriesListContainerProps) {
             />
           ))
         ) : (
-          <EmptyWrapper>
-            <Image
-              src="/images/empty_book.png"
-              width={210}
-              height={105}
-              alt="empty"
-            />
-            읽고 있는 작품을 추가하고
-            <br />
-            기록해보세요!
-          </EmptyWrapper>
+          <Empty
+            description={
+              <>
+                읽고 있는 작품을 추가하고
+                <br />
+                기록해보세요!
+              </>
+            }
+          />
         )}
       </ListWrapper>
     </MyRecordSeriesListContainerWrapper>

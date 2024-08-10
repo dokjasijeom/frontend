@@ -1,6 +1,7 @@
 import { ProviderItem } from '@/@types/series'
 import { getProviders } from '@/api/providers'
 import { getNewSeriesList } from '@/api/series'
+import Empty from '@/components/common/Empty/Empty'
 import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSkeleton'
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
@@ -73,6 +74,7 @@ function NewWebtoon({
   const {
     data: newWebToonSeries,
     fetchNextPage,
+    isLoading,
     hasNextPage,
     refetch,
     isFetchingNextPage,
@@ -145,17 +147,15 @@ function NewWebtoon({
             />
           )}
         </NewWebtoonTabWrapper>
+        {isEmpty(newWebToonSeries) && !isLoading && (
+          <Empty description="등록된 작품이 없어요." />
+        )}
         <SeriesListWrapper>
-          {isEmpty(newWebToonSeries) ? (
-            <ThumbnailListSkeleton />
-          ) : (
-            <>
-              {newWebToonSeries &&
-                newWebToonSeries.map((item) => (
-                  <Thumbnail key={item.hashId} series={item} />
-                ))}
-            </>
-          )}
+          {isLoading && <ThumbnailListSkeleton />}
+          {newWebToonSeries &&
+            newWebToonSeries.map((item) => (
+              <Thumbnail key={item.hashId} series={item} />
+            ))}
         </SeriesListWrapper>
       </NewWebtoonWrapper>
       {isFetchingNextPage ? (

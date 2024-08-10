@@ -1,6 +1,7 @@
 import { RecordSeries, User } from '@/@types/user'
 import { getUser } from '@/api/user'
 import Divider from '@/components/common/Divider/Divider'
+import Empty from '@/components/common/Empty/Empty'
 import RecordSeriesItem from '@/components/common/RecordSeriesItem/RecordSeriesItem'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
 import Tab from '@/components/common/Tab/Tab'
@@ -9,7 +10,6 @@ import OnlyFooterLayout from '@/components/layout/OnlyFooterLayout'
 import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import { useQuery } from '@tanstack/react-query'
 import { isEmpty, range } from 'lodash'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { Children, ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
@@ -37,17 +37,6 @@ const SkeletonItem = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 12px;
-`
-
-const EmptyBook = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-top: 140px;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  ${({ theme }) => theme.typography.body2};
-  color: ${({ theme }) => theme.color.gray[800]};
 `
 
 const CompleteBookWrapper = styled.div`
@@ -126,15 +115,7 @@ function Complete() {
             </SkeletonWrapper>
           )}
           {!isLoading && isEmpty(filterCompletedRecordSeriesList) && (
-            <EmptyBook>
-              <Image
-                src="/images/empty_book.png"
-                width={210}
-                height={105}
-                alt="empty"
-              />
-              완독한 작품이 없어요.
-            </EmptyBook>
+            <Empty description="완독한 작품이 없어요." />
           )}
           {!isEmpty(filterCompletedRecordSeriesList) &&
             filterCompletedRecordSeriesList.map(

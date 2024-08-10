@@ -1,5 +1,6 @@
 import { Series } from '@/@types/series'
 import { getSeriesList } from '@/api/series'
+import Empty from '@/components/common/Empty/Empty'
 import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSkeleton'
 import Tab, { TabItem } from '@/components/common/Tab/Tab'
 import Thumbnail from '@/components/common/Thumbnail/Thumbnail'
@@ -77,6 +78,7 @@ function Week({
   const {
     data: weekSeries,
     fetchNextPage,
+    isLoading,
     hasNextPage,
     refetch,
     isFetchingNextPage,
@@ -179,17 +181,15 @@ function Week({
             />
           )}
         </WeekTabWrapper>
+        {isEmpty(weekSeries) && !isLoading && (
+          <Empty description="등록된 작품이 없어요." />
+        )}
         <SeriesListWrapper>
-          {isEmpty(weekSeries) ? (
-            <ThumbnailListSkeleton />
-          ) : (
-            <>
-              {weekSeries &&
-                weekSeries.map((item: Series) => (
-                  <Thumbnail key={item.hashId} series={item} />
-                ))}
-            </>
-          )}
+          {isLoading && <ThumbnailListSkeleton />}
+          {weekSeries &&
+            weekSeries.map((item: Series) => (
+              <Thumbnail key={item.hashId} series={item} />
+            ))}
         </SeriesListWrapper>
       </WeekWrapper>
       {isFetchingNextPage ? (

@@ -9,7 +9,6 @@ import { SERIES_TYPE_TAB_LIST } from '@/constants/Tab'
 import useToast from '@/hooks/useToast'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty, range } from 'lodash'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { Children, ReactElement, useMemo, useState } from 'react'
 import styled, { useTheme } from 'styled-components'
@@ -18,6 +17,7 @@ import { Series } from '@/@types/series'
 import { LikeSeries, User } from '@/@types/user'
 import { recordSeries } from '@/api/series'
 import Skeleton from '@/components/common/Skeleton/Skeleton'
+import Empty from '@/components/common/Empty/Empty'
 
 const LikeContainer = styled.div``
 
@@ -41,17 +41,6 @@ const SkeletonItem = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 12px;
-`
-
-const EmptyBook = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-top: 140px;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  ${({ theme }) => theme.typography.body2};
-  color: ${({ theme }) => theme.color.gray[800]};
 `
 
 const LikeBookWrapper = styled.div`
@@ -139,15 +128,7 @@ function Like() {
             </SkeletonWrapper>
           )}
           {!isLoading && isEmpty(filterLikeSeriesList) && (
-            <EmptyBook>
-              <Image
-                src="/images/empty_book.png"
-                width={210}
-                height={105}
-                alt="empty"
-              />
-              찜한 작품이 없어요.
-            </EmptyBook>
+            <Empty description="찜한 작품이 없어요." />
           )}
           {!isEmpty(filterLikeSeriesList) &&
             filterLikeSeriesList.map((series: Series) => {
