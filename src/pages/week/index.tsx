@@ -11,6 +11,7 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -142,67 +143,70 @@ function Week({
   }
 
   return (
-    <WeekContainer>
-      <TitleHeader
-        title="요일별 연재 작품"
-        onClickBack={() => {
-          router.push(
-            {
-              pathname: '/',
-              query: {
-                seriesType: selectedSeriesTypeTab?.name,
-                week: selectedWeek?.name,
+    <>
+      <NextSeo title="요일별 연재 작품" />
+      <WeekContainer>
+        <TitleHeader
+          title="요일별 연재 작품"
+          onClickBack={() => {
+            router.push(
+              {
+                pathname: '/',
+                query: {
+                  seriesType: selectedSeriesTypeTab?.name,
+                  week: selectedWeek?.name,
+                },
               },
-            },
-            '/',
-          )
-        }}
-      />
-      <WeekWrapper>
-        <WeekTabWrapper>
-          {selectedSeriesTypeTab && (
-            <Tab
-              type="text"
-              tabList={SERIES_TYPE_TAB_LIST}
-              selectedTab={selectedSeriesTypeTab}
-              onChange={async (tab) => {
-                handleChangeSeriesTypeTab(tab)
-              }}
+              '/',
+            )
+          }}
+        />
+        <WeekWrapper>
+          <WeekTabWrapper>
+            {selectedSeriesTypeTab && (
+              <Tab
+                type="text"
+                tabList={SERIES_TYPE_TAB_LIST}
+                selectedTab={selectedSeriesTypeTab}
+                onChange={async (tab) => {
+                  handleChangeSeriesTypeTab(tab)
+                }}
+              />
+            )}
+            {selectedWeek && (
+              <Tab
+                type="button"
+                tabList={WEEK_TAB_LIST}
+                selectedTab={selectedWeek}
+                onChange={async (tab) => {
+                  handleChangeWeek(tab)
+                }}
+              />
+            )}
+          </WeekTabWrapper>
+          {isEmpty(weekSeries) && !isLoading && (
+            <Empty
+              description="등록된 작품이 없어요."
+              style={{ paddingTop: '200px' }}
             />
           )}
-          {selectedWeek && (
-            <Tab
-              type="button"
-              tabList={WEEK_TAB_LIST}
-              selectedTab={selectedWeek}
-              onChange={async (tab) => {
-                handleChangeWeek(tab)
-              }}
-            />
-          )}
-        </WeekTabWrapper>
-        {isEmpty(weekSeries) && !isLoading && (
-          <Empty
-            description="등록된 작품이 없어요."
-            style={{ paddingTop: '200px' }}
-          />
+          <SeriesListWrapper>
+            {isLoading && <ThumbnailListSkeleton />}
+            {weekSeries &&
+              weekSeries.map((item: Series) => (
+                <Thumbnail key={item.hashId} series={item} />
+              ))}
+          </SeriesListWrapper>
+        </WeekWrapper>
+        {isFetchingNextPage ? (
+          <SeriesListWrapper>
+            <ThumbnailListSkeleton />
+          </SeriesListWrapper>
+        ) : (
+          <div ref={setTarget} />
         )}
-        <SeriesListWrapper>
-          {isLoading && <ThumbnailListSkeleton />}
-          {weekSeries &&
-            weekSeries.map((item: Series) => (
-              <Thumbnail key={item.hashId} series={item} />
-            ))}
-        </SeriesListWrapper>
-      </WeekWrapper>
-      {isFetchingNextPage ? (
-        <SeriesListWrapper>
-          <ThumbnailListSkeleton />
-        </SeriesListWrapper>
-      ) : (
-        <div ref={setTarget} />
-      )}
-    </WeekContainer>
+      </WeekContainer>
+    </>
   )
 }
 

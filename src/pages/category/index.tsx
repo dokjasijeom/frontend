@@ -23,6 +23,7 @@ import ThumbnailListSkeleton from '@/components/common/Skeleton/ThumbnailListSke
 import { PAGE_SIZE, WEBNOVEL, WEBTOON } from '@/constants/Series'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import Empty from '@/components/common/Empty/Empty'
+import { NextSeo } from 'next-seo'
 
 const CategoryContainer = styled.div`
   padding-top: 56px;
@@ -303,103 +304,106 @@ function Category({
     }
   }
   return (
-    <CategoryContainer>
-      <TitleHeader
-        title="카테고리"
-        onClickBack={() => {
-          router.back()
-        }}
-      />
-      <CategoryWrapper>
-        <Tab
-          type="underbar"
-          tabList={SERIES_TYPE_TAB_LIST}
-          selectedTab={selectedSeriesType}
-          onChange={(tab) => {
-            handleSelectedSeriesType(tab)
+    <>
+      <NextSeo title="카테고리" />
+      <CategoryContainer>
+        <TitleHeader
+          title="카테고리"
+          onClickBack={() => {
+            router.back()
           }}
         />
-        <CategoryTabWrapper>
-          {!isEmpty(genres) &&
-            genres.map((genre: Genre) => (
-              <SubscriptionItem
-                key={genre.hashId}
-                onClick={() => handleSelectedGenre(genre)}
-                className={
-                  selectedGenre.hashId === genre.hashId ? 'active' : ''
-                }
-              >
-                {genre.name}
-              </SubscriptionItem>
-            ))}
-        </CategoryTabWrapper>
-        <CategoryFilterWrapper>
+        <CategoryWrapper>
           <Tab
-            type="text"
-            tabList={SORT_TAB_LIST}
-            selectedTab={selectedSort}
+            type="underbar"
+            tabList={SERIES_TYPE_TAB_LIST}
+            selectedTab={selectedSeriesType}
             onChange={(tab) => {
-              handleSelectedSort(tab)
+              handleSelectedSeriesType(tab)
             }}
           />
-          <div className="platform_wrapper">
-            {!isEmpty(seriesTypeProviders) &&
-              seriesTypeProviders?.map((provider) => (
-                <Checkbox
-                  key={provider.hashId}
-                  style={{ gap: '4px' }}
-                  checked={
-                    selectedProvider
-                      ? Boolean(
-                          selectedProvider.find(
-                            (item) => item.hashId === provider.hashId,
-                          ),
-                        )
-                      : false
+          <CategoryTabWrapper>
+            {!isEmpty(genres) &&
+              genres.map((genre: Genre) => (
+                <SubscriptionItem
+                  key={genre.hashId}
+                  onClick={() => handleSelectedGenre(genre)}
+                  className={
+                    selectedGenre.hashId === genre.hashId ? 'active' : ''
                   }
-                  onChange={() => {
-                    handleSelectedProvider(provider)
-                  }}
-                  checkColor={theme.color.main[600]}
                 >
-                  <div className="checkbox_label">{provider.displayName}</div>
-                </Checkbox>
+                  {genre.name}
+                </SubscriptionItem>
               ))}
-          </div>
-        </CategoryFilterWrapper>
-        <CategoryListWrapper>
-          <div className="total_count">
-            전체 {categories?.pagination.totalCount.toLocaleString()}
-          </div>
-          {isLoading && (
-            <div className="series_list">
-              <ThumbnailListSkeleton />
-            </div>
-          )}
-          {isEmpty(categories?.series) && !isLoading && (
-            <Empty description="등록된 작품이 없어요." />
-          )}
-          {!isEmpty(categories?.series) && (
-            <>
-              <div className="series_list">
-                {categories?.series.map((series) => (
-                  <Thumbnail key={series.hashId} series={series} />
+          </CategoryTabWrapper>
+          <CategoryFilterWrapper>
+            <Tab
+              type="text"
+              tabList={SORT_TAB_LIST}
+              selectedTab={selectedSort}
+              onChange={(tab) => {
+                handleSelectedSort(tab)
+              }}
+            />
+            <div className="platform_wrapper">
+              {!isEmpty(seriesTypeProviders) &&
+                seriesTypeProviders?.map((provider) => (
+                  <Checkbox
+                    key={provider.hashId}
+                    style={{ gap: '4px' }}
+                    checked={
+                      selectedProvider
+                        ? Boolean(
+                            selectedProvider.find(
+                              (item) => item.hashId === provider.hashId,
+                            ),
+                          )
+                        : false
+                    }
+                    onChange={() => {
+                      handleSelectedProvider(provider)
+                    }}
+                    checkColor={theme.color.main[600]}
+                  >
+                    <div className="checkbox_label">{provider.displayName}</div>
+                  </Checkbox>
                 ))}
+            </div>
+          </CategoryFilterWrapper>
+          <CategoryListWrapper>
+            <div className="total_count">
+              전체 {categories?.pagination.totalCount.toLocaleString()}
+            </div>
+            {isLoading && (
+              <div className="series_list">
+                <ThumbnailListSkeleton />
               </div>
+            )}
+            {isEmpty(categories?.series) && !isLoading && (
+              <Empty description="등록된 작품이 없어요." />
+            )}
+            {!isEmpty(categories?.series) && (
+              <>
+                <div className="series_list">
+                  {categories?.series.map((series) => (
+                    <Thumbnail key={series.hashId} series={series} />
+                  ))}
+                </div>
 
-              <div className="pagination_wrapper">
-                <Pagination
-                  totalPage={categories?.pagination.totalPage ?? 1}
-                  pageCount={10}
-                  currentPage={page}
-                  onChangePage={handleChangePage}
-                />
-              </div>
-            </>
-          )}
-        </CategoryListWrapper>
-      </CategoryWrapper>
-    </CategoryContainer>
+                <div className="pagination_wrapper">
+                  <Pagination
+                    totalPage={categories?.pagination.totalPage ?? 1}
+                    pageCount={10}
+                    currentPage={page}
+                    onChangePage={handleChangePage}
+                  />
+                </div>
+              </>
+            )}
+          </CategoryListWrapper>
+        </CategoryWrapper>
+      </CategoryContainer>
+    </>
   )
 }
 

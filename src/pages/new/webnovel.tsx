@@ -11,6 +11,7 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -120,56 +121,59 @@ function NewWebnovel({
   }
 
   return (
-    <NewWebnovelContainer>
-      <TitleHeader
-        title="웹소설 신작"
-        onClickBack={() => {
-          router.push(
-            {
-              pathname: '/',
-              query: {
-                newWebNovelProvider: selectedProvider.name,
+    <>
+      <NextSeo title="웹소설 신작" />
+      <NewWebnovelContainer>
+        <TitleHeader
+          title="웹소설 신작"
+          onClickBack={() => {
+            router.push(
+              {
+                pathname: '/',
+                query: {
+                  newWebNovelProvider: selectedProvider.name,
+                },
               },
-            },
-            '/',
-          )
-        }}
-      />
-      <NewWebnovelWrapper>
-        <NewWebnovelTabWrapper>
-          {!isEmpty(providers) && !isEmpty(selectedProvider) && (
-            <Tab
-              type="text"
-              tabList={providers}
-              selectedTab={selectedProvider}
-              onChange={async (tab) => {
-                handleChangeProviderTab(tab)
-              }}
+              '/',
+            )
+          }}
+        />
+        <NewWebnovelWrapper>
+          <NewWebnovelTabWrapper>
+            {!isEmpty(providers) && !isEmpty(selectedProvider) && (
+              <Tab
+                type="text"
+                tabList={providers}
+                selectedTab={selectedProvider}
+                onChange={async (tab) => {
+                  handleChangeProviderTab(tab)
+                }}
+              />
+            )}
+          </NewWebnovelTabWrapper>
+          {isEmpty(newWebNovelSeries) && !isLoading && (
+            <Empty
+              description="등록된 작품이 없어요."
+              style={{ paddingTop: '200px' }}
             />
           )}
-        </NewWebnovelTabWrapper>
-        {isEmpty(newWebNovelSeries) && !isLoading && (
-          <Empty
-            description="등록된 작품이 없어요."
-            style={{ paddingTop: '200px' }}
-          />
+          <SeriesListWrapper>
+            {isLoading && <ThumbnailListSkeleton />}
+            {newWebNovelSeries &&
+              newWebNovelSeries.map((item) => (
+                <Thumbnail key={item.hashId} series={item} />
+              ))}
+          </SeriesListWrapper>
+        </NewWebnovelWrapper>
+        {isFetchingNextPage ? (
+          <SeriesListWrapper>
+            <ThumbnailListSkeleton />
+          </SeriesListWrapper>
+        ) : (
+          <div ref={setTarget} />
         )}
-        <SeriesListWrapper>
-          {isLoading && <ThumbnailListSkeleton />}
-          {newWebNovelSeries &&
-            newWebNovelSeries.map((item) => (
-              <Thumbnail key={item.hashId} series={item} />
-            ))}
-        </SeriesListWrapper>
-      </NewWebnovelWrapper>
-      {isFetchingNextPage ? (
-        <SeriesListWrapper>
-          <ThumbnailListSkeleton />
-        </SeriesListWrapper>
-      ) : (
-        <div ref={setTarget} />
-      )}
-    </NewWebnovelContainer>
+      </NewWebnovelContainer>
+    </>
   )
 }
 

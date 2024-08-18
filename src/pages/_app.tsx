@@ -1,6 +1,7 @@
 import GlobalModal from '@/components/common/Modal/GlobalModal'
 import GlobalToast from '@/components/common/Toast/GlobalToast'
 import AppLayout from '@/components/layout/AppLayout'
+import { DEAFULT_SEO } from '@/constants/SEO'
 import useScrollRestoration from '@/hooks/useScrollRestoration'
 import GlobalStyle from '@/styles/GlobalStyle'
 import theme from '@/styles/theme'
@@ -12,6 +13,7 @@ import {
 import { AxiosError } from 'axios'
 import { deleteCookie } from 'cookies-next'
 import { NextPage } from 'next'
+import { DefaultSeo } from 'next-seo'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { ReactElement, ReactNode } from 'react'
@@ -65,12 +67,8 @@ export default function App({
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <ThemeProvider theme={theme}>
+          <DefaultSeo {...DEAFULT_SEO} />
           <Head>
-            <title>독자시점</title>
-            <meta
-              name="description"
-              content="검색과 기록을 한 눈에! 웹소설 & 웹툰 통합 관리 플랫폼"
-            />
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover, user-scalable=0"

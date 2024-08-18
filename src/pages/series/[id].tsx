@@ -18,6 +18,7 @@ import useToast from '@/hooks/useToast'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { NextSeo } from 'next-seo'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { ReactElement, useMemo } from 'react'
@@ -197,6 +198,7 @@ const PlatformItem = styled.div`
 function SeriesDetail({
   hashId,
   isLogin,
+  series,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const theme = useTheme()
@@ -204,14 +206,6 @@ function SeriesDetail({
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   const { showModal } = useModal()
-
-  const { data: series } = useQuery<Series>({
-    queryKey: ['seriesDetail'],
-    queryFn: async () => {
-      const res = await getSeries(hashId)
-      return res.data.data
-    },
-  })
 
   const { data: user } = useQuery<User>({
     queryKey: ['user'],
@@ -290,135 +284,143 @@ function SeriesDetail({
   }
 
   return (
-    <SeriesDetailContainer>
-      <TitleHeader title="" onClickBack={() => router.back()} isSearch />
-      {series ? (
-        <SeriesDetailWrapper>
-          <SeriesInfoWrapper>
-            {!isEmpty(series.thumbnail) && (
-              <div className="thumbnail_wrapper">
-                <Image
-                  src={series.thumbnail}
-                  fill
-                  sizes="280px"
-                  alt={series.title}
-                />
-              </div>
-            )}
-            <div className="series_info_wrapper">
-              <div className="series_info">
-                <div className="title">{series.title}</div>
-                {!isEmpty(series.authors) && (
-                  <div className="sub">
-                    {series.authors.map((value) => value.name).join('/')}{' '}
-                    <span className="caption">저</span>
-                  </div>
-                )}
-                {!isEmpty(series.publishers) && (
-                  <div className="sub">
-                    {series.publishers.map((value) => value.name).join('/')}{' '}
-                    <span className="caption">출판</span>
-                  </div>
-                )}
-                <div className="sub">
-                  총 {series.totalEpisode}화
-                  {series.isComplete && (
-                    <>
-                      <div className="divider" />
-                      <span className="caption">완결</span>
-                    </>
-                  )}
+    <>
+      <NextSeo
+        title={series.title}
+        openGraph={{
+          images: [{ url: series.thumbnail, width: 260, height: 260 }],
+        }}
+      />
+      <SeriesDetailContainer>
+        <TitleHeader title="" onClickBack={() => router.back()} isSearch />
+        {series ? (
+          <SeriesDetailWrapper>
+            <SeriesInfoWrapper>
+              {!isEmpty(series.thumbnail) && (
+                <div className="thumbnail_wrapper">
+                  <Image
+                    src={series.thumbnail}
+                    fill
+                    sizes="280px"
+                    alt={series.title}
+                  />
                 </div>
-                <div className="tags">{series.displayTags}</div>
-              </div>
-              <div className="action_button_wrapper">
-                <Button
-                  className="like_button"
-                  type={isUserLikeSeries ? 'primary' : 'secondary'}
-                  width="auto"
-                  onClick={handleLikeSeries}
-                >
-                  <div className="button_body">
-                    <Icons
-                      name={isUserLikeSeries ? 'HeartActive' : 'HeartDefault'}
-                      width="20px"
-                      height="20px"
-                      color={
-                        isUserLikeSeries
-                          ? theme.color.system.w
-                          : theme.color.main[600]
-                      }
-                    />
-                    {series.likeCount ? series.likeCount.toLocaleString() : 0}
+              )}
+              <div className="series_info_wrapper">
+                <div className="series_info">
+                  <div className="title">{series.title}</div>
+                  {!isEmpty(series.authors) && (
+                    <div className="sub">
+                      {series.authors.map((value) => value.name).join('/')}{' '}
+                      <span className="caption">저</span>
+                    </div>
+                  )}
+                  {!isEmpty(series.publishers) && (
+                    <div className="sub">
+                      {series.publishers.map((value) => value.name).join('/')}{' '}
+                      <span className="caption">출판</span>
+                    </div>
+                  )}
+                  <div className="sub">
+                    총 {series.totalEpisode}화
+                    {series.isComplete && (
+                      <>
+                        <div className="divider" />
+                        <span className="caption">완결</span>
+                      </>
+                    )}
                   </div>
-                </Button>
-                <Button
-                  width="auto"
-                  type={isUserRecordSeries ? 'primary' : 'secondary'}
-                  onClick={handleAddMyLibrary}
-                >
-                  <div className="button_body">
-                    <Icons
-                      width="20px"
-                      height="20px"
-                      name={isUserRecordSeries ? 'OpenedBook' : 'Plus'}
-                      color={
-                        isUserRecordSeries
-                          ? theme.color.system.w
-                          : theme.color.main[600]
-                      }
-                    />
-                    {isUserRecordSeries
-                      ? '읽고 있는 작품'
-                      : '내 서재에 추가하기'}
-                  </div>
-                </Button>
-              </div>
-            </div>
-          </SeriesInfoWrapper>
-          <SeriesDetailBodyWrapper>
-            <SectionTitle>줄거리</SectionTitle>
-            <SynopsisWrapper>{series.description}</SynopsisWrapper>
-            <SectionTitle>보러가기</SectionTitle>
-            <PlarformWrapper>
-              {!isEmpty(series.providers) &&
-                series.providers.map((provider: Provider) => (
-                  <PlatformItem
-                    key={provider.hashId}
-                    onClick={() => window.open(provider.link)}
+                  <div className="tags">{series.displayTags}</div>
+                </div>
+                <div className="action_button_wrapper">
+                  <Button
+                    className="like_button"
+                    type={isUserLikeSeries ? 'primary' : 'secondary'}
+                    width="auto"
+                    onClick={handleLikeSeries}
                   >
-                    <Image
+                    <div className="button_body">
+                      <Icons
+                        name={isUserLikeSeries ? 'HeartActive' : 'HeartDefault'}
+                        width="20px"
+                        height="20px"
+                        color={
+                          isUserLikeSeries
+                            ? theme.color.system.w
+                            : theme.color.main[600]
+                        }
+                      />
+                      {series.likeCount ? series.likeCount.toLocaleString() : 0}
+                    </div>
+                  </Button>
+                  <Button
+                    width="auto"
+                    type={isUserRecordSeries ? 'primary' : 'secondary'}
+                    onClick={handleAddMyLibrary}
+                  >
+                    <div className="button_body">
+                      <Icons
+                        width="20px"
+                        height="20px"
+                        name={isUserRecordSeries ? 'OpenedBook' : 'Plus'}
+                        color={
+                          isUserRecordSeries
+                            ? theme.color.system.w
+                            : theme.color.main[600]
+                        }
+                      />
+                      {isUserRecordSeries
+                        ? '읽고 있는 작품'
+                        : '내 서재에 추가하기'}
+                    </div>
+                  </Button>
+                </div>
+              </div>
+            </SeriesInfoWrapper>
+            <SeriesDetailBodyWrapper>
+              <SectionTitle>줄거리</SectionTitle>
+              <SynopsisWrapper>{series.description}</SynopsisWrapper>
+              <SectionTitle>보러가기</SectionTitle>
+              <PlarformWrapper>
+                {!isEmpty(series.providers) &&
+                  series.providers.map((provider: Provider) => (
+                    <PlatformItem
                       key={provider.hashId}
-                      src={`/images/${provider.name}.svg`}
-                      alt={provider.displayName}
-                      width={20}
-                      height={20}
-                    />
-                    {provider.displayName}
-                  </PlatformItem>
-                ))}
-            </PlarformWrapper>
-          </SeriesDetailBodyWrapper>
-        </SeriesDetailWrapper>
-      ) : (
-        <SkeletonWrapper>
-          <div className="skeleton_thumbnail_wrapper">
-            <Skeleton width="100%" height="100%" style={{ flexShrink: 0 }} />
-          </div>
-          <div className="skeleton_item_wrapper">
-            <Skeleton width="120px" height="24px" />
-            <Skeleton
-              width="100px"
-              height="14px"
-              style={{ marginTop: '10px' }}
-            />
-            <Skeleton width="80px" height="14px" />
-            <Skeleton width="50px" height="14px" />
-            <Skeleton width="70px" height="14px" />
-          </div>
-        </SkeletonWrapper>
-      )}
-    </SeriesDetailContainer>
+                      onClick={() => window.open(provider.link)}
+                    >
+                      <Image
+                        key={provider.hashId}
+                        src={`/images/${provider.name}.svg`}
+                        alt={provider.displayName}
+                        width={20}
+                        height={20}
+                      />
+                      {provider.displayName}
+                    </PlatformItem>
+                  ))}
+              </PlarformWrapper>
+            </SeriesDetailBodyWrapper>
+          </SeriesDetailWrapper>
+        ) : (
+          <SkeletonWrapper>
+            <div className="skeleton_thumbnail_wrapper">
+              <Skeleton width="100%" height="100%" style={{ flexShrink: 0 }} />
+            </div>
+            <div className="skeleton_item_wrapper">
+              <Skeleton width="120px" height="24px" />
+              <Skeleton
+                width="100px"
+                height="14px"
+                style={{ marginTop: '10px' }}
+              />
+              <Skeleton width="80px" height="14px" />
+              <Skeleton width="50px" height="14px" />
+              <Skeleton width="70px" height="14px" />
+            </div>
+          </SkeletonWrapper>
+        )}
+      </SeriesDetailContainer>
+    </>
   )
 }
 
@@ -427,12 +429,17 @@ SeriesDetail.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps: GetServerSideProps<{
+  series: Series
   hashId: string
   isLogin: boolean
 }> = async (context) => {
   const { id } = context.params as IParams
   const cookiesString = context.req.headers.cookie as string
   const cookies = {} as any
+  let series = {} as Series
+
+  const res = await getSeries(id)
+  series = res.data.data
 
   cookiesString?.split(';').forEach((cookie) => {
     const [key, value] = cookie.split('=').map((c) => c.trim())
@@ -445,6 +452,7 @@ export const getServerSideProps: GetServerSideProps<{
     props: {
       hashId: id,
       isLogin,
+      series,
     },
   }
 }

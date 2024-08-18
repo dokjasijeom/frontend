@@ -7,6 +7,7 @@ import Input from '@/components/common/Input/Input'
 import useDebounce from '@/hooks/useDebounce'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps } from 'next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -149,49 +150,52 @@ function Search({ query }: SearchPageProps) {
   }, [debounceSearch])
 
   return (
-    <SearchContainer>
-      <SearchWrapper>
-        <Input
-          value={keyword}
-          placeholder="제목을 검색해보세요."
-          suffix={
-            !isEmpty(keyword) ? (
-              <Icons
-                name="CloseCircle"
-                width="22px"
-                height="22px"
-                onClick={handleClearSearch}
-              />
-            ) : (
-              <Icons name="Search" width="22px" height="22px" />
-            )
-          }
-          onChange={(e) => handleChangeSearch(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        {!isEmpty(autoCompleteList) && showSearchBox && (
-          <SearchBox>
-            {autoCompleteList.map((autoComplete) => (
-              <SearchBoxItem
-                key={autoComplete.hashId}
-                onClick={() => router.push(`/series/${autoComplete.hashId}`)}
-              >
-                {autoComplete.title}
-              </SearchBoxItem>
-            ))}
-          </SearchBox>
+    <>
+      <NextSeo title="검색" />
+      <SearchContainer>
+        <SearchWrapper>
+          <Input
+            value={keyword}
+            placeholder="제목을 검색해보세요."
+            suffix={
+              !isEmpty(keyword) ? (
+                <Icons
+                  name="CloseCircle"
+                  width="22px"
+                  height="22px"
+                  onClick={handleClearSearch}
+                />
+              ) : (
+                <Icons name="Search" width="22px" height="22px" />
+              )
+            }
+            onChange={(e) => handleChangeSearch(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          {!isEmpty(autoCompleteList) && showSearchBox && (
+            <SearchBox>
+              {autoCompleteList.map((autoComplete) => (
+                <SearchBoxItem
+                  key={autoComplete.hashId}
+                  onClick={() => router.push(`/series/${autoComplete.hashId}`)}
+                >
+                  {autoComplete.title}
+                </SearchBoxItem>
+              ))}
+            </SearchBox>
+          )}
+        </SearchWrapper>
+        {searchKeyword ? (
+          <SearchResult keyword={searchKeyword} />
+        ) : (
+          <SearchMain
+            keywords={keywords}
+            handleClearKeywords={handleClearKeywords}
+            handleDeleteKeyword={handleDeleteKeyword}
+          />
         )}
-      </SearchWrapper>
-      {searchKeyword ? (
-        <SearchResult keyword={searchKeyword} />
-      ) : (
-        <SearchMain
-          keywords={keywords}
-          handleClearKeywords={handleClearKeywords}
-          handleDeleteKeyword={handleDeleteKeyword}
-        />
-      )}
-    </SearchContainer>
+      </SearchContainer>
+    </>
   )
 }
 

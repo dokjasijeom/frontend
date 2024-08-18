@@ -11,6 +11,7 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionOpserver'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -119,56 +120,59 @@ function NewWebtoon({
   }
 
   return (
-    <NewWebtoonContainer>
-      <TitleHeader
-        title="웹툰 신작"
-        onClickBack={() => {
-          router.push(
-            {
-              pathname: '/',
-              query: {
-                newWebToonProvider: selectedProvider.name,
+    <>
+      <NextSeo title="웹툰 신작" />
+      <NewWebtoonContainer>
+        <TitleHeader
+          title="웹툰 신작"
+          onClickBack={() => {
+            router.push(
+              {
+                pathname: '/',
+                query: {
+                  newWebToonProvider: selectedProvider.name,
+                },
               },
-            },
-            '/',
-          )
-        }}
-      />
-      <NewWebtoonWrapper>
-        <NewWebtoonTabWrapper>
-          {!isEmpty(providers) && (
-            <Tab
-              type="text"
-              tabList={providers}
-              selectedTab={selectedProvider}
-              onChange={async (tab) => {
-                handleChangeProviderTab(tab)
-              }}
+              '/',
+            )
+          }}
+        />
+        <NewWebtoonWrapper>
+          <NewWebtoonTabWrapper>
+            {!isEmpty(providers) && (
+              <Tab
+                type="text"
+                tabList={providers}
+                selectedTab={selectedProvider}
+                onChange={async (tab) => {
+                  handleChangeProviderTab(tab)
+                }}
+              />
+            )}
+          </NewWebtoonTabWrapper>
+          {isEmpty(newWebToonSeries) && !isLoading && (
+            <Empty
+              description="등록된 작품이 없어요."
+              style={{ paddingTop: '200px' }}
             />
           )}
-        </NewWebtoonTabWrapper>
-        {isEmpty(newWebToonSeries) && !isLoading && (
-          <Empty
-            description="등록된 작품이 없어요."
-            style={{ paddingTop: '200px' }}
-          />
+          <SeriesListWrapper>
+            {isLoading && <ThumbnailListSkeleton />}
+            {newWebToonSeries &&
+              newWebToonSeries.map((item) => (
+                <Thumbnail key={item.hashId} series={item} />
+              ))}
+          </SeriesListWrapper>
+        </NewWebtoonWrapper>
+        {isFetchingNextPage ? (
+          <SeriesListWrapper>
+            <ThumbnailListSkeleton />
+          </SeriesListWrapper>
+        ) : (
+          <div ref={setTarget} />
         )}
-        <SeriesListWrapper>
-          {isLoading && <ThumbnailListSkeleton />}
-          {newWebToonSeries &&
-            newWebToonSeries.map((item) => (
-              <Thumbnail key={item.hashId} series={item} />
-            ))}
-        </SeriesListWrapper>
-      </NewWebtoonWrapper>
-      {isFetchingNextPage ? (
-        <SeriesListWrapper>
-          <ThumbnailListSkeleton />
-        </SeriesListWrapper>
-      ) : (
-        <div ref={setTarget} />
-      )}
-    </NewWebtoonContainer>
+      </NewWebtoonContainer>
+    </>
   )
 }
 
