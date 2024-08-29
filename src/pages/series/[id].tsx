@@ -196,9 +196,9 @@ const PlatformItem = styled.div`
 `
 
 function SeriesDetail({
+  querySeries,
   hashId,
   isLogin,
-  series,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const theme = useTheme()
@@ -214,6 +214,16 @@ function SeriesDetail({
       return res.data.data
     },
     enabled: isLogin,
+  })
+
+  const { data: series } = useQuery<Series>({
+    queryKey: ['seriesDetail'],
+    queryFn: async () => {
+      const res = await getSeries(hashId)
+      return res.data.data
+    },
+    initialData: querySeries,
+    staleTime: 1000,
   })
 
   const isUserLikeSeries = useMemo(() => {
@@ -286,9 +296,9 @@ function SeriesDetail({
   return (
     <>
       <NextSeo
-        title={series.title}
+        title={querySeries.title}
         openGraph={{
-          images: [{ url: series.thumbnail, width: 260, height: 260 }],
+          images: [{ url: querySeries.thumbnail, width: 260, height: 260 }],
         }}
       />
       <SeriesDetailContainer>
@@ -429,17 +439,17 @@ SeriesDetail.getLayout = function getLayout(page: ReactElement) {
 }
 
 export const getServerSideProps: GetServerSideProps<{
-  series: Series
+  querySeries: Series
   hashId: string
   isLogin: boolean
 }> = async (context) => {
   const { id } = context.params as IParams
   const cookiesString = context.req.headers.cookie as string
   const cookies = {} as any
-  let series = {} as Series
+  let querySeries = {} as Series
 
   const res = await getSeries(id)
-  series = res.data.data
+  querySeries = res.data.data
 
   cookiesString?.split(';').forEach((cookie) => {
     const [key, value] = cookie.split('=').map((c) => c.trim())
@@ -452,7 +462,7 @@ export const getServerSideProps: GetServerSideProps<{
     props: {
       hashId: id,
       isLogin,
-      series,
+      querySeries,
     },
   }
 }
