@@ -68,7 +68,7 @@ const SeriesPosterItemWrapper = styled.div`
         gap: 8px;
       }
       .title {
-        width: calc(100% - 12px);
+        width: calc(100% - 40px);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

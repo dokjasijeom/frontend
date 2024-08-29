@@ -61,10 +61,14 @@ const SeriesWrapper = styled.div`
         width: 100%;
         align-items: center;
         gap: 12px;
-        overflow: hidden;
+        position: relative;
 
         .title {
-          display: flex;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          word-break: break-all;
+          width: calc(100% - 60px);
           flex-direction: row;
           gap: 12px;
           align-items: center;
@@ -74,14 +78,14 @@ const SeriesWrapper = styled.div`
           @media (max-width: 490px) {
             display: block;
             width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            word-break: break-all;
           }
         }
 
         .sub {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          word-break: break-all;
           ${({ theme }) => theme.typography.body5};
           color: ${({ theme }) => theme.color.gray[800]};
         }
@@ -256,12 +260,12 @@ function RecordModalBody(props: RecordModalBodyProps) {
           )}
           <div className="series_info">
             <div className="title_wrapper">
-              <span className="title">
+              <div className="title">
                 {recordSeries.series
                   ? recordSeries.series.title
                   : recordSeries.title}
-              </span>
-              <span className="sub">{authorGenreText}</span>
+              </div>
+              <div className="sub">{authorGenreText}</div>
             </div>
           </div>
         </div>
