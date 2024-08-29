@@ -27,14 +27,35 @@ const SearchWrapper = styled.div`
   margin-top: 20px;
 `
 
-const SearchBox = styled.div`
+const SearchBoxWrapper = styled.div`
   position: absolute;
   width: 100%;
+  overflow: hidden;
   top: 54px;
   left: 0;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.color.gray[200]};
-  overflow: hidden;
+  background: ${({ theme }) => theme.color.system.w};
+  z-index: 2;
+`
+
+const SearchBox = styled.div`
+  width: 100%;
+  max-height: 20em;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.color.gray[300]};
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(184, 184, 184, 0.1);
+  }
 `
 
 const SearchBoxItem = styled.div`
@@ -231,21 +252,23 @@ function AddSeriesModalBody(props: AddSeriesModalBodyProps) {
           onChange={(e) => handleChangeSearch(e.target.value)}
         />
         {!isEmpty(keyword) && showSearchBox && (
-          <SearchBox>
-            {autoCompleteList.map((autoComplete) => (
-              <SearchBoxItem
-                key={autoComplete.hashId}
-                onClick={() => handleShowSearchResult(autoComplete.hashId)}
-              >
-                {autoComplete.title}
+          <SearchBoxWrapper>
+            <SearchBox>
+              {autoCompleteList.map((autoComplete) => (
+                <SearchBoxItem
+                  key={autoComplete.hashId}
+                  onClick={() => handleShowSearchResult(autoComplete.hashId)}
+                >
+                  {autoComplete.title}
+                </SearchBoxItem>
+              ))}
+              <SearchBoxItem onClick={handleAddSeriesDirect}>
+                <div className="last_item">
+                  <div className="keyword">{keyword}</div> 직접 등록하기
+                </div>
               </SearchBoxItem>
-            ))}
-            <SearchBoxItem onClick={handleAddSeriesDirect}>
-              <div className="last_item">
-                <div className="keyword">{keyword}</div> 직접 등록하기
-              </div>
-            </SearchBoxItem>
-          </SearchBox>
+            </SearchBox>
+          </SearchBoxWrapper>
         )}
       </SearchWrapper>
       {isDirect && (
