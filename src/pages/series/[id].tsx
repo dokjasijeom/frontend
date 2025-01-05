@@ -207,7 +207,7 @@ function SeriesDetail({
   const { showToast } = useToast()
   const { showModal } = useModal()
 
-  const { data: user } = useQuery<User>({
+  const { data: user, isLoading: isUserLoading } = useQuery<User>({
     queryKey: ['user'],
     queryFn: async () => {
       const res = await getUser()
@@ -303,7 +303,7 @@ function SeriesDetail({
       />
       <SeriesDetailContainer>
         <TitleHeader title="" onClickBack={() => router.back()} isSearch />
-        {series ? (
+        {series && !isUserLoading ? (
           <SeriesDetailWrapper>
             <SeriesInfoWrapper>
               {!isEmpty(series.thumbnail) && (
